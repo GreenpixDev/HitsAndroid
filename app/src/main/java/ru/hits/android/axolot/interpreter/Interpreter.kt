@@ -10,6 +10,6 @@ interface Interpreter {
 
     fun execute(node: NodeExecutable?, context: Context)
 
-    fun createContext(cache: Boolean): Context
+    fun createContext(): Context
 
 }
