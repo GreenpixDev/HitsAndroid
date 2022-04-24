@@ -8,6 +8,7 @@ import ru.hits.android.axolot.blueprint.node.executable.NodePrintString
 import ru.hits.android.axolot.blueprint.node.executable.NodeSetVariable
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeForLoop
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeForLoopIndex
+import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeWhileLoop
 import ru.hits.android.axolot.blueprint.node.function.math.NodeSin
 import ru.hits.android.axolot.blueprint.node.function.NodeGetVariable
 import ru.hits.android.axolot.blueprint.node.function.math.NodeIntSum

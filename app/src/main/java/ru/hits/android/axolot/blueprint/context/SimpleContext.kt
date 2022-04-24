@@ -12,4 +12,8 @@ class SimpleContext(override val interpreter: Interpreter,
         return SimpleContext(interpreter, params, local)
     }
 
+    override fun createChild(): Context {
+        return SimpleContext(interpreter, emptyMap(), local)
+    }
+
 }

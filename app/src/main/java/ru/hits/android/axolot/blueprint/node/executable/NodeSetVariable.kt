@@ -19,7 +19,7 @@ class NodeSetVariable(val name: String) : NodeExecutable() {
     }
 
     override operator fun invoke(context: Context): NodeExecutable? {
-        val value = context.params[INPUT]!!
+        val value = dependencies[INPUT]!!.invoke(context)
         context.scope.setVariable(name, value)
         return nextNode
     }

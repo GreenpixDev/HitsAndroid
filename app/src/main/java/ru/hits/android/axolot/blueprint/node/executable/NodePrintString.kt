@@ -4,7 +4,6 @@ import ru.hits.android.axolot.blueprint.context.Context
 import ru.hits.android.axolot.blueprint.node.NodeDependency
 import ru.hits.android.axolot.blueprint.node.NodeExecutable
 import ru.hits.android.axolot.blueprint.type.Type
-import ru.hits.android.axolot.blueprint.variable.Variable
 
 class NodePrintString : NodeExecutable() {
 
@@ -19,7 +18,7 @@ class NodePrintString : NodeExecutable() {
     }
 
     override operator fun invoke(context: Context): NodeExecutable? {
-        val string = context.params[STRING]!![Type.STRING]
+        val string = dependencies[STRING]!!.invoke(context)[Type.STRING]
         println(string)
         return nextNode
     }

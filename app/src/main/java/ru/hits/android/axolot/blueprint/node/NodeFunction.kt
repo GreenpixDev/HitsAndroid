@@ -1,8 +1,6 @@
 package ru.hits.android.axolot.blueprint.node
 
-import ru.hits.android.axolot.blueprint.variable.Variable
-
-abstract class NodeFunction : NodeDependency, NodeRequiring, NodeInvokable<Variable> {
+abstract class NodeFunction : NodeDependency, NodeRequiring {
 
     override val dependencies: MutableMap<Any, NodeDependency> = mutableMapOf()
 

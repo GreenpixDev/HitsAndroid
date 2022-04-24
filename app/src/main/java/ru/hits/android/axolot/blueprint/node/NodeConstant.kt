@@ -1,5 +1,6 @@
 package ru.hits.android.axolot.blueprint.node
 
+import ru.hits.android.axolot.blueprint.context.Context
 import ru.hits.android.axolot.blueprint.type.VariableType
 import ru.hits.android.axolot.blueprint.variable.Variable
 
@@ -16,5 +17,9 @@ class NodeConstant(type: VariableType<*>) : NodeDependency {
     }
 
     var variable: Variable = Variable.nullVariable(type)
+
+    override fun invoke(context: Context): Variable {
+        return variable
+    }
 
 }

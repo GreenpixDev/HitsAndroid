@@ -17,7 +17,7 @@ class NodeCast(val cast: VariableType<*>) : NodeFunction() {
     }
 
     override operator fun invoke(context: Context): Variable {
-        val input = context.params[INPUT]!!
+        val input = dependencies[INPUT]!!.invoke(context)
         return Variable(cast, cast.cast(input))
     }
 }

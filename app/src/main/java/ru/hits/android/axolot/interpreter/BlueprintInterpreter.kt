@@ -15,15 +15,17 @@ class BlueprintInterpreter(override val scope: Scope) : Interpreter {
         while (currentNode != null) {
 
             // Запрашиваем необходимые параметры
-            val params = currentNode.dependencies.mapValues { request(it.value, context) }
+            // TODO устарело, убрать
+            //val params = currentNode.dependencies.mapValues { request(it.value, context) }
 
             // Отчищаем кэш (если включен)
+            // TODO устарело, убрать
             if (context is CacheableContext) {
                 context.cache.clear()
             }
 
             // Выполняем функцию и получаем следующую ноду
-            val nextNode = currentNode(context.createChild(params))
+            val nextNode = currentNode(context.createChild())
             context.local.remove(currentNode)
 
             // Далее
@@ -38,6 +40,7 @@ class BlueprintInterpreter(override val scope: Scope) : Interpreter {
         return SimpleContext(this, emptyMap(), mutableMapOf())
     }
 
+    @Deprecated("Это логика теперь реализована в NodeDependency#invoke(Context)")
     private fun request(node: NodeDependency, context: Context): Variable {
         // Если зависимость является константой
         if (node is NodeConstant) {

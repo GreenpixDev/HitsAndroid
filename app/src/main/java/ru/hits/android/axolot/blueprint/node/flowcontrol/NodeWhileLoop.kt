@@ -5,22 +5,29 @@ import ru.hits.android.axolot.blueprint.node.NodeDependency
 import ru.hits.android.axolot.blueprint.node.NodeExecutable
 import ru.hits.android.axolot.blueprint.type.Type
 
-class NodeBranch : NodeExecutable() {
+class NodeWhileLoop : NodeExecutable() {
 
-    var trueNode: NodeExecutable? = null
+    var loopBody: NodeExecutable? = null
 
-    var falseNode: NodeExecutable? = null
+    var completed: NodeExecutable? = null
 
     companion object {
         const val CONDITION = 0
     }
 
-    fun init(input: NodeDependency) {
-        dependencies[CONDITION] = input
+    fun init(condition: NodeDependency) {
+        dependencies[CONDITION] = condition
     }
 
     override fun invoke(context: Context): NodeExecutable? {
         val condition = dependencies[CONDITION]!!.invoke(context)[Type.BOOLEAN]!!
-        return if (condition) trueNode else falseNode
+
+        // Цикл
+        while (condition) {
+            // Выполняем итерацию
+            context.interpreter.execute(loopBody, context.createChild(emptyMap()))
+        }
+
+        return completed
     }
 }

@@ -16,8 +16,8 @@ class NodeIntSum : NodeFunction() {
 
     override operator fun invoke(context: Context): Variable {
         var sum = 0
-        for (i in context.params.values.indices) {
-            val input = context.params[i]!![Type.INT]
+        for (i in dependencies.values.indices) {
+            val input = dependencies[i]!!.invoke(context)[Type.INT]
             input?.let { sum += input }
         }
         return Variable(Type.INT, sum)

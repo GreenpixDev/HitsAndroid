@@ -18,7 +18,7 @@ class NodeSin : NodeFunction() {
     }
 
     override operator fun invoke(context: Context): Variable {
-        val input = context.params[INPUT]!![Type.FLOAT]
+        val input = dependencies[INPUT]!!.invoke(context)[Type.FLOAT]
         val result = input?.let { sin(it) }
         return Variable(Type.FLOAT, result)
     }

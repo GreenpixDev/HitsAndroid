@@ -1,5 +1,7 @@
 package ru.hits.android.axolot.blueprint.node
 
-interface NodeDependency : Node {
+import ru.hits.android.axolot.blueprint.variable.Variable
+
+interface NodeDependency : NodeInvokable<Variable> {
 
 }

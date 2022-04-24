@@ -16,8 +16,8 @@ class NodeFloatSum : NodeFunction() {
 
     override operator fun invoke(context: Context): Variable {
         var sum = 0.0
-        for (i in context.params.values.indices) {
-            val input = context.params[i]!![Type.FLOAT]
+        for (i in dependencies.values.indices) {
+            val input = dependencies[i]!!.invoke(context)[Type.FLOAT]
             input?.let { sum += input }
         }
         return Variable(Type.FLOAT, sum)

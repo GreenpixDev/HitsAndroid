@@ -25,8 +25,8 @@ class NodeForLoop : NodeExecutable() {
     }
 
     override fun invoke(context: Context): NodeExecutable? {
-        val firstIndex = context.params[FIRST_INDEX]!![Type.INT]!!
-        val lastIndex = context.params[LAST_INDEX]!![Type.INT]!!
+        val firstIndex = dependencies[FIRST_INDEX]!!.invoke(context)[Type.INT]!!
+        val lastIndex = dependencies[LAST_INDEX]!!.invoke(context)[Type.INT]!!
 
         // Локальный контекст для индексов и остановки цикла
         val localContext = arrayOf<Any>(0, false)
