@@ -21,7 +21,7 @@ class BlueprintInterpreterTest {
     fun firstTest() {
         val scope = GlobalScope()
         val interpreter = BlueprintInterpreter(scope)
-        val context = interpreter.createContext(false)
+        val context = interpreter.createContext()
 
         scope.declareVariable("test", Type.INT, 2)
 

@@ -25,7 +25,7 @@ class NodeWhileLoop : NodeExecutable() {
         // Цикл
         while (condition) {
             // Выполняем итерацию
-            context.interpreter.execute(loopBody, context.createChild(emptyMap()))
+            context.interpreter.execute(loopBody, context.createChild())
         }
 
         return completed

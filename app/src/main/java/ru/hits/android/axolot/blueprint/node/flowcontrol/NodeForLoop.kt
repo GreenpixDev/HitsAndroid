@@ -36,7 +36,7 @@ class NodeForLoop : NodeExecutable() {
         for (i in firstIndex..lastIndex) {
             // Задаем индекс и выполняем итерацию
             localContext[INDEX] = i
-            context.interpreter.execute(loopBody, context.createChild(emptyMap()))
+            context.interpreter.execute(loopBody, context.createChild())
 
             // Если цикл остановлен - завершаем его
             if (localContext[BREAK] as Boolean) {
