@@ -1,12 +1,13 @@
-package ru.hits.android.axolot.blueprint.node.function.math
+package ru.hits.android.axolot.blueprint.node.function.math.real
 
 import ru.hits.android.axolot.blueprint.context.Context
 import ru.hits.android.axolot.blueprint.node.NodeDependency
 import ru.hits.android.axolot.blueprint.node.NodeFunction
 import ru.hits.android.axolot.blueprint.type.Type
 import ru.hits.android.axolot.blueprint.variable.Variable
+import kotlin.math.max
 
-class NodeFloatSum : NodeFunction() {
+class NodeFloatMin : NodeFunction() {
 
     fun init(vararg input: NodeDependency) {
         for (i in input.indices) {
@@ -15,11 +16,11 @@ class NodeFloatSum : NodeFunction() {
     }
 
     override operator fun invoke(context: Context): Variable {
-        var sum = 0.0
+        var max = Double.NEGATIVE_INFINITY
         for (i in dependencies.values.indices) {
-            val input = dependencies[i]!!.invoke(context)[Type.FLOAT]
-            input?.let { sum += input }
+            val input = dependencies[i]!!.invoke(context)[Type.FLOAT]!!
+            max = max(max, input)
         }
-        return Variable(Type.FLOAT, sum)
+        return Variable(Type.FLOAT, max)
     }
 }

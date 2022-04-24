@@ -1,17 +1,15 @@
 package ru.hits.android.axolot.interpreter
 
 import org.junit.Test
-import ru.hits.android.axolot.blueprint.scope.Scope
 import ru.hits.android.axolot.blueprint.node.NodeConstant
 import ru.hits.android.axolot.blueprint.node.function.NodeCast
 import ru.hits.android.axolot.blueprint.node.executable.NodePrintString
 import ru.hits.android.axolot.blueprint.node.executable.NodeSetVariable
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeForLoop
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeForLoopIndex
-import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeWhileLoop
-import ru.hits.android.axolot.blueprint.node.function.math.NodeSin
+import ru.hits.android.axolot.blueprint.node.function.math.trig.NodeSin
 import ru.hits.android.axolot.blueprint.node.function.NodeGetVariable
-import ru.hits.android.axolot.blueprint.node.function.math.NodeIntSum
+import ru.hits.android.axolot.blueprint.node.function.math.integer.NodeIntSum
 import ru.hits.android.axolot.blueprint.scope.GlobalScope
 import ru.hits.android.axolot.blueprint.type.Type
 
@@ -50,7 +48,7 @@ class BlueprintInterpreterTest {
         printString1.nextNode = setVariableTest
 
         setVariableTest.init(intSum1)
-        intSum1.init(getVariableTest, NodeConstant.of(Type.INT, 2), NodeConstant.of(Type.INT, 1))
+        intSum1.init(getVariableTest, NodeConstant.of(Type.INT, 2), NodeConstant.of(Type.INT, 10))
         setVariableTest.nextNode = printString2
 
         printString2.init(castIntToString1)
