@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">HitsAndroid</string>
+    <string name="infoBtn_name">Info</string>
+    <string name="settingsBtn_name">Settings</string>
+    <string name="hello_name">Добро пожаловать!</string>
+    <string name="startBtn_name">Начать</string>
+    <string name="main_name">ГЛАВНАЯ</string>
+    <string name="info_name">О НАС</string>
+
+
 </resources>
