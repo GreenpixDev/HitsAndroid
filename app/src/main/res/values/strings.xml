@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">HitsAndroid</string>
+    <string name="welcome">Доброе пожаловать</string>
+    <string name="begin">начать</string>
+    <string name="aboutUs">О нас</string>
     <string name="main">Главная</string>
-    <string name="it_s_background_image_for_header">It\'s background image for header</string>
-    <string name="about_us">О нас</string>
-    <string name="welcome">Добро пожаловать</string>
-    <string name="begin">Начать</string>
-    <string name="link_to_settings">Link to settings</string>
-    <string name="link_to_manual">Link to manual</string>
+    <string name="info_icon_description">Кнопка, которая ведет на страницу с инструкцией</string>
+    <string name="settings_icon_description">Кнопка, которая ведет на страницу с настрйоками</string>
+
 </resources>
