@@ -15,9 +15,9 @@ class NodePowService(private val nodeHandlerService: NodeHandlerService) : NodeD
             val pow = nodeHandlerService.invoke(node.dependencies[NodePow.POW])
             if(number && pow) {
                 val res = pow(number.value, pow.value)
-
+                //TODO вариабле блин...
             }
         }
-
+        throw IllegalArgumentException("This is not NodePrintln")
     }
 }
