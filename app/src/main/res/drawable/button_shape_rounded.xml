@@ -4,12 +4,10 @@
     android:insetLeft="6dp"
     android:insetRight="6dp"
     android:insetTop="1dp">
-    <ripple android:color="?attr/colorControlHighlight">
-        <item>
-            <shape android:shape="rectangle">
-                <corners android:radius="20dp"/>
-                <padding android:bottom="6dp"/>
-            </shape>
-        </item>
-    </ripple>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="20dp"/>
+            <padding android:bottom="6dp"/>
+        </shape>
+    </item>
 </inset>

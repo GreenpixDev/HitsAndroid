@@ -9,7 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="main_color">#E2EDF0</color>
     <color name="aside_color">#AEC8D2</color>
+    <!--    не знаю, можно ли так-->
     <color name="startBtn_color">#C4D8DC</color>
     <color name="toolBar_color">#C4D8DC</color>
+    <!--    не знаю, можно ли так-->
     <color name="buttonToolBar_color">#83AFC0</color>
 </resources>
