@@ -69,6 +69,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toEndOf="@+id/information"
         app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:onClick="onClickBegin"
         app:layout_constraintVertical_bias="0.438" />
 
     <View
