@@ -1,7 +1,9 @@
 package ru.hits.android.axolot.executor.variable
 
-class Variable {
+interface Variable<T> {
 
+    val type: String
 
+    var value: T?
 
 }

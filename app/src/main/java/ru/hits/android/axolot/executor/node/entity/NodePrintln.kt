@@ -5,17 +5,14 @@ import ru.hits.android.axolot.executor.node.NodeExecutable
 
 class NodePrintln : NodeExecutable() {
 
+    companion object {
+        const val PARAM = 0
+    }
+
     var nextNode: NodeExecutable? = null
 
-    fun initialize(param: NodeDependency) {
+    fun init(param: NodeDependency) {
         dependencies.add(param)
     }
 
-    override fun invoke(): NodeExecutable? {
-        dependencies[0].invoke()
-
-        // TODO Изменить на нашу консоль
-        println()
-        return nextNode
-    }
 }

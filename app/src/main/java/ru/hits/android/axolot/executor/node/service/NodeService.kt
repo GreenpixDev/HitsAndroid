@@ -1,4 +1,9 @@
 package ru.hits.android.axolot.executor.node.service
 
-interface NodeService {
+import ru.hits.android.axolot.executor.node.Node
+
+interface NodeService<T> {
+
+    fun invoke(node: Node): T
+
 }
