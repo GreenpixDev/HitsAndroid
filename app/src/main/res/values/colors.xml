@@ -11,4 +11,5 @@
     <color name="background_main">#E5E5E5</color>
     <color name="buttons">#C4D8DC</color>
     <color name="i_dont_know">#8DB9CA</color>
+    <color name="oval_button_color">#FCD366</color>
 </resources>

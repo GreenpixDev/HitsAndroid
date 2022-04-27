@@ -5,7 +5,7 @@
     <string name="aboutUs">О нас</string>
     <string name="main">Главная</string>
     <string name="info_icon_description">Кнопка, которая ведет на страницу с инструкцией</string>
-    <string name="settings_icon_description">Кнопка, которая ведет на страницу с настрйоками</string>
+    <string name="settings_icon_description">Кнопка, которая ведет на страницу с настройками</string>
     <string name="play_icon_description">Это кнопка, которая запускает сформированный вами код</string>
 
 </resources>
