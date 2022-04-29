@@ -6,33 +6,70 @@
     android:layout_height="match_parent"
     android:background="@color/main_color">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="200dp"
-        android:layout_height="0dp"
-        android:background="@color/toolBar_color"
+    <!--            <ru.hits.android.axolot.view.CanvasView-->
+    <!--                android:layout_width="514dp"-->
+    <!--                android:layout_height="342dp"-->
+    <!--                tools:layout_editor_absoluteX="137dp"-->
+    <!--                tools:layout_editor_absoluteY="34dp"-->
+    <!--                tools:ignore="MissingConstraints" />-->
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="460dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="1.0"-->
+<!--        app:zoomage_animateOnReset='false'-->
+<!--        app:zoomage_autoCenter='true'-->
+<!--        app:zoomage_autoResetMode='UNDER'-->
+<!--        app:zoomage_maxScale='10'-->
+<!--        app:zoomage_minScale='0.5'-->
+<!--        app:zoomage_restrictBounds='true'-->
+<!--        app:zoomage_translatable='true'-->
+<!--        app:zoomage_zoomable='true'>-->
+
+<!--    </androidx.cardview.widget.CardView>-->
+
+    <ru.hits.android.axolot.view.BlockView
+        android:id="@+id/block"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:blockTitle="BLOCK"
+        app:blockBackgroundColor="#99ADB4"
+        app:blockPropertyText="PROPERTY"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="130dp"
-            android:layout_height="199dp"
-            android:layout_marginTop="6dp"
-            app:layout_constraintTop_toBottomOf="@+id/button"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="44dp" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/button_shape_circle"
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="200dp"
+            android:layout_height="0dp"
+            android:background="@color/toolBar_color"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintTop_toTopOf="parent" >
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonMenu"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/button_shape_circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--        <androidx.recyclerview.widget.RecyclerView-->
+    <!--            android:id="@+id/listNamesBlocks"-->
+    <!--            android:layout_width="130dp"-->
+    <!--            android:layout_height="199dp"-->
+    <!--            android:layout_marginTop="28dp"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/button"-->
+    <!--            tools:ignore="MissingConstraints"-->
+    <!--            tools:layout_editor_absoluteX="45dp" />-->

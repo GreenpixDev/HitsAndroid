@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="BlockView">
+        <attr name="blockTitle" format="string"/>
+        <attr name="blockBackgroundColor" format="color"/>
+        <attr name="blockPropertyText" format="string"/>
+
+    </declare-styleable>
+
+</resources>

@@ -6,4 +6,20 @@
     <string name="startBtn_name">Начать</string>
     <string name="main_name">ГЛАВНАЯ</string>
     <string name="info_name">О НАС</string>
+    <string name="add_block">Добавить блок</string>
+
+<!--    <string-array name="blocks">-->
+<!--        <string-array name="cycles">-->
+<!--            <item>while</item>-->
+<!--            <item>forEach</item>-->
+<!--            <item>for</item>-->
+<!--            <item>if else</item>-->
+<!--        </string-array>-->
+<!--        <string-array name="variable">-->
+<!--            <item>integer</item>-->
+<!--            <item>double</item>-->
+<!--            <item>boolean</item>-->
+<!--            <item>char</item>-->
+<!--        </string-array>-->
+<!--    </string-array>-->
 </resources>
