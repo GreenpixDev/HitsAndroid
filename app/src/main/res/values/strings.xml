@@ -7,5 +7,7 @@
     <string name="info_icon_description">Кнопка, которая ведет на страницу с инструкцией</string>
     <string name="settings_icon_description">Кнопка, которая ведет на страницу с настройками</string>
     <string name="play_icon_description">Это кнопка, которая запускает сформированный вами код</string>
+    <string name="show_and_not_show_toolbar">Это кнопка, которая закрывает и открывает тулбар</string>
+    <string name="menu_description">Это меню, где вы можете выбрать блок для визуального программирования</string>
 
 </resources>

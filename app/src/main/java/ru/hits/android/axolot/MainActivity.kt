@@ -16,5 +16,4 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, BluePrintActivity::class.java)
         startActivity(intent)
     }
-
 }
