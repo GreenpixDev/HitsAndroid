@@ -28,7 +28,6 @@ import ru.hits.android.axolot.blueprint.node.function.math.integer.*
 import ru.hits.android.axolot.blueprint.node.macros.*
 import ru.hits.android.axolot.blueprint.scope.GlobalScope
 import ru.hits.android.axolot.blueprint.type.Type
-import ru.hits.android.axolot.blueprint.type.structure.ArrayType
 import ru.hits.android.axolot.blueprint.variable.Variable
 
 class BlueprintInterpreterTest {
@@ -484,10 +483,10 @@ class BlueprintInterpreterTest {
         val assign2 = NodeArrayAssignElement()
         val assign3 = NodeArrayAssignElement()
 
-        var forLoop = forLoop()
-        var sub = NodeIntSub()
-        var printElement = NodePrintString()
-        var arrayGet = NodeArrayGetElement()
+        val forLoop = forLoop()
+        val sub = NodeIntSub()
+        val printElement = NodePrintString()
+        val arrayGet = NodeArrayGetElement()
 
         // Начало
         printStart.init(NodeConstant.of(Type.STRING, "Start Array Test!"))
