@@ -1,6 +1,6 @@
 package ru.hits.android.axolot.blueprint.node.function.math.integer
 
-import ru.hits.android.axolot.blueprint.context.Context
+import ru.hits.android.axolot.interpreter.InterpreterContext
 import ru.hits.android.axolot.blueprint.node.NodeDependency
 import ru.hits.android.axolot.blueprint.node.NodeFunction
 import ru.hits.android.axolot.blueprint.type.Type
@@ -14,7 +14,7 @@ class NodeIntMod : NodeFunction() {
         }
     }
 
-    override operator fun invoke(context: Context): Variable {
+    override operator fun invoke(context: InterpreterContext): Variable {
         var sum = 0
         for (i in dependencies.values.indices) {
             val input = dependencies[i]!!.invoke(context)[Type.INT]

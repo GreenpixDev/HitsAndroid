@@ -1,6 +1,7 @@
 package ru.hits.android.axolot.interpreter
 
 import org.junit.Test
+import ru.hits.android.axolot.blueprint.element.BlueprintFunction
 import ru.hits.android.axolot.blueprint.element.BlueprintMacros
 import ru.hits.android.axolot.blueprint.node.NodeConstant
 import ru.hits.android.axolot.blueprint.node.function.NodeCast
@@ -12,12 +13,14 @@ import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeForLoopIndex
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeSequence
 import ru.hits.android.axolot.blueprint.node.function.math.trig.NodeSin
 import ru.hits.android.axolot.blueprint.node.function.NodeGetVariable
+import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionEnd
+import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionInvoke
+import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionParameter
+import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionReturned
 import ru.hits.android.axolot.blueprint.node.function.math.bool.NodeBooleanAnd
 import ru.hits.android.axolot.blueprint.node.function.math.bool.NodeBooleanNot
-import ru.hits.android.axolot.blueprint.node.function.math.integer.NodeIntLess
-import ru.hits.android.axolot.blueprint.node.function.math.integer.NodeIntLessOrEqual
-import ru.hits.android.axolot.blueprint.node.function.math.integer.NodeIntMore
-import ru.hits.android.axolot.blueprint.node.function.math.integer.NodeIntSum
+import ru.hits.android.axolot.blueprint.node.function.math.bool.NodeBooleanOr
+import ru.hits.android.axolot.blueprint.node.function.math.integer.*
 import ru.hits.android.axolot.blueprint.node.macros.*
 import ru.hits.android.axolot.blueprint.scope.GlobalScope
 import ru.hits.android.axolot.blueprint.type.Type
@@ -28,7 +31,6 @@ class BlueprintInterpreterTest {
     fun firstTest() {
         val scope = GlobalScope()
         val interpreter = BlueprintInterpreter(scope)
-        val context = interpreter.createContext()
 
         scope.declareVariable("test", Type.INT, 2)
 
@@ -44,8 +46,8 @@ class BlueprintInterpreterTest {
         val printString2 = NodePrintString()
         val castIntToString1 = NodeCast(Type.STRING)
 
-        val forLoop1 = NodeForLoop()
-        val forLoop1Index = NodeForLoopIndex(forLoop1)
+        val forLoop1Index = NodeForLoopIndex()
+        val forLoop1 = NodeForLoop(forLoop1Index)
         val castIntToStringIndex = NodeCast(Type.STRING)
         val printString3 = NodePrintString()
         val printString4 = NodePrintString()
@@ -73,14 +75,13 @@ class BlueprintInterpreterTest {
         forLoop1.completed = printString4
         printString4.init(NodeConstant.of(Type.STRING, "ForLoop Completed!"))
 
-        interpreter.execute(printString1, context)
+        interpreter.execute(printString1)
     }
 
     @Test
     fun whileMacrosTest() {
         val scope = GlobalScope()
         val interpreter = BlueprintInterpreter(scope)
-        val context = interpreter.createContext()
         scope.declareVariable("counter", Type.INT, 0)
 
         /*
@@ -155,7 +156,7 @@ class BlueprintInterpreterTest {
         /*
          Запуск
          */
-        interpreter.execute(printStart, context)
+        interpreter.execute(printStart)
     }
 
     /*
@@ -177,7 +178,6 @@ class BlueprintInterpreterTest {
     fun forMacrosTest() {
         val scope = GlobalScope()
         val interpreter = BlueprintInterpreter(scope)
-        val context = interpreter.createContext()
 
         /*
          Делаем макрос
@@ -255,7 +255,7 @@ class BlueprintInterpreterTest {
         /*
          Запуск
          */
-        interpreter.execute(printStart, context)
+        interpreter.execute(printStart)
     }
 
     /*
@@ -277,7 +277,6 @@ class BlueprintInterpreterTest {
     fun forWithBreakMacrosTest() {
         val scope = GlobalScope()
         val interpreter = BlueprintInterpreter(scope)
-        val context = interpreter.createContext()
 
         /*
          Делаем макрос
@@ -395,6 +394,94 @@ class BlueprintInterpreterTest {
         /*
          Запуск
          */
-        interpreter.execute(printStart, context)
+        interpreter.execute(printStart)
+    }
+
+    /*
+     * Start Fibonacci Function Test!
+     * Completed Fibonacci Function!
+     */
+    @Test
+    fun fibonacciFunctionTest() {
+        val scope = GlobalScope()
+        val interpreter = BlueprintInterpreter(scope)
+
+        /*
+         Делаем функцию
+         */
+
+        // Объявляем все узлы
+        val branch = NodeBranch()
+
+        val or = NodeBooleanOr()
+        val equals1 = NodeIntEqual()
+        val equals2 = NodeIntEqual()
+
+        val function = BlueprintFunction(branch)
+        function.input["number"] = NodeFunctionParameter()
+        function.output["return"] = Type.INT
+
+        val return1 = NodeFunctionEnd(function)
+        val return2 = NodeFunctionEnd(function)
+
+        val invoke1 = NodeFunctionInvoke(function)
+        val returned1 = NodeFunctionReturned(invoke1, "return")
+
+        val invoke2 = NodeFunctionInvoke(function)
+        val returned2 = NodeFunctionReturned(invoke2, "return")
+
+        val sub1 = NodeIntSub()
+        val sub2 = NodeIntSub()
+        val sum = NodeIntSum()
+
+        // Связка узлов
+        equals1.init(function.input["number"]!!, NodeConstant.of(Type.INT, 1))
+        equals2.init(function.input["number"]!!, NodeConstant.of(Type.INT, 2))
+        or.init(equals1, equals2)
+        branch.init(or)
+        branch.trueNode = return1
+        branch.falseNode = invoke1
+
+        return1.dependencies["return"] = NodeConstant.of(Type.INT, 1)
+
+        sub1.init(function.input["number"]!!, NodeConstant.of(Type.INT, 1))
+        invoke1.dependencies["number"] = sub1
+        invoke1.nextNode = invoke2
+
+        sub2.init(sub1, NodeConstant.of(Type.INT, 1))
+        invoke2.dependencies["number"] = sub2
+        invoke2.nextNode = return2
+
+        sum.init(returned1, returned2)
+        return2.dependencies["return"] = sum
+
+        /*
+         Используем его
+         */
+        val printStart = NodePrintString()                      // Нода вывода в консоль начала программы
+        val printResult = NodePrintString()                     // Нода вывода числа фибоначчи
+        val printEnd = NodePrintString()                        // Нода вывода в консоль завершения программы
+        val fibonacciInvoke = NodeFunctionInvoke(function)      // Нода вызова функции фибоначчи
+        val fibonacciReturned = NodeFunctionReturned(fibonacciInvoke, "return")
+        val intToString = NodeCast(Type.STRING)                 // Нода преобразования: int -> string
+
+        printStart.init(NodeConstant.of(Type.STRING, "Start Fibonacci Function Test!"))
+        printStart.nextNode = fibonacciInvoke
+
+        fibonacciInvoke.dependencies["number"] = NodeConstant.of(Type.INT, 40)
+        fibonacciInvoke.nextNode = printResult
+
+        intToString.init(fibonacciReturned)
+        printResult.init(intToString)
+        printResult.nextNode = printEnd
+
+        printEnd.init(NodeConstant.of(Type.STRING, "End Fibonacci Function Test!"))
+
+        /*
+         Запуск
+         */
+        val timestamp = System.currentTimeMillis()
+        interpreter.execute(printStart)
+        println("Executed for ${System.currentTimeMillis() - timestamp} ms")
     }
 }

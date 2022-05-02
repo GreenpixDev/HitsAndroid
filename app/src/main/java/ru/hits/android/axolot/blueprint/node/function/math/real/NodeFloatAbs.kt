@@ -1,6 +1,6 @@
 package ru.hits.android.axolot.blueprint.node.function.math.real
 
-import ru.hits.android.axolot.blueprint.context.Context
+import ru.hits.android.axolot.interpreter.InterpreterContext
 import ru.hits.android.axolot.blueprint.node.NodeDependency
 import ru.hits.android.axolot.blueprint.node.NodeFunction
 import ru.hits.android.axolot.blueprint.type.Type
@@ -17,7 +17,7 @@ class NodeFloatAbs : NodeFunction() {
         dependencies[INPUT] = input
     }
 
-    override operator fun invoke(context: Context): Variable {
+    override operator fun invoke(context: InterpreterContext): Variable {
         val input = dependencies[INPUT]!!.invoke(context)[Type.FLOAT]
         val result = input?.let { abs(it) }
         return Variable(Type.FLOAT, result)

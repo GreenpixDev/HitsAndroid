@@ -1,6 +1,6 @@
 package ru.hits.android.axolot.blueprint.node.macros
 
-import ru.hits.android.axolot.blueprint.context.Context
+import ru.hits.android.axolot.interpreter.InterpreterContext
 import ru.hits.android.axolot.blueprint.node.NodeDependency
 import ru.hits.android.axolot.blueprint.node.NodeExecutable
 
@@ -18,7 +18,7 @@ class NodeAssignVariable : NodeExecutable() {
         dependencies[VALUE] = value
     }
 
-    override fun invoke(context: Context): NodeExecutable? {
+    override fun invoke(context: InterpreterContext): NodeExecutable? {
         val reference = dependencies[REFERENCE]!!.invoke(context)
         val value = dependencies[VALUE]!!.invoke(context)
 

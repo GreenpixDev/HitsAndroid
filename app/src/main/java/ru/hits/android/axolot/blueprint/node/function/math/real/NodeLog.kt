@@ -1,6 +1,6 @@
 package ru.hits.android.axolot.blueprint.node.function.math.real
 
-import ru.hits.android.axolot.blueprint.context.Context
+import ru.hits.android.axolot.interpreter.InterpreterContext
 import ru.hits.android.axolot.blueprint.node.NodeDependency
 import ru.hits.android.axolot.blueprint.node.NodeFunction
 import ru.hits.android.axolot.blueprint.type.Type
@@ -19,7 +19,7 @@ class NodeLog : NodeFunction() {
         dependencies[BASE] = base
     }
 
-    override operator fun invoke(context: Context): Variable {
+    override operator fun invoke(context: InterpreterContext): Variable {
         val number = dependencies[NUMBER]!!.invoke(context)[Type.FLOAT]!!
         val base = dependencies[BASE]!!.invoke(context)[Type.FLOAT]!!
         return Variable(Type.FLOAT, log(number, base))

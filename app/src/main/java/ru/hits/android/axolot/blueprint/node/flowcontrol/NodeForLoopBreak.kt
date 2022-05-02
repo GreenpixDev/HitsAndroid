@@ -1,14 +1,13 @@
 package ru.hits.android.axolot.blueprint.node.flowcontrol
 
-import ru.hits.android.axolot.blueprint.context.Context
+import ru.hits.android.axolot.interpreter.InterpreterContext
 import ru.hits.android.axolot.blueprint.node.NodeExecutable
-import ru.hits.android.axolot.blueprint.variable.Variable
 
 @Deprecated("Этот узел можно сделать не нативным")
-class NodeForLoopBreak(private val forLoop: NodeForLoop) : NodeExecutable() {
+class NodeForLoopBreak : NodeExecutable() {
 
-    override fun invoke(context: Context): NodeExecutable? {
-        context.local[forLoop]!![NodeForLoop.BREAK] = true
+    override fun invoke(context: InterpreterContext): NodeExecutable? {
+        context.stack[this]?.value = true
         return null
     }
 }
