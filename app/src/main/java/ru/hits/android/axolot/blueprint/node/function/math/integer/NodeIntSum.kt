@@ -9,15 +9,13 @@ import ru.hits.android.axolot.blueprint.variable.Variable
 class NodeIntSum : NodeFunction() {
 
     fun init(vararg input: NodeDependency) {
-        for (i in input.indices) {
-            dependencies[i] = input[i]
-        }
+        dependencies.addAll(input)
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
         var sum = 0
-        for (i in dependencies.values.indices) {
-            val input = dependencies[i]!!.invoke(context)[Type.INT]
+        for (i in dependencies.indices) {
+            val input = dependencies[i].invoke(context)[Type.INT]
             input?.let { sum += input }
         }
         return Variable(Type.INT, sum)

@@ -7,10 +7,7 @@ import ru.hits.android.axolot.blueprint.type.Type
 import ru.hits.android.axolot.blueprint.variable.Variable
 
 @Deprecated("Этот узел можно сделать не нативным")
-class NodeForLoop @JvmOverloads constructor(
-    private val nodeIndex: NodeForLoopIndex? = null,
-    private val nodeBreak: NodeForLoopBreak? = null
-) : NodeExecutable() {
+class NodeForLoop : NodeExecutable() {
 
     var loopBody: NodeExecutable? = null
 
@@ -27,27 +24,28 @@ class NodeForLoop @JvmOverloads constructor(
     }
 
     override fun invoke(context: InterpreterContext): NodeExecutable? {
-        val firstIndex = dependencies[FIRST_INDEX]!!.invoke(context)[Type.INT]!!
-        val lastIndex = dependencies[LAST_INDEX]!!.invoke(context)[Type.INT]!!
+        val firstIndex = dependencies[FIRST_INDEX].invoke(context)[Type.INT]!!
+        val lastIndex = dependencies[LAST_INDEX].invoke(context)[Type.INT]!!
 
         // Добавляем в стек переменные для цикла
-        nodeBreak?.let { context.stack[it] = Variable(Type.BOOLEAN, false) }
-        nodeIndex?.let { context.stack[it] = Variable(Type.INT, 0) }
+        val idxBreak = context.stack.peek().add(Variable(Type.BOOLEAN, false))
+        val idxIndex = context.stack.peek().add(Variable(Type.INT, 0))
 
         // Цикл
         for (i in firstIndex..lastIndex) {
             // Задаем индекс и выполняем итерацию
-            nodeIndex?.let { context.stack[it]?.value = i }
+            context.stack.peek()[idxIndex].value = i
             context.interpreter.execute(loopBody)
 
             // Если цикл остановлен - завершаем его
-            if (nodeBreak != null && context.stack[nodeBreak]?.value as Boolean) {
+            if (context.stack.peek()[idxBreak].value as Boolean) {
                 break
             }
         }
 
-        // Удаляем переменную break, а index сохраняем
-        nodeBreak?.let { context.stack[it] = null }
+        // Удаляем переменные из стека
+        context.stack.peek().removeAt(idxBreak)
+        context.stack.peek().removeAt(idxIndex)
 
         return completed
     }

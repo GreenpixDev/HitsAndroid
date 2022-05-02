@@ -10,15 +10,13 @@ import kotlin.math.min
 class NodeIntMin : NodeFunction() {
 
     fun init(vararg input: NodeDependency) {
-        for (i in input.indices) {
-            dependencies[i] = input[i]
-        }
+        dependencies.addAll(input)
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
         var min = Integer.MAX_VALUE
-        for (i in dependencies.values.indices) {
-            val input = dependencies[i]!!.invoke(context)[Type.INT]!!
+        for (i in dependencies.indices) {
+            val input = dependencies[i].invoke(context)[Type.INT]!!
             min = min(min, input)
         }
         return Variable(Type.INT, min)

@@ -22,9 +22,9 @@ class NodeArrayResize : NodeExecutable()  {
     }
 
     override fun invoke(context: InterpreterContext): NodeExecutable? {
-        val arrayReference = dependencies[ARRAY]!!.invoke(context)
+        val arrayReference = dependencies[ARRAY].invoke(context)
         val elementType = (arrayReference.type as ArrayType).elementType
-        val size = dependencies[SIZE]!!.invoke(context)[Type.INT]!!
+        val size = dependencies[SIZE].invoke(context)[Type.INT]!!
 
         arrayReference.value = Array(size) { Variable.nullVariable(elementType) }
 

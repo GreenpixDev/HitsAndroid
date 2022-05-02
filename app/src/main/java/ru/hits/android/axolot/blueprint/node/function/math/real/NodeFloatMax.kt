@@ -10,15 +10,13 @@ import kotlin.math.max
 class NodeFloatMax : NodeFunction() {
 
     fun init(vararg input: NodeDependency) {
-        for (i in input.indices) {
-            dependencies[i] = input[i]
-        }
+        dependencies.addAll(input)
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
         var max = Double.POSITIVE_INFINITY
-        for (i in dependencies.values.indices) {
-            val input = dependencies[i]!!.invoke(context)[Type.FLOAT]!!
+        for (i in dependencies.indices) {
+            val input = dependencies[i].invoke(context)[Type.FLOAT]!!
             max = max(max, input)
         }
         return Variable(Type.FLOAT, max)

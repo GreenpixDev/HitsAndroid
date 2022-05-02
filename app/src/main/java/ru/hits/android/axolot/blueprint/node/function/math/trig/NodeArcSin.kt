@@ -10,7 +10,7 @@ import kotlin.math.asin
 class NodeArcSin : NodeFunction() {
 
     companion object {
-        const val INPUT = "input"
+        const val INPUT = 0
     }
 
     fun init(input: NodeDependency) {
@@ -18,7 +18,7 @@ class NodeArcSin : NodeFunction() {
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        val input = dependencies[INPUT]!!.invoke(context)[Type.FLOAT]
+        val input = dependencies[INPUT].invoke(context)[Type.FLOAT]
         val result = input?.let { asin(it) }
         return Variable(Type.FLOAT, result)
     }

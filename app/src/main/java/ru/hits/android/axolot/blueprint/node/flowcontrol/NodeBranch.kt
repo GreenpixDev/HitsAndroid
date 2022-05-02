@@ -20,7 +20,7 @@ class NodeBranch : NodeExecutable() {
     }
 
     override fun invoke(context: InterpreterContext): NodeExecutable? {
-        val condition = dependencies[CONDITION]!!.invoke(context)[Type.BOOLEAN]!!
+        val condition = dependencies[CONDITION].invoke(context)[Type.BOOLEAN]!!
         return if (condition) trueNode else falseNode
     }
 }

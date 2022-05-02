@@ -20,8 +20,8 @@ class NodeArrayFindElement : NodeFunction() {
     }
 
     override fun invoke(context: InterpreterContext): Variable {
-        val array = dependencies[ARRAY]!!.invoke(context).getArray()!!
-        val element = dependencies[ELEMENT]!!.invoke(context).value
+        val array = dependencies[ARRAY].invoke(context).getArray()!!
+        val element = dependencies[ELEMENT].invoke(context).value
 
         return Variable(Type.INT, array.find { it.value == element })
     }

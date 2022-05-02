@@ -5,9 +5,9 @@ import ru.hits.android.axolot.blueprint.node.NodeFunction
 import ru.hits.android.axolot.blueprint.variable.Variable
 
 @Deprecated("Этот узел можно сделать не нативным")
-class NodeForLoopIndex : NodeFunction() {
+class NodeForLoopIndex(private val index: Int) : NodeFunction() {
 
     override fun invoke(context: InterpreterContext): Variable {
-        return context.stack[this]!!
+        return context.stack.peek()[index]
     }
 }

@@ -11,9 +11,9 @@ class NodeFunctionInvoke(val function: BlueprintFunction) : NodeExecutable() {
 
     override fun invoke(context: InterpreterContext): NodeExecutable? {
         // Получаем все входные переменные функции
-        val frame = StackFrame(this)
-        dependencies.forEach {
-            frame.variables[function.input[it.key]!!] = it.value.invoke(context)
+        val frame = StackFrame()
+        for (i in dependencies.indices) {
+            frame.add(dependencies[i].invoke(context))
         }
 
         // Увеличиваем стек (вход в функцию)

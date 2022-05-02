@@ -9,7 +9,7 @@ import ru.hits.android.axolot.blueprint.variable.Variable
 class NodeCast(val cast: VariableType<*>) : NodeFunction() {
 
     companion object {
-        const val INPUT = "input"
+        const val INPUT = 0
     }
 
     fun init(input: NodeDependency) {
@@ -17,7 +17,7 @@ class NodeCast(val cast: VariableType<*>) : NodeFunction() {
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        val input = dependencies[INPUT]!!.invoke(context)
+        val input = dependencies[INPUT].invoke(context)
         return Variable(cast, cast.cast(input))
     }
 }

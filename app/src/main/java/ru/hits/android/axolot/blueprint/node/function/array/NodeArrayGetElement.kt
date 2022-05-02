@@ -20,8 +20,8 @@ class NodeArrayGetElement : NodeFunction() {
     }
 
     override fun invoke(context: InterpreterContext): Variable {
-        val array = dependencies[ARRAY]!!.invoke(context).getArray()!!
-        val index = dependencies[INDEX]!!.invoke(context)[Type.INT]!!
+        val array = dependencies[ARRAY].invoke(context).getArray()!!
+        val index = dependencies[INDEX].invoke(context)[Type.INT]!!
 
         return array[index]
     }

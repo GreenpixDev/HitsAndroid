@@ -16,6 +16,6 @@ class NodeMacrosDependency : NodeFunction() {
     }
 
     override fun invoke(context: InterpreterContext): Variable {
-        return dependencies[INPUT]!!.invoke(context)
+        return dependencies[INPUT].invoke(context)
     }
 }

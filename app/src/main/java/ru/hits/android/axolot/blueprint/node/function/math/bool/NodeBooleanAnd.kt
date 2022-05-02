@@ -8,18 +8,19 @@ import ru.hits.android.axolot.blueprint.variable.Variable
 
 class NodeBooleanAnd : NodeFunction() {
 
-    fun init(vararg input: NodeDependency) {
-        for (i in input.indices) {
-            dependencies[i] = input[i]
-        }
+    companion object {
+        const val FIRST = 0
+        const val SECOND = 1
+    }
+
+    fun init(first: NodeDependency, second: NodeDependency) {
+        dependencies[FIRST] = first
+        dependencies[SECOND] = second
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        var result = true
-        for (i in dependencies.values.indices) {
-            val input = dependencies[i]!!.invoke(context)[Type.BOOLEAN]!!
-            result = result && input
-        }
-        return Variable(Type.BOOLEAN, result)
+        val first = dependencies[FIRST].invoke(context)[Type.BOOLEAN]!!
+        val second = dependencies[SECOND].invoke(context)[Type.BOOLEAN]!!
+        return Variable(Type.BOOLEAN, first && second)
     }
 }

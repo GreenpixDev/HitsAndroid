@@ -18,7 +18,7 @@ class NodePrintString : NodeExecutable() {
     }
 
     override operator fun invoke(context: InterpreterContext): NodeExecutable? {
-        val string = dependencies[STRING]!!.invoke(context)[Type.STRING]
+        val string = dependencies[STRING].invoke(context)[Type.STRING]
         println(string)
         return nextNode
     }

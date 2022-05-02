@@ -19,8 +19,8 @@ class NodeAssignVariable : NodeExecutable() {
     }
 
     override fun invoke(context: InterpreterContext): NodeExecutable? {
-        val reference = dependencies[REFERENCE]!!.invoke(context)
-        val value = dependencies[VALUE]!!.invoke(context)
+        val reference = dependencies[REFERENCE].invoke(context)
+        val value = dependencies[VALUE].invoke(context)
 
         require(reference.type == value.type) {
             "different types of reference and value: excepted ${reference.type}, actual ${value.type}"

@@ -18,7 +18,7 @@ class NodeArraySize : NodeFunction() {
     }
 
     override fun invoke(context: InterpreterContext): Variable {
-        val array = dependencies[ARRAY]!!.invoke(context).getArray()!!
+        val array = dependencies[ARRAY].invoke(context).getArray()!!
 
         return Variable(Type.INT, array.size)
     }

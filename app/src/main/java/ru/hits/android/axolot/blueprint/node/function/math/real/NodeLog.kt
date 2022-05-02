@@ -10,8 +10,8 @@ import kotlin.math.log
 class NodeLog : NodeFunction() {
 
     companion object {
-        const val NUMBER = "number"
-        const val BASE = "base"
+        const val NUMBER = 0
+        const val BASE = 1
     }
 
     fun init(number: NodeDependency, base: NodeDependency) {
@@ -20,8 +20,8 @@ class NodeLog : NodeFunction() {
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        val number = dependencies[NUMBER]!!.invoke(context)[Type.FLOAT]!!
-        val base = dependencies[BASE]!!.invoke(context)[Type.FLOAT]!!
+        val number = dependencies[NUMBER].invoke(context)[Type.FLOAT]!!
+        val base = dependencies[BASE].invoke(context)[Type.FLOAT]!!
         return Variable(Type.FLOAT, log(number, base))
     }
 }

@@ -19,8 +19,8 @@ class NodeIntMore : NodeFunction() {
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        val first = dependencies[FIRST]!!.invoke(context)[Type.INT]!!
-        val second = dependencies[SECOND]!!.invoke(context)[Type.INT]!!
+        val first = dependencies[FIRST].invoke(context)[Type.INT]!!
+        val second = dependencies[SECOND].invoke(context)[Type.INT]!!
         return Variable(Type.BOOLEAN, first > second)
     }
 }

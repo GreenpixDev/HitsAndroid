@@ -21,7 +21,7 @@ class NodeWhileLoop : NodeExecutable() {
     }
 
     override fun invoke(context: InterpreterContext): NodeExecutable? {
-        val condition = dependencies[CONDITION]!!.invoke(context)[Type.BOOLEAN]!!
+        val condition = dependencies[CONDITION].invoke(context)[Type.BOOLEAN]!!
 
         // Цикл
         while (condition) {

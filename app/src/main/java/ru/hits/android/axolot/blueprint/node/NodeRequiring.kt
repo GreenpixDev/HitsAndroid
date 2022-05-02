@@ -1,7 +1,9 @@
 package ru.hits.android.axolot.blueprint.node
 
+import ru.hits.android.axolot.util.Dependencies
+
 interface NodeRequiring : Node {
 
-    val dependencies: Map<Any, NodeDependency>
+    val dependencies: Dependencies
 
 }

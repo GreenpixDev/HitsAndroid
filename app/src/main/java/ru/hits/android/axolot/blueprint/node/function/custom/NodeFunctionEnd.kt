@@ -8,9 +8,8 @@ class NodeFunctionEnd(val function: BlueprintFunction) : NodeExecutable() {
 
     override fun invoke(context: InterpreterContext): NodeExecutable? {
         // Записываем все входные переменные функции в стек
-        dependencies.forEach {
-            val key = context.stack.peek().invocable to it.key
-            context.stack.peek(1).variables[key] = it.value.invoke(context)
+        for (i in dependencies.indices) {
+            context.stack.peek(1).add(dependencies[i].invoke(context))
         }
 
         return null

@@ -10,7 +10,7 @@ import kotlin.math.abs
 class NodeIntAbs : NodeFunction() {
 
     companion object {
-        const val INPUT = "input"
+        const val INPUT = 0
     }
 
     fun init(input: NodeDependency) {
@@ -18,7 +18,7 @@ class NodeIntAbs : NodeFunction() {
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        val input = dependencies[INPUT]!!.invoke(context)[Type.INT]
+        val input = dependencies[INPUT].invoke(context)[Type.INT]
         val result = input?.let { abs(it) }
         return Variable(Type.FLOAT, result)
     }

@@ -51,8 +51,8 @@ class BlueprintInterpreterTest {
         val printString2 = NodePrintString()
         val castIntToString1 = NodeCast(Type.STRING)
 
-        val forLoop1Index = NodeForLoopIndex()
-        val forLoop1 = NodeForLoop(forLoop1Index)
+        val forLoop1Index = NodeForLoopIndex(0)
+        val forLoop1 = NodeForLoop()
         val castIntToStringIndex = NodeCast(Type.STRING)
         val printString3 = NodePrintString()
         val printString4 = NodePrintString()
@@ -263,8 +263,8 @@ class BlueprintInterpreterTest {
         macros.output["index"] = NodeMacrosDependency()
 
         // Объявляем все узлы
-        val localBreak = NodeLocalVariable(Type.BOOLEAN)            // Нода локальной переменной: boolean break
-        val localIndex = NodeLocalVariable(Type.INT)                // Нода локальной переменной: int index
+        val localBreak = NodeLocalVariable(0, Type.BOOLEAN)            // Нода локальной переменной: boolean break
+        val localIndex = NodeLocalVariable(1, Type.INT)                // Нода локальной переменной: int index
         val firstAssignBreak = NodeAssignVariable()                 // Нода присваивания: break = ..
         val firstAssignIndex = NodeAssignVariable()                 // Нода присваивания: index = ..
 
@@ -390,21 +390,25 @@ class BlueprintInterpreterTest {
         val equals2 = NodeIntEqual()
 
         val function = BlueprintFunction(branch)
-        function.input["number"] = NodeFunctionParameter()
+        function.input["number"] = NodeFunctionParameter(0)
         function.output["return"] = Type.INT
 
         val return1 = NodeFunctionEnd(function)
         val return2 = NodeFunctionEnd(function)
 
         val invoke1 = NodeFunctionInvoke(function)
-        val returned1 = NodeFunctionReturned(invoke1, "return")
+        val returned1 = NodeFunctionReturned(1)
 
         val invoke2 = NodeFunctionInvoke(function)
-        val returned2 = NodeFunctionReturned(invoke2, "return")
+        val returned2 = NodeFunctionReturned(2)
 
         val sub1 = NodeIntSub()
         val sub2 = NodeIntSub()
         val sum = NodeIntSum()
+
+        // Константы
+        val RETURN = 0
+        val NUMBER = 0
 
         // Связка узлов
         equals1.init(function.input["number"]!!, NodeConstant.of(Type.INT, 1))
@@ -414,18 +418,18 @@ class BlueprintInterpreterTest {
         branch.trueNode = return1
         branch.falseNode = invoke1
 
-        return1.dependencies["return"] = NodeConstant.of(Type.INT, 1)
+        return1.dependencies[RETURN] = NodeConstant.of(Type.INT, 1)
 
         sub1.init(function.input["number"]!!, NodeConstant.of(Type.INT, 1))
-        invoke1.dependencies["number"] = sub1
+        invoke1.dependencies[NUMBER] = sub1
         invoke1.nextNode = invoke2
 
         sub2.init(sub1, NodeConstant.of(Type.INT, 1))
-        invoke2.dependencies["number"] = sub2
+        invoke2.dependencies[NUMBER] = sub2
         invoke2.nextNode = return2
 
         sum.init(returned1, returned2)
-        return2.dependencies["return"] = sum
+        return2.dependencies[RETURN] = sum
 
         /*
          Используем его
@@ -434,13 +438,13 @@ class BlueprintInterpreterTest {
         val printResult = NodePrintString()                     // Нода вывода числа фибоначчи
         val printEnd = NodePrintString()                        // Нода вывода в консоль завершения программы
         val fibonacciInvoke = NodeFunctionInvoke(function)      // Нода вызова функции фибоначчи
-        val fibonacciReturned = NodeFunctionReturned(fibonacciInvoke, "return")
+        val fibonacciReturned = NodeFunctionReturned(0)
         val intToString = NodeCast(Type.STRING)                 // Нода преобразования: int -> string
 
         printStart.init(NodeConstant.of(Type.STRING, "Start Fibonacci Function Test!"))
         printStart.nextNode = fibonacciInvoke
 
-        fibonacciInvoke.dependencies["number"] = NodeConstant.of(Type.INT, 30)
+        fibonacciInvoke.dependencies[NUMBER] = NodeConstant.of(Type.INT, 30)
         fibonacciInvoke.nextNode = printResult
 
         intToString.init(fibonacciReturned)
@@ -539,7 +543,7 @@ class BlueprintInterpreterTest {
         macros.outputExecutable["completed"] = NodeMacrosOutput()
         macros.output["index"] = NodeMacrosDependency()
 
-        val localInt = NodeLocalVariable(Type.INT)              // Нода локальной переменной localInt
+        val localInt = NodeLocalVariable(0, Type.INT)              // Нода локальной переменной localInt
         val firstAssign = NodeAssignVariable()                  // Нода присваивания
         val lessOrEqual = NodeIntLessOrEqual()                  // Нода a <= b
         val branch = NodeBranch()                               // Нода IF

@@ -10,7 +10,7 @@ import kotlin.math.acos
 class NodeArcCos : NodeFunction() {
 
     companion object {
-        const val INPUT = "input"
+        const val INPUT = 0
     }
 
     fun init(input: NodeDependency) {
@@ -18,7 +18,7 @@ class NodeArcCos : NodeFunction() {
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        val input = dependencies[INPUT]!!.invoke(context)[Type.FLOAT]
+        val input = dependencies[INPUT].invoke(context)[Type.FLOAT]
         val result = input?.let { acos(it) }
         return Variable(Type.FLOAT, result)
     }

@@ -19,8 +19,8 @@ class NodeFloatNotEqual : NodeFunction() {
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        val first = dependencies[FIRST]!!.invoke(context)[Type.FLOAT]!!
-        val second = dependencies[SECOND]!!.invoke(context)[Type.FLOAT]!!
+        val first = dependencies[FIRST].invoke(context)[Type.FLOAT]!!
+        val second = dependencies[SECOND].invoke(context)[Type.FLOAT]!!
         return Variable(Type.BOOLEAN, first != second)
     }
 }

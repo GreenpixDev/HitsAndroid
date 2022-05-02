@@ -10,7 +10,7 @@ import kotlin.math.tan
 class NodeTan : NodeFunction() {
 
     companion object {
-        const val INPUT = "input"
+        const val INPUT = 0
     }
 
     fun init(input: NodeDependency) {
@@ -18,7 +18,7 @@ class NodeTan : NodeFunction() {
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        val input = dependencies[INPUT]!!.invoke(context)[Type.FLOAT]
+        val input = dependencies[INPUT].invoke(context)[Type.FLOAT]
         val result = input?.let { tan(it) }
         return Variable(Type.FLOAT, result)
     }
