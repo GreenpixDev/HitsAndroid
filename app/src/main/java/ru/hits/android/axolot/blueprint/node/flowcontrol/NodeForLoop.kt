@@ -5,6 +5,7 @@ import ru.hits.android.axolot.blueprint.node.NodeDependency
 import ru.hits.android.axolot.blueprint.node.NodeExecutable
 import ru.hits.android.axolot.blueprint.type.Type
 
+@Deprecated("Этот узел можно сделать не нативным")
 class NodeForLoop : NodeExecutable() {
 
     var loopBody: NodeExecutable? = null
@@ -29,21 +30,20 @@ class NodeForLoop : NodeExecutable() {
         val lastIndex = dependencies[LAST_INDEX]!!.invoke(context)[Type.INT]!!
 
         // Локальный контекст для индексов и остановки цикла
-        val localContext = arrayOf<Any>(0, false)
-        context.local[this] = localContext
+        context.createLocalContext(this, mapOf(INDEX to 0, BREAK to false)).use {
+            // Цикл
+            for (i in firstIndex..lastIndex) {
+                // Задаем индекс и выполняем итерацию
+                it[INDEX] = i
+                context.interpreter.execute(loopBody, context.createChild())
 
-        // Цикл
-        for (i in firstIndex..lastIndex) {
-            // Задаем индекс и выполняем итерацию
-            localContext[INDEX] = i
-            context.interpreter.execute(loopBody, context.createChild())
-
-            // Если цикл остановлен - завершаем его
-            if (localContext[BREAK] as Boolean) {
-                break
+                // Если цикл остановлен - завершаем его
+                if (it[BREAK] as Boolean) {
+                    break
+                }
             }
-        }
 
+        }
         return completed
     }
 }

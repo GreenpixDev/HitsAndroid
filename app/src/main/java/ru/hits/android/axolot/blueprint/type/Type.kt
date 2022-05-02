@@ -9,7 +9,6 @@ interface Type {
 
     companion object {
 
-        val EXECUTE = ExecuteType()
         val BOOLEAN = BooleanType()
         val INT = IntType()
         val FLOAT = FloatType()

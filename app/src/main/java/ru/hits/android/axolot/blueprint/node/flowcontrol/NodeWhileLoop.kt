@@ -5,6 +5,7 @@ import ru.hits.android.axolot.blueprint.node.NodeDependency
 import ru.hits.android.axolot.blueprint.node.NodeExecutable
 import ru.hits.android.axolot.blueprint.type.Type
 
+@Deprecated("Этот узел можно сделать не нативным")
 class NodeWhileLoop : NodeExecutable() {
 
     var loopBody: NodeExecutable? = null
