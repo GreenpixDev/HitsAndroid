@@ -8,12 +8,13 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/information"
+        android:id="@+id/informationIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/info_icon_description"
+        android:onClick="onInformation"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,15 +22,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_info_icon" />
+        app:srcCompat="@drawable/ic_info_icon"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <ImageView
-        android:id="@+id/settings"
+        android:id="@+id/settingsIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/settings_icon_description"
+        android:onClick="onSettings"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,9 +69,9 @@
         android:textColor="@color/black"
         app:cornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/settings"
+        app:layout_constraintEnd_toStartOf="@+id/settingsIcon"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toEndOf="@+id/information"
+        app:layout_constraintStart_toEndOf="@+id/informationIcon"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintVertical_bias="0.461" />
 
@@ -76,7 +79,7 @@
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@color/buttons"
+        android:background="@color/background_header"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -85,7 +88,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/main"
+        android:id="@+id/mainTextView"
         android:layout_width="126dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -99,17 +102,19 @@
         app:layout_constraintVertical_bias="0.545" />
 
     <TextView
-        android:id="@+id/aboutUs"
+        android:id="@+id/aboutUsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="64dp"
         android:fontFamily="@font/montserrat_regular"
+        android:onClick="onAboutUs"
         android:text="@string/aboutUs"
         android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view"
-        app:layout_constraintVertical_bias="0.545" />
+        app:layout_constraintVertical_bias="0.545"
+        tools:ignore="TouchTargetSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

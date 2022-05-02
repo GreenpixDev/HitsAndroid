@@ -12,16 +12,25 @@
         android:theme="@style/Theme.HitsAndroid"
         tools:ignore="ExtraText">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:screenOrientation="userLandscape" />
+        <activity
+            android:name=".InformationActivity"
+            android:exported="false"
+            android:screenOrientation="userLandscape" />
+        <activity
+            android:name=".AboutUsActivity"
+            android:exported="false"
+            android:screenOrientation="userLandscape" />
+        <activity
             android:name=".BluePrintActivity"
             android:exported="false"
             android:screenOrientation="userLandscape" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="userLandscape">
-
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

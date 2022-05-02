@@ -5,20 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 
-class MainActivity : AppCompatActivity() {
-
+class AboutUsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_about_us)
     }
 
-    fun onClickBegin(view: View){
-        val intent = Intent(this, BluePrintActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun onAboutUs(view: View){
-        val intent = Intent(this, AboutUsActivity::class.java)
+    fun onMain(view: View){
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
