@@ -6,6 +6,7 @@ import ru.hits.android.axolot.blueprint.node.NodeExecutable
 import ru.hits.android.axolot.blueprint.stack.StackFrame
 import ru.hits.android.axolot.blueprint.variable.Variable
 
+
 class NodeFunctionInvoke(val function: BlueprintFunction) : NodeExecutable() {
 
     var nextNode: NodeExecutable? = null

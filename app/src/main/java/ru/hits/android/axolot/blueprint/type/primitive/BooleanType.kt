@@ -9,7 +9,7 @@ class BooleanType : PrimitiveType<Boolean> {
     }
 
     override fun toString(): String {
-        return "BOOLEAN"
+        return "Boolean"
     }
 
 }

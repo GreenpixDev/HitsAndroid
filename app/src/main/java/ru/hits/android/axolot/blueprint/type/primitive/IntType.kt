@@ -12,7 +12,7 @@ class IntType : NumberType<Int>() {
     }
 
     override fun toString(): String {
-        return "INT"
+        return "Int"
     }
 
 }

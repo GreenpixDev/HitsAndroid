@@ -7,12 +7,16 @@ import ru.hits.android.axolot.blueprint.node.NodeConstant
 import ru.hits.android.axolot.blueprint.node.function.NodeCast
 import ru.hits.android.axolot.blueprint.node.executable.NodePrintString
 import ru.hits.android.axolot.blueprint.node.executable.NodeSetVariable
+import ru.hits.android.axolot.blueprint.node.executable.array.NodeArrayAssignElement
+import ru.hits.android.axolot.blueprint.node.executable.array.NodeArrayResize
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeForLoop
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeForLoopIndex
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeSequence
 import ru.hits.android.axolot.blueprint.node.function.math.trig.NodeSin
 import ru.hits.android.axolot.blueprint.node.function.NodeGetVariable
+import ru.hits.android.axolot.blueprint.node.function.array.NodeArrayGetElement
+import ru.hits.android.axolot.blueprint.node.function.array.NodeArraySize
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionEnd
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionInvoke
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionParameter
@@ -24,6 +28,8 @@ import ru.hits.android.axolot.blueprint.node.function.math.integer.*
 import ru.hits.android.axolot.blueprint.node.macros.*
 import ru.hits.android.axolot.blueprint.scope.GlobalScope
 import ru.hits.android.axolot.blueprint.type.Type
+import ru.hits.android.axolot.blueprint.type.structure.ArrayType
+import ru.hits.android.axolot.blueprint.variable.Variable
 
 class BlueprintInterpreterTest {
 
@@ -182,40 +188,7 @@ class BlueprintInterpreterTest {
         /*
          Делаем макрос
          */
-        val macros = BlueprintMacros()
-        macros.inputExecutable["input"] = NodeMacrosInput()
-        macros.input["firstIndex"] = NodeMacrosDependency()
-        macros.input["lastIndex"] = NodeMacrosDependency()
-        macros.outputExecutable["loopBody"] = NodeMacrosOutput()
-        macros.outputExecutable["completed"] = NodeMacrosOutput()
-        macros.output["index"] = NodeMacrosDependency()
-
-        val localInt = NodeLocalVariable(Type.INT)              // Нода локальной переменной localInt
-        val firstAssign = NodeAssignVariable()                  // Нода присваивания
-        val lessOrEqual = NodeIntLessOrEqual()                  // Нода a <= b
-        val branch = NodeBranch()                               // Нода IF
-        val sequence = NodeSequence()                           // Нода последовательности
-        val loopAssign = NodeAssignVariable()                   // Нода присваивания
-        val sum = NodeIntSum()                                  // Нода a + b
-
-        firstAssign.init(localInt, macros.input["firstIndex"]!!)// localInt = lastIndex
-        firstAssign.nextNode = branch                           // Далее IF
-
-        lessOrEqual.init(localInt, macros.input["lastIndex"]!!) // localInt <= lastIndex
-
-        branch.init(lessOrEqual)                                // Проверяем условие
-        branch.trueNode = sequence                              // Если true - переходим к ноде последовательности
-        branch.falseNode = macros.outputExecutable["completed"] // Если false - цикл завершен
-
-        sequence.then(macros.outputExecutable["loopBody"]!!)    // Сначала цикл
-        sequence.then(loopAssign)                               // Потом assign
-
-        loopAssign.init(localInt, sum)                          // localInt++
-        sum.init(localInt, NodeConstant.of(Type.INT, 1))
-        loopAssign.nextNode = branch                            // Потом снова IF
-
-        macros.inputExecutable["input"]?.nextNode = firstAssign // Макрос будет начинаться с Assign
-        macros.output["index"]?.init(localInt)                  // На выход макрос отдаёт localInt
+        val macros = forLoop()
 
         /*
          Используем его
@@ -468,7 +441,7 @@ class BlueprintInterpreterTest {
         printStart.init(NodeConstant.of(Type.STRING, "Start Fibonacci Function Test!"))
         printStart.nextNode = fibonacciInvoke
 
-        fibonacciInvoke.dependencies["number"] = NodeConstant.of(Type.INT, 40)
+        fibonacciInvoke.dependencies["number"] = NodeConstant.of(Type.INT, 30)
         fibonacciInvoke.nextNode = printResult
 
         intToString.init(fibonacciReturned)
@@ -483,5 +456,117 @@ class BlueprintInterpreterTest {
         val timestamp = System.currentTimeMillis()
         interpreter.execute(printStart)
         println("Executed for ${System.currentTimeMillis() - timestamp} ms")
+    }
+
+    /*
+     * Start Fibonacci Function Test!
+     * Completed Fibonacci Function!
+     */
+    @Test
+    fun arrayTest() {
+        val scope = GlobalScope()
+        val interpreter = BlueprintInterpreter(scope)
+        scope.declareVariable("array", Variable.arrayVariable(Type.STRING, 1))
+
+        /*
+         Массив
+         */
+        val printStart = NodePrintString()
+        val printArraySize = NodePrintString()
+        val printEnd = NodePrintString()
+
+        val getArray = NodeGetVariable("array")
+        val arraySize = NodeArraySize()
+        val intToString = NodeCast(Type.STRING)
+
+        val arrayResize = NodeArrayResize()
+        val assign1 = NodeArrayAssignElement()
+        val assign2 = NodeArrayAssignElement()
+        val assign3 = NodeArrayAssignElement()
+
+        var forLoop = forLoop()
+        var sub = NodeIntSub()
+        var printElement = NodePrintString()
+        var arrayGet = NodeArrayGetElement()
+
+        // Начало
+        printStart.init(NodeConstant.of(Type.STRING, "Start Array Test!"))
+        printStart.nextNode = printArraySize
+
+        // Выводим размер
+        arraySize.init(getArray)
+        intToString.init(arraySize)
+        printArraySize.init(intToString)
+        printArraySize.nextNode = arrayResize
+
+        // Resize и добавляем элементы
+        arrayResize.init(getArray, NodeConstant.of(Type.INT, 3))
+        assign1.init(getArray, NodeConstant.of(Type.INT, 0), NodeConstant.of(Type.STRING, "How"))
+        assign2.init(getArray, NodeConstant.of(Type.INT, 1), NodeConstant.of(Type.STRING, "are"))
+        assign3.init(getArray, NodeConstant.of(Type.INT, 2), NodeConstant.of(Type.STRING, "you?"))
+
+        arrayResize.nextNode = assign1
+        assign1.nextNode = assign2
+        assign2.nextNode = assign3
+        assign3.nextNode = forLoop.inputExecutable["input"]
+
+        // Цикл
+        forLoop.outputExecutable["completed"]?.nextNode = printEnd
+        forLoop.outputExecutable["loopBody"]?.nextNode = printElement
+        forLoop.input["firstIndex"]?.init(NodeConstant.of(Type.INT, 0))
+        forLoop.input["lastIndex"]?.init(sub)
+        sub.init(arraySize, NodeConstant.of(Type.INT, 1))
+
+        arrayGet.init(getArray, forLoop.output["index"]!!)
+        printElement.init(arrayGet)
+
+        // Конец
+        printEnd.init(NodeConstant.of(Type.STRING, "End Array Test!"))
+
+        /*
+         Запуск
+         */
+        val timestamp = System.currentTimeMillis()
+        interpreter.execute(printStart)
+        println("Executed for ${System.currentTimeMillis() - timestamp} ms")
+    }
+
+    private fun forLoop(): BlueprintMacros {
+        val macros = BlueprintMacros()
+        macros.inputExecutable["input"] = NodeMacrosInput()
+        macros.input["firstIndex"] = NodeMacrosDependency()
+        macros.input["lastIndex"] = NodeMacrosDependency()
+        macros.outputExecutable["loopBody"] = NodeMacrosOutput()
+        macros.outputExecutable["completed"] = NodeMacrosOutput()
+        macros.output["index"] = NodeMacrosDependency()
+
+        val localInt = NodeLocalVariable(Type.INT)              // Нода локальной переменной localInt
+        val firstAssign = NodeAssignVariable()                  // Нода присваивания
+        val lessOrEqual = NodeIntLessOrEqual()                  // Нода a <= b
+        val branch = NodeBranch()                               // Нода IF
+        val sequence = NodeSequence()                           // Нода последовательности
+        val loopAssign = NodeAssignVariable()                   // Нода присваивания
+        val sum = NodeIntSum()                                  // Нода a + b
+
+        firstAssign.init(localInt, macros.input["firstIndex"]!!)// localInt = lastIndex
+        firstAssign.nextNode = branch                           // Далее IF
+
+        lessOrEqual.init(localInt, macros.input["lastIndex"]!!) // localInt <= lastIndex
+
+        branch.init(lessOrEqual)                                // Проверяем условие
+        branch.trueNode = sequence                              // Если true - переходим к ноде последовательности
+        branch.falseNode = macros.outputExecutable["completed"] // Если false - цикл завершен
+
+        sequence.then(macros.outputExecutable["loopBody"]!!)    // Сначала цикл
+        sequence.then(loopAssign)                               // Потом assign
+
+        loopAssign.init(localInt, sum)                          // localInt++
+        sum.init(localInt, NodeConstant.of(Type.INT, 1))
+        loopAssign.nextNode = branch                            // Потом снова IF
+
+        macros.inputExecutable["input"]?.nextNode = firstAssign // Макрос будет начинаться с Assign
+        macros.output["index"]?.init(localInt)                  // На выход макрос отдаёт localInt
+
+        return macros
     }
 }

@@ -12,7 +12,7 @@ class FloatType : NumberType<Double>() {
     }
 
     override fun toString(): String {
-        return "FLOAT"
+        return "Float"
     }
 
 }

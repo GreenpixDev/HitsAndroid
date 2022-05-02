@@ -9,7 +9,7 @@ class StringType : PrimitiveType<String> {
     }
 
     override fun toString(): String {
-        return "STRING"
+        return "String"
     }
 
 }

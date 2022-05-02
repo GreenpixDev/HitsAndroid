@@ -1,14 +1,13 @@
 package ru.hits.android.axolot.blueprint.scope
 
-import ru.hits.android.axolot.blueprint.type.VariableType
 import ru.hits.android.axolot.blueprint.variable.Variable
 
 class GlobalScope : Scope {
 
     private val variables: MutableMap<String, Variable> = mutableMapOf()
 
-    override fun declareVariable(name: String, type: VariableType<*>) {
-        variables[name] = Variable.nullVariable(type)
+    override fun declareVariable(name: String, variable: Variable) {
+        variables[name] = variable
     }
 
     @Suppress("unchecked_cast")
@@ -23,8 +22,7 @@ class GlobalScope : Scope {
     }
 
     override fun getVariable(name: String): Variable {
-        val variable = variables[name]!!
-        return Variable(variable.type, variable.value)
+        return variables[name]!!
     }
 
 }

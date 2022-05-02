@@ -4,6 +4,7 @@ import ru.hits.android.axolot.blueprint.type.primitive.BooleanType
 import ru.hits.android.axolot.blueprint.type.primitive.FloatType
 import ru.hits.android.axolot.blueprint.type.primitive.IntType
 import ru.hits.android.axolot.blueprint.type.primitive.StringType
+import ru.hits.android.axolot.blueprint.type.structure.ArrayType
 
 interface Type {
 

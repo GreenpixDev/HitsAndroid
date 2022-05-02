@@ -1,6 +1,7 @@
 package ru.hits.android.axolot.blueprint.variable
 
 import ru.hits.android.axolot.blueprint.type.VariableType
+import ru.hits.android.axolot.blueprint.type.structure.ArrayType
 
 class Variable(val type: VariableType<*>, var value: Any?) {
 
@@ -10,10 +11,20 @@ class Variable(val type: VariableType<*>, var value: Any?) {
         return value as T
     }
 
+    @Suppress("unchecked_cast")
+    fun getArray(): Array<Variable>? {
+        require(this.type is ArrayType) { "invalid type of variable: excepted Array<*>, actual ${this.type}" }
+        return value as Array<Variable>?
+    }
+
     companion object {
 
         fun nullVariable(type: VariableType<*>): Variable {
             return Variable(type, null)
+        }
+
+        fun arrayVariable(type: VariableType<*>, size: Int): Variable {
+            return Variable(ArrayType(type), Array(size) { nullVariable(type) })
         }
 
     }
