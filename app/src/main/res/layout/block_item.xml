@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="MissingDefaultResource">
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="166dp"
         android:layout_height="64dp"
-        android:background="#99ADB4"
+        android:background="@color/blockBg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.11"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintVertical_bias="0.498">
 
         <TextView
             android:id="@+id/title"
@@ -30,7 +27,8 @@
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SmallSp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="63dp"
@@ -46,13 +44,12 @@
                 android:id="@+id/node"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                android:background="@drawable/button_shape_circle"
+                android:background="@drawable/button_shape_circle_disconnect"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.084"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/property"

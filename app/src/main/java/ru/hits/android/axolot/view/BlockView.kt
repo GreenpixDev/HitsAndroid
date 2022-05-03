@@ -1,51 +1,54 @@
 package ru.hits.android.axolot.view
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
-import kotlinx.android.synthetic.main.activity_second.view.*
 import ru.hits.android.axolot.R
 import ru.hits.android.axolot.databinding.BlockItemBinding
 
 
-class BlockView(
+@SuppressLint("ViewConstructor")
+class BlockView @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet?,
-    defstyleAttr: Int,
-    defStyleRes: Int
-): ConstraintLayout(context, attrs, defstyleAttr, defStyleRes) {
+    attrs: AttributeSet? = null,
+    defstyleAttr: Int = 0,
+    defstyleRes: Int = 0
+): ConstraintLayout(context, attrs, defstyleAttr, defstyleRes) {
 
     private val binding: BlockItemBinding
-
-    constructor(context: Context, attrs: AttributeSet?, defstyleAttr: Int) : this(context, attrs, defstyleAttr, 0)
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context) : this(context, null)
 
     init {
         val inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.block_item, this, true)
         binding = BlockItemBinding.bind(this)
 
-        initializeAttributes(attrs, defstyleAttr, defStyleRes)
+        initializeAttributes(attrs, defstyleAttr, defstyleRes)
     }
 
-    private fun initializeAttributes(attrs:AttributeSet?, defstyleAttr: Int, defStyleRes: Int) {
+    @SuppressLint("Recycle")
+    private fun initializeAttributes(attrs: AttributeSet?, defstyleAttr: Int, defstyleRes: Int) {
         if (attrs == null) return
 
-        val typedArray = context.obtainStyledAttributes(attrs,R.styleable.BlockView, defstyleAttr, defStyleRes)
-        with(binding) {
-            val blockTitle = typedArray.getString(R.styleable.BlockView_blockTitle)
-            binding.title.text = blockTitle?: "BLOCK"
+        val typedArray =
+            context.obtainStyledAttributes(attrs, R.styleable.BlockView, defstyleAttr, defstyleRes)
 
-            val blockBackgroundColor = typedArray.getColor(R.styleable.BlockView_blockBackgroundColor, Color.BLUE)
-            block.backgroundTintList = ColorStateList.valueOf(blockBackgroundColor)
+//        with(binding) {
+//            val blockTitle = typedArray.getString(R.styleable.BlockView_blockTitle)
+//            binding.title.text = blockTitle ?: "BLOCK"
+//
+//            val blockPropertyText = typedArray.getString(R.styleable.BlockView_blockPropertyText)
+//            binding.property.text = blockPropertyText
 
-            val blockPropertyText = typedArray.getString(R.styleable.BlockView_blockPropertyText)
-            binding.property.text = blockPropertyText
-        }
+//            val blockConnection = typedArray.getBoolean(R.styleable.BlockView_btnConnection, false)
+//            if (blockConnection) {
+//                binding.node.backgroundTintList = ColorStateList.createFromXml(resources, XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+//            } else {
+//                binding.node.backgroundTintList = ColorStateList.createFromXml("@drawable/button_shape_circle2")
+//            }
+
+        //}
 
         typedArray.recycle()
     }

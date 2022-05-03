@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_color"
@@ -18,9 +19,9 @@
 
         <TextView
             android:id="@+id/main_position"
-            android:layout_width="125dp"
+            android:layout_width="130dp"
             android:layout_height="50dp"
-            android:fontFamily="@font/montserrat_semi_bold"
+            android:fontFamily="@font/montserrat_semibold"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/main_name"
             android:textSize="25sp"
@@ -52,7 +53,7 @@
         android:id="@+id/textHello"
         android:layout_width="250dp"
         android:layout_height="100dp"
-        android:fontFamily="@font/montserrat_light"
+        android:fontFamily="@font/montserrat_regular"
         android:gravity="center_horizontal|center_vertical"
         android:text="@string/hello_name"
         android:textSize="30sp"
@@ -60,7 +61,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        app:layout_constraintVertical_bias="0.402"/>
+        app:layout_constraintVertical_bias="0.402" />
 
     <Button
         android:id="@+id/startBtn"
@@ -88,7 +89,7 @@
         android:layout_height="48dp"
         android:layout_marginStart="18dp"
         android:layout_marginBottom="13dp"
-        android:contentDescription="@string/info_name"
+        android:contentDescription="@string/infoBtn_name"
         android:scaleType="fitXY"
         android:background="@color/main_color"
         app:layout_constraintBottom_toBottomOf="parent"

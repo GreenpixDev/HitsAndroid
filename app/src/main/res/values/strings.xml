@@ -6,7 +6,7 @@
     <string name="startBtn_name">Начать</string>
     <string name="main_name">ГЛАВНАЯ</string>
     <string name="info_name">О НАС</string>
-    <string name="add_block">Добавить блок</string>
+    <string name="add_variable">Добавить блок</string>
 
 <!--    <string-array name="blocks">-->
 <!--        <string-array name="cycles">-->
