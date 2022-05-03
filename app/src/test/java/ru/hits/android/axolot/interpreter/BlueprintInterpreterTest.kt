@@ -85,6 +85,20 @@ class BlueprintInterpreterTest {
     }
 
     @Test
+    fun printTest() {
+        val scope = GlobalScope()
+        val interpreter = BlueprintInterpreter(scope)
+        scope.declareVariable("str", Type.STRING, "hello")
+
+        val nodeGetVariable = NodeGetVariable("str")
+
+        val printNode = NodePrintString()
+        printNode.init(nodeGetVariable)
+
+        interpreter.execute(printNode)
+    }
+
+    @Test
     fun whileMacrosTest() {
         val scope = GlobalScope()
         val interpreter = BlueprintInterpreter(scope)
