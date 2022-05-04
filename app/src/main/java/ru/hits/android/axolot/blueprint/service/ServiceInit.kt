@@ -9,6 +9,7 @@ import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionEnd
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionInvoke
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionParameter
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionReturned
+import ru.hits.android.axolot.blueprint.node.function.math.bool.*
 import ru.hits.android.axolot.blueprint.node.function.math.integer.*
 import ru.hits.android.axolot.blueprint.service.impl.executable.NodePrintStringService
 import ru.hits.android.axolot.blueprint.service.impl.flowcontrol.NodeBranchService
@@ -18,6 +19,7 @@ import ru.hits.android.axolot.blueprint.service.impl.function.custom.NodeFunctio
 import ru.hits.android.axolot.blueprint.service.impl.function.custom.NodeFunctionInvokeService
 import ru.hits.android.axolot.blueprint.service.impl.function.custom.NodeFunctionParameterService
 import ru.hits.android.axolot.blueprint.service.impl.function.custom.NodeFunctionReturnedService
+import ru.hits.android.axolot.blueprint.service.impl.function.math.bool.NodeBooleanService
 import ru.hits.android.axolot.blueprint.service.impl.function.math.integer.NodeIntService
 import kotlin.reflect.KClass
 
@@ -48,8 +50,14 @@ class ServiceInit {
         map[NodeIntNotEqual::class] = NodeIntService()
         map[NodeIntSub::class] = NodeIntService()
         map[NodeIntSum::class] = NodeIntService()
-
-
+        //------------------------ Math for boolean
+        map[NodeBooleanAnd::class] = NodeBooleanService()
+        map[NodeBooleanNand::class] = NodeBooleanService()
+        map[NodeBooleanNor::class] = NodeBooleanService()
+        map[NodeBooleanNot::class] = NodeBooleanService()
+        map[NodeBooleanOr::class] = NodeBooleanService()
+        map[NodeBooleanXnor::class] = NodeBooleanService()
+        map[NodeBooleanXor::class] = NodeBooleanService()
         return map
     }
 
