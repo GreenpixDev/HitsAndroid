@@ -5,26 +5,27 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_color"
+    android:background="@color/bg_main"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@color/aside_color"
+        android:background="@color/bg_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/main_position"
+            android:id="@+id/toMainPage"
             android:layout_width="130dp"
             android:layout_height="50dp"
             android:fontFamily="@font/montserrat_semibold"
             android:gravity="center_horizontal|center_vertical"
-            android:text="@string/main_name"
+            android:text="@string/main"
             android:textSize="25sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.05"
@@ -34,13 +35,14 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/info_position"
+            android:id="@+id/toAboutUsPage"
             android:layout_width="85dp"
             android:layout_height="50dp"
             android:fontFamily="@font/montserrat_regular"
             android:gravity="center_horizontal|center_vertical"
-            android:text="@string/info_name"
+            android:text="@string/aboutUs"
             android:textSize="25sp"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.95"
@@ -55,8 +57,9 @@
         android:layout_height="100dp"
         android:fontFamily="@font/montserrat_regular"
         android:gravity="center_horizontal|center_vertical"
-        android:text="@string/hello_name"
+        android:text="@string/welcome"
         android:textSize="30sp"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,12 +70,12 @@
         android:id="@+id/startBtn"
         android:layout_width="183dp"
         android:layout_height="71dp"
-        android:backgroundTint="@color/startBtn_color"
+        android:backgroundTint="@color/buttons"
         android:elevation="10dp"
         android:fontFamily="@font/montserrat_regular"
         android:gravity="center_horizontal|center_vertical"
         android:stateListAnimator="@null"
-        android:text="@string/startBtn_name"
+        android:text="@string/begin"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:translationZ="7dp"
@@ -89,12 +92,12 @@
         android:layout_height="48dp"
         android:layout_marginStart="18dp"
         android:layout_marginBottom="13dp"
-        android:contentDescription="@string/infoBtn_name"
+        android:contentDescription="@string/info_icon_description"
         android:scaleType="fitXY"
-        android:background="@color/main_color"
+        android:background="@color/bg_main"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_info" />
+        app:srcCompat="@drawable/ic_info_icon" />
 
     <ImageButton
         android:id="@+id/btn_settings"
@@ -102,11 +105,11 @@
         android:layout_height="48dp"
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="13dp"
-        android:contentDescription="@string/settingsBtn_name"
+        android:contentDescription="@string/settings_icon_description"
         android:scaleType="fitXY"
-        android:background="@color/main_color"
+        android:background="@color/bg_main"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_settings" />
+        app:srcCompat="@drawable/ic_settings_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,15 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="main_color">#E2EDF0</color>
-    <color name="aside_color">#AEC8D2</color>
-    <color name="blockBg">#99ADB4</color>
+    <color name="bg_main">#E2EDF0</color>
+    <color name="bg_header">#AEC8D2</color>
+    <color name="bgBlock">#99ADB4</color>
 
-    <!--    не знаю, можно ли так-->
-    <color name="startBtn_color">#C4D8DC</color>
+    <color name="buttons">#C4D8DC</color>
     <color name="toolBar_color">#C4D8DC</color>
-    <!--    не знаю, можно ли так-->
-    <color name="buttonToolBar_color">#83AFC0</color>
+    <color name="circle_button">#83AFC0</color>
 
-    <color name="integerBlock_color">#9DB499</color>
+
 </resources>

@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="166dp"
         android:layout_height="64dp"
-        android:background="@color/blockBg"
+        android:background="@color/bgBlock"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.499"
@@ -28,7 +28,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SmallSp" />
+            tools:ignore="SmallSp,TextContrastCheck" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="63dp"
@@ -44,12 +44,13 @@
                 android:id="@+id/node"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                android:background="@drawable/button_shape_circle_disconnect"
+                android:background="@drawable/button_shape_circle_stroke"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.084"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/property"
@@ -63,7 +64,7 @@
                 app:layout_constraintHorizontal_bias="0.302"
                 app:layout_constraintStart_toEndOf="@+id/node"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SmallSp" />
+                tools:ignore="SmallSp,TextContrastCheck" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

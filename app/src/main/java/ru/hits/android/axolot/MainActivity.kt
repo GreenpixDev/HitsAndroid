@@ -15,8 +15,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.startBtn.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, BlueprintActivity::class.java))
+        }
+
+        binding.btnInfo.setOnClickListener() {
+            startActivity(Intent(this, InformationActivity::class.java))
+        }
+
+        binding.btnSettings.setOnClickListener() {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
+        binding.toMainPage.setOnClickListener() {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
+        binding.toAboutUsPage.setOnClickListener() {
+            startActivity(Intent(this, AboutUsActivity::class.java))
         }
     }
 
