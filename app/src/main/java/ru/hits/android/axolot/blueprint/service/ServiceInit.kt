@@ -37,27 +37,29 @@ class ServiceInit {
         map[NodeConstant::class] = NodeConstantService()
         map[NodeCast::class] = NodeCastService()
         //------------------------ Math for int
-        map[NodeIntDiv::class] = NodeIntService()
-        map[NodeIntEqual::class] = NodeIntService()
-        map[NodeIntLess::class] = NodeIntService()
-        map[NodeIntLessOrEqual::class] = NodeIntService()
-        map[NodeIntMax::class] = NodeIntService()
-        map[NodeIntMin::class] = NodeIntService()
-        map[NodeIntMod::class] = NodeIntService()
-        map[NodeIntMore::class] = NodeIntService()
-        map[NodeIntMoreOrEqual::class] = NodeIntService()
-        map[NodeIntMul::class] = NodeIntService()
-        map[NodeIntNotEqual::class] = NodeIntService()
-        map[NodeIntSub::class] = NodeIntService()
-        map[NodeIntSum::class] = NodeIntService()
+        val nodeIntService = NodeIntService()
+        map[NodeIntDiv::class] = nodeIntService
+        map[NodeIntEqual::class] = nodeIntService
+        map[NodeIntLess::class] = nodeIntService
+        map[NodeIntLessOrEqual::class] = nodeIntService
+        map[NodeIntMax::class] = nodeIntService
+        map[NodeIntMin::class] = nodeIntService
+        map[NodeIntMod::class] = nodeIntService
+        map[NodeIntMore::class] = nodeIntService
+        map[NodeIntMoreOrEqual::class] = nodeIntService
+        map[NodeIntMul::class] = nodeIntService
+        map[NodeIntNotEqual::class] = nodeIntService
+        map[NodeIntSub::class] = nodeIntService
+        map[NodeIntSum::class] = nodeIntService
         //------------------------ Math for boolean
-        map[NodeBooleanAnd::class] = NodeBooleanService()
-        map[NodeBooleanNand::class] = NodeBooleanService()
-        map[NodeBooleanNor::class] = NodeBooleanService()
-        map[NodeBooleanNot::class] = NodeBooleanService()
-        map[NodeBooleanOr::class] = NodeBooleanService()
-        map[NodeBooleanXnor::class] = NodeBooleanService()
-        map[NodeBooleanXor::class] = NodeBooleanService()
+        val nodeBooleanService = NodeBooleanService()
+        map[NodeBooleanAnd::class] = nodeBooleanService
+        map[NodeBooleanNand::class] = nodeBooleanService
+        map[NodeBooleanNor::class] = nodeBooleanService
+        map[NodeBooleanNot::class] = nodeBooleanService
+        map[NodeBooleanOr::class] = nodeBooleanService
+        map[NodeBooleanXnor::class] = nodeBooleanService
+        map[NodeBooleanXor::class] = nodeBooleanService
         return map
     }
 
