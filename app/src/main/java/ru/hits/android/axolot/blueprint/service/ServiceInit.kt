@@ -19,6 +19,7 @@ import ru.hits.android.axolot.blueprint.node.function.math.bool.*
 import ru.hits.android.axolot.blueprint.node.function.math.integer.*
 import ru.hits.android.axolot.blueprint.node.function.math.real.*
 import ru.hits.android.axolot.blueprint.node.function.math.trig.*
+import ru.hits.android.axolot.blueprint.node.macros.*
 import ru.hits.android.axolot.blueprint.service.impl.executable.NodePrintStringService
 import ru.hits.android.axolot.blueprint.service.impl.executable.NodeSetVariableService
 import ru.hits.android.axolot.blueprint.service.impl.executable.array.NodeArrayAssignElementService
@@ -35,12 +36,21 @@ import ru.hits.android.axolot.blueprint.service.impl.function.math.bool.NodeBool
 import ru.hits.android.axolot.blueprint.service.impl.function.math.integer.NodeIntService
 import ru.hits.android.axolot.blueprint.service.impl.function.math.real.NodeFloatService
 import ru.hits.android.axolot.blueprint.service.impl.function.math.trig.NodeTrigService
+import ru.hits.android.axolot.blueprint.service.impl.macros.*
 import kotlin.reflect.KClass
 
 class ServiceInit {
 
     fun intiHandler():Map<KClass<*>, NodeService<*>> {
         val map = hashMapOf<KClass<*>, NodeService<*>>()
+
+        //------------------------ Macros
+        map[NodeAssignVariable::class] = NodeAssignVariableService()
+        map[NodeLocalVariable::class] = NodeLocalVariableService()
+        map[NodeMacrosDependency::class] = NodeMacrosDependencyService()
+        map[NodeMacrosInput::class] = NodeMacrosInputService()
+        map[NodeMacrosOutput::class] = NodeMacrosOutputService()
+
 
         //------------------------ Flow control
         map[NodeBranch::class] = NodeBranchService()
