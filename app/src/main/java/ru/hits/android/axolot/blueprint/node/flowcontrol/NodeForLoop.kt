@@ -8,8 +8,8 @@ import ru.hits.android.axolot.blueprint.variable.Variable
 
 @Deprecated("Этот узел можно сделать не нативным")
 class NodeForLoop @JvmOverloads constructor(
-    private val nodeIndex: NodeForLoopIndex? = null,
-    private val nodeBreak: NodeForLoopBreak? = null
+    val nodeIndex: NodeForLoopIndex? = null,
+    val nodeBreak: NodeForLoopBreak? = null
 ) : NodeExecutable() {
 
     var loopBody: NodeExecutable? = null

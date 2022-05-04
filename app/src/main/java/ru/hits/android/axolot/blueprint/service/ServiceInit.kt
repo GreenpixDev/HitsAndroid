@@ -5,7 +5,7 @@ import ru.hits.android.axolot.blueprint.node.executable.NodePrintString
 import ru.hits.android.axolot.blueprint.node.executable.NodeSetVariable
 import ru.hits.android.axolot.blueprint.node.executable.array.NodeArrayAssignElement
 import ru.hits.android.axolot.blueprint.node.executable.array.NodeArrayResize
-import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeBranch
+import ru.hits.android.axolot.blueprint.node.flowcontrol.*
 import ru.hits.android.axolot.blueprint.node.function.NodeCast
 import ru.hits.android.axolot.blueprint.node.function.NodeGetVariable
 import ru.hits.android.axolot.blueprint.node.function.array.NodeArrayFindElement
@@ -23,7 +23,7 @@ import ru.hits.android.axolot.blueprint.service.impl.executable.NodePrintStringS
 import ru.hits.android.axolot.blueprint.service.impl.executable.NodeSetVariableService
 import ru.hits.android.axolot.blueprint.service.impl.executable.array.NodeArrayAssignElementService
 import ru.hits.android.axolot.blueprint.service.impl.executable.array.NodeArrayResizeService
-import ru.hits.android.axolot.blueprint.service.impl.flowcontrol.NodeBranchService
+import ru.hits.android.axolot.blueprint.service.impl.flowcontrol.*
 import ru.hits.android.axolot.blueprint.service.impl.function.NodeCastService
 import ru.hits.android.axolot.blueprint.service.impl.function.NodeGetVariableService
 import ru.hits.android.axolot.blueprint.service.impl.function.array.NodeArrayService
@@ -42,8 +42,13 @@ class ServiceInit {
     fun intiHandler():Map<KClass<*>, NodeService<*>> {
         val map = hashMapOf<KClass<*>, NodeService<*>>()
 
+        //------------------------ Flow control
         map[NodeBranch::class] = NodeBranchService()
-
+        map[NodeForLoopBreak::class] = NodeForLoopBreakService()
+        map[NodeForLoopIndex::class] = NodeForLoopIndexService()
+        map[NodeForLoop::class] = NodeForLoopService()
+        map[NodeSequence::class] = NodeSequenceService()
+        map[NodeWhileLoop::class] = NodeWhileLoopService()
 
         map[NodeFunctionParameter::class] = NodeFunctionParameterService()
         map[NodeFunctionEnd::class] = NodeFunctionEndService()
