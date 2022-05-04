@@ -2,6 +2,9 @@ package ru.hits.android.axolot.blueprint.service
 
 import ru.hits.android.axolot.blueprint.node.NodeConstant
 import ru.hits.android.axolot.blueprint.node.executable.NodePrintString
+import ru.hits.android.axolot.blueprint.node.executable.NodeSetVariable
+import ru.hits.android.axolot.blueprint.node.executable.array.NodeArrayAssignElement
+import ru.hits.android.axolot.blueprint.node.executable.array.NodeArrayResize
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.blueprint.node.function.NodeCast
 import ru.hits.android.axolot.blueprint.node.function.NodeGetVariable
@@ -17,6 +20,9 @@ import ru.hits.android.axolot.blueprint.node.function.math.integer.*
 import ru.hits.android.axolot.blueprint.node.function.math.real.*
 import ru.hits.android.axolot.blueprint.node.function.math.trig.*
 import ru.hits.android.axolot.blueprint.service.impl.executable.NodePrintStringService
+import ru.hits.android.axolot.blueprint.service.impl.executable.NodeSetVariableService
+import ru.hits.android.axolot.blueprint.service.impl.executable.array.NodeArrayAssignElementService
+import ru.hits.android.axolot.blueprint.service.impl.executable.array.NodeArrayResizeService
 import ru.hits.android.axolot.blueprint.service.impl.flowcontrol.NodeBranchService
 import ru.hits.android.axolot.blueprint.service.impl.function.NodeCastService
 import ru.hits.android.axolot.blueprint.service.impl.function.NodeGetVariableService
@@ -35,7 +41,7 @@ class ServiceInit {
 
     fun intiHandler():Map<KClass<*>, NodeService<*>> {
         val map = hashMapOf<KClass<*>, NodeService<*>>()
-        map[NodePrintString::class] = NodePrintStringService()
+
         map[NodeBranch::class] = NodeBranchService()
 
 
@@ -108,6 +114,12 @@ class ServiceInit {
         map[NodeArrayGetElement::class] = nodeArrayService
         map[NodeArraySize::class] = nodeArrayService
 
+
+        //------------------------ Exec
+        map[NodeArrayAssignElement::class] = NodeArrayAssignElementService()
+        map[NodeSetVariable::class] = NodeSetVariableService()
+        map[NodeArrayResize::class] = NodeArrayResizeService()
+        map[NodePrintString::class] = NodePrintStringService()
         return map
     }
 
