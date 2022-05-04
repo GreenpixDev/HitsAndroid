@@ -5,6 +5,9 @@ import ru.hits.android.axolot.blueprint.node.executable.NodePrintString
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.blueprint.node.function.NodeCast
 import ru.hits.android.axolot.blueprint.node.function.NodeGetVariable
+import ru.hits.android.axolot.blueprint.node.function.array.NodeArrayFindElement
+import ru.hits.android.axolot.blueprint.node.function.array.NodeArrayGetElement
+import ru.hits.android.axolot.blueprint.node.function.array.NodeArraySize
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionEnd
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionInvoke
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionParameter
@@ -17,6 +20,7 @@ import ru.hits.android.axolot.blueprint.service.impl.executable.NodePrintStringS
 import ru.hits.android.axolot.blueprint.service.impl.flowcontrol.NodeBranchService
 import ru.hits.android.axolot.blueprint.service.impl.function.NodeCastService
 import ru.hits.android.axolot.blueprint.service.impl.function.NodeGetVariableService
+import ru.hits.android.axolot.blueprint.service.impl.function.array.NodeArrayService
 import ru.hits.android.axolot.blueprint.service.impl.function.custom.NodeFunctionEndService
 import ru.hits.android.axolot.blueprint.service.impl.function.custom.NodeFunctionInvokeService
 import ru.hits.android.axolot.blueprint.service.impl.function.custom.NodeFunctionParameterService
@@ -33,14 +37,13 @@ class ServiceInit {
         val map = hashMapOf<KClass<*>, NodeService<*>>()
         map[NodePrintString::class] = NodePrintStringService()
         map[NodeBranch::class] = NodeBranchService()
+
+
         map[NodeFunctionParameter::class] = NodeFunctionParameterService()
         map[NodeFunctionEnd::class] = NodeFunctionEndService()
         map[NodeFunctionInvoke::class] = NodeFunctionInvokeService()
         map[NodeFunctionReturned::class] = NodeFunctionReturnedService()
         map[NodeConstant::class] = NodeConstantService()
-
-        // Math
-
 
         //------------------------ Math for boolean
         val nodeBooleanService = NodeBooleanService()
@@ -98,6 +101,12 @@ class ServiceInit {
         //------------------------ Math
         map[NodeGetVariable::class] = NodeGetVariableService()
         map[NodeCast::class] = NodeCastService()
+
+        //------------------------ Array
+        val nodeArrayService = NodeArrayService()
+        map[NodeArrayFindElement::class] = nodeArrayService
+        map[NodeArrayGetElement::class] = nodeArrayService
+        map[NodeArraySize::class] = nodeArrayService
 
         return map
     }
