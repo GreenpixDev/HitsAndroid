@@ -15,11 +15,11 @@ class NodeFloatMul : NodeFunction() {
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        var sum = 0.0
+        var mul = 0.0
         for (i in dependencies.values.indices) {
             val input = dependencies[i]!!.invoke(context)[Type.FLOAT]
-            input?.let { sum *= input }
+            input?.let { mul *= input }
         }
-        return Variable(Type.FLOAT, sum)
+        return Variable(Type.FLOAT, mul)
     }
 }

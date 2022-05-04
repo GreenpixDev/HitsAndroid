@@ -10,7 +10,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-class NodeIntService: NodeDependencyService {
+class NodeIntService : NodeDependencyService {
 
     override fun invoke(node: Node, context: InterpreterContext): Variable {
         if(node is NodeIntAbs) {
