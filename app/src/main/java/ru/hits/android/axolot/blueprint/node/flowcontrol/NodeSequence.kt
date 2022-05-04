@@ -5,7 +5,7 @@ import ru.hits.android.axolot.blueprint.node.NodeExecutable
 
 class NodeSequence : NodeExecutable() {
 
-    private val nextNodes: MutableList<NodeExecutable> = mutableListOf()
+    val nextNodes: MutableList<NodeExecutable> = mutableListOf()
 
     fun then(then: NodeExecutable) {
         nextNodes.add(then)
