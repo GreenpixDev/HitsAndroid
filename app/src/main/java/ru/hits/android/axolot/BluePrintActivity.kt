@@ -7,21 +7,24 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_blue_print.*
+import ru.hits.android.axolot.databinding.ActivityBluePrintBinding
 
 class BluePrintActivity : AppCompatActivity() {
-    var menuIsVisible = true
+    private lateinit var bluePrintBinding: ActivityBluePrintBinding
+    private var menuIsVisible = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_blue_print)
+        bluePrintBinding = ActivityBluePrintBinding.inflate(layoutInflater)
+        setContentView(bluePrintBinding.root)
     }
 
     fun onClickShowMenu(view: View) {
         if (menuIsVisible) {
-            menu.visibility = View.GONE
+            bluePrintBinding.menu.visibility = View.GONE
             menuIsVisible = false
         } else {
-            menu.visibility = View.VISIBLE
+            bluePrintBinding.menu.visibility = View.VISIBLE
             menuIsVisible = true
         }
     }

@@ -4,17 +4,20 @@
     <string name="begin">начать</string>
     <string name="aboutUs">О нас</string>
     <string name="main">Главная</string>
-    <string name="info_icon_description">Кнопка, которая ведет на страницу с инструкцией</string>
-    <string name="settings_icon_description">Кнопка, которая ведет на страницу с настройками</string>
-    <string name="play_icon_description">Это кнопка, которая запускает сформированный вами код</string>
-    <string name="show_and_not_show_toolbar">Это кнопка, которая закрывает и открывает тулбар</string>
+    <string name="info_icon_description">Кнопка, ведущая на страницу с инструкцией</string>
+    <string name="settings_icon_description">Кнопка, ведущая на страницу с настройками</string>
+    <string name="play_icon_description">Это кнопка, запускающая сформированный вами код</string>
+    <string name="show_and_not_show_toolbar">Это кнопка, закрывающая и открывающая тулбар</string>
     <string name="menu_description">Это меню, где вы можете выбрать блок для визуального программирования</string>
+
     <string name="Konstantin">Константин</string>
     <string name="Elena">Елена</string>
     <string name="Roman">Роман</string>
     <string name="Ivan">Иван</string>
-    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In auctor suscipit augue fermentum varius. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam eu sapien placerat, vestibulum est vel, varius arcu. Maecenas pharetra velit ut ornare porta. Donec tristique sapien ut posuere pulvinar. Nunc volutpat quam enim, a porttitor dolor tincidunt ut. Duis vel dui eget libero fermentum feugiat. Phasellus in diam congue, bibendum velit non, tincidunt nisi. Morbi scelerisque ullamcorper nisl sit amet blandit. Vestibulum imperdiet pretium felis in venenatis. Duis ac massa dui. Nulla rhoncus leo quis eros lobortis convallis. Donec vitae pretium quam.</string>
+
     <string name="title_information_activity">Справка по взаимодействию с CodeBlock</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In auctor suscipit augue fermentum varius. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam eu sapien placerat, vestibulum est vel, varius arcu. Maecenas pharetra velit ut ornare porta. Donec tristique sapien ut posuere pulvinar. Nunc volutpat quam enim, a porttitor dolor tincidunt ut. Duis vel dui eget libero fermentum feugiat. Phasellus in diam congue, bibendum velit non, tincidunt nisi. Morbi scelerisque ullamcorper nisl sit amet blandit. Vestibulum imperdiet pretium felis in venenatis. Duis ac massa dui. Nulla rhoncus leo quis eros lobortis convallis. Donec vitae pretium quam.</string>
+
     <string name="back_to_main">Вернуться на главную</string>
     <string name="go_to_the_game">Перейти к игре</string>
     <string name="left_arrow_description">Эта картинка является кнопкой, которая ведет на основую страницу</string>
@@ -24,4 +27,23 @@
     <string name="open_code">Загрузить код из блоков</string>
     <string name="exit">Выход</string>
 
+    <string name="titleVariable">Переменные</string>
+    <string-array name="btnBlocksVariables">
+        <item>Integer</item>
+        <item>Double</item>
+        <item>Boolean</item>
+        <item>Char</item>
+    </string-array>
+
+    <string name="titleCycles">Циклы</string>
+    <string-array name="btnBlocksCycles">
+        <item>while</item>
+        <item>for</item>
+        <item>forEach</item>
+    </string-array>
+
+    <string name="titleConditions">Условия</string>
+    <string-array name="btnBlocksConditions">
+        <item>if else</item>
+    </string-array>
 </resources>
