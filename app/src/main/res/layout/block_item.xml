@@ -7,71 +7,45 @@
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="166dp"
-        android:layout_height="64dp"
-        android:background="@color/bgBlock"
+        android:id="@+id/block"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_rect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_medium"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="БЛОК"
-            android:textSize="10sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="5dp"
+            android:text="block"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toTopOf="@+id/forUser"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SmallSp,TextContrastCheck" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="63dp"
-            android:layout_height="17dp"
-            android:layout_marginTop="12dp"
-            android:background="#99ADB4"
+        <TableLayout
+            android:id="@+id/forUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.153"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title">
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:layout_editor_absoluteX="85dp">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/node"
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:background="@drawable/button_shape_circle_stroke"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.084"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-            <TextView
-                android:id="@+id/property"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal|center_vertical"
-                android:text="Свойство"
-                android:textSize="7sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.302"
-                app:layout_constraintStart_toEndOf="@+id/node"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="SmallSp,TextContrastCheck" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </TableLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </merge>
 
-    <!--    <com.jsibbold.zoomage.ZoomageView-->
-    <!--        android:layout_width=""-->
-    <!--        android:layout_height=""/>-->
-
+    <!--еще подходит для get если убрать основные круглежки-->

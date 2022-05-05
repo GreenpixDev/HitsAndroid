@@ -3,12 +3,9 @@
 
     <declare-styleable name="BlockView">
         <attr name="blockTitle" format="string"/>
-        <attr name="blockPropertyText" format="string"/>
-
-        <attr name="blockBackgroundColor" format="color"/>
-
-        <attr name="btnConnection" format="boolean"/>
-
+        <attr name="bgBlock" format="color"/>
+        <attr name="edit_absoluteX" format="string"/>
+        <attr name="edit_absoluteY" format="string"/>
     </declare-styleable>
 
 </resources>

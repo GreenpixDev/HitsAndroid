@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">HitsAndroid</string>
-    <string name="welcome">Доброе пожаловать</string>
+    <string name="welcome">Добро пожаловать</string>
     <string name="begin">Начать</string>
     <string name="aboutUs">О нас</string>
     <string name="main">Главная</string>
@@ -26,7 +26,6 @@
     <string name="back_to_game">Вернуться к игре</string>
     <string name="exit">Выход</string>
 
-    <string name="add_variable">Добавить блок</string>
     <string name="variable">variable</string>
 
     <string name="blockSET">SET</string>
@@ -36,11 +35,25 @@
     <string name="inputData">Condition</string>
     <string name="outputTrue">True</string>
     <string name="outputFalse">False</string>
-<!--    <string-array name="blocks">-->
-<!--        <item>while</item>-->
-<!--        <item>forEach</item>-->
-<!--        <item>for</item>-->
-<!--        <item>if else</item>-->
-<!--    </string-array>-->
+
+    <string name="titleVariable">Переменные</string>
+    <string-array name="btnBlocksVariables">
+        <item>Integer</item>
+        <item>Double</item>
+        <item>Boolean</item>
+        <item>Char</item>
+    </string-array>
+
+    <string name="titleCycles">Циклы</string>
+    <string-array name="btnBlocksCycles">
+        <item>while</item>
+        <item>for</item>
+        <item>forEach</item>
+    </string-array>
+
+    <string name="titleConditions">Условия</string>
+    <string-array name="btnBlocksConditions">
+        <item>if else</item>
+    </string-array>
 
 </resources>
