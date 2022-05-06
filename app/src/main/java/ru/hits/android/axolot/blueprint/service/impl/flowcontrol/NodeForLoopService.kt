@@ -5,17 +5,25 @@ import ru.hits.android.axolot.blueprint.node.NodeExecutable
 import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeForLoop
 
 import ru.hits.android.axolot.blueprint.service.NodeExecutableService
+import ru.hits.android.axolot.blueprint.service.NodeHandlerService
 import ru.hits.android.axolot.blueprint.type.Type
 import ru.hits.android.axolot.blueprint.variable.Variable
 import ru.hits.android.axolot.interpreter.InterpreterContext
 
-class NodeForLoopService : NodeExecutableService {
+@Deprecated("Этот узел можно сделать не нативным")
+class NodeForLoopService(private val nodeHandlerService: NodeHandlerService) :
+    NodeExecutableService {
 
     override fun invoke(node: Node, context: InterpreterContext): NodeExecutable? {
-        if(node is NodeForLoop)
-        {
-            val firstIndex = node.dependencies[NodeForLoop.FIRST_INDEX]!!.invoke(context)[Type.INT]!!
-            val lastIndex = node.dependencies[NodeForLoop.LAST_INDEX]!!.invoke(context)[Type.INT]!!
+        if (node is NodeForLoop) {
+            val firstIndex = nodeHandlerService.invoke(
+                node[NodeForLoop.FIRST_INDEX],
+                context
+            )[Type.INT]!!
+            val lastIndex = nodeHandlerService.invoke(
+                node[NodeForLoop.LAST_INDEX],
+                context
+            )[Type.INT]!!
 
             // Добавляем в стек переменные для цикла
             node.nodeBreak?.let { context.stack[it] = Variable(Type.BOOLEAN, false) }

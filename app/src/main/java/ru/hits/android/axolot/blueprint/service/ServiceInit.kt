@@ -39,35 +39,35 @@ import ru.hits.android.axolot.blueprint.service.impl.function.math.trig.NodeTrig
 import ru.hits.android.axolot.blueprint.service.impl.macros.*
 import kotlin.reflect.KClass
 
-class ServiceInit {
+class ServiceInit(private val nodeHandlerService: NodeHandlerService) {
 
-    fun intiHandler():Map<KClass<*>, NodeService<*>> {
+    fun intiHandler(): Map<KClass<*>, NodeService<*>> {
         val map = hashMapOf<KClass<*>, NodeService<*>>()
 
         //------------------------ Macros
-        map[NodeAssignVariable::class] = NodeAssignVariableService()
+        map[NodeAssignVariable::class] = NodeAssignVariableService(nodeHandlerService)
         map[NodeLocalVariable::class] = NodeLocalVariableService()
-        map[NodeMacrosDependency::class] = NodeMacrosDependencyService()
+        map[NodeMacrosDependency::class] = NodeMacrosDependencyService(nodeHandlerService)
         map[NodeMacrosInput::class] = NodeMacrosInputService()
         map[NodeMacrosOutput::class] = NodeMacrosOutputService()
 
 
         //------------------------ Flow control
-        map[NodeBranch::class] = NodeBranchService()
+        map[NodeBranch::class] = NodeBranchService(nodeHandlerService)
         map[NodeForLoopBreak::class] = NodeForLoopBreakService()
         map[NodeForLoopIndex::class] = NodeForLoopIndexService()
-        map[NodeForLoop::class] = NodeForLoopService()
+        map[NodeForLoop::class] = NodeForLoopService(nodeHandlerService)
         map[NodeSequence::class] = NodeSequenceService()
-        map[NodeWhileLoop::class] = NodeWhileLoopService()
+        map[NodeWhileLoop::class] = NodeWhileLoopService(nodeHandlerService)
 
         map[NodeFunctionParameter::class] = NodeFunctionParameterService()
-        map[NodeFunctionEnd::class] = NodeFunctionEndService()
-        map[NodeFunctionInvoke::class] = NodeFunctionInvokeService()
+        map[NodeFunctionEnd::class] = NodeFunctionEndService(nodeHandlerService)
+        map[NodeFunctionInvoke::class] = NodeFunctionInvokeService(nodeHandlerService)
         map[NodeFunctionReturned::class] = NodeFunctionReturnedService()
         map[NodeConstant::class] = NodeConstantService()
 
         //------------------------ Math for boolean
-        val nodeBooleanService = NodeBooleanService()
+        val nodeBooleanService = NodeBooleanService(nodeHandlerService)
         map[NodeBooleanAnd::class] = nodeBooleanService
         map[NodeBooleanNand::class] = nodeBooleanService
         map[NodeBooleanNor::class] = nodeBooleanService
@@ -77,7 +77,7 @@ class ServiceInit {
         map[NodeBooleanXor::class] = nodeBooleanService
 
         //------------------------ Math for int
-        val nodeIntService = NodeIntService()
+        val nodeIntService = NodeIntService(nodeHandlerService)
         map[NodeIntDiv::class] = nodeIntService
         map[NodeIntEqual::class] = nodeIntService
         map[NodeIntLess::class] = nodeIntService
@@ -93,7 +93,7 @@ class ServiceInit {
         map[NodeIntSum::class] = nodeIntService
 
         //------------------------ Math for float
-        val nodeFloatService = NodeFloatService()
+        val nodeFloatService = NodeFloatService(nodeHandlerService)
         map[NodeFloatAbs::class] = nodeFloatService
         map[NodeFloatDiv::class] = nodeFloatService
         map[NodeFloatEqual::class] = nodeFloatService
@@ -111,7 +111,7 @@ class ServiceInit {
         map[NodeLog::class] = nodeFloatService
 
         //------------------------ trig math
-        val nodeTrigService = NodeTrigService()
+        val nodeTrigService = NodeTrigService(nodeHandlerService)
         map[NodeArcCos::class] = nodeTrigService
         map[NodeArcSin::class] = nodeTrigService
         map[NodeArcTan::class] = nodeTrigService
@@ -121,20 +121,20 @@ class ServiceInit {
 
         //------------------------ Math
         map[NodeGetVariable::class] = NodeGetVariableService()
-        map[NodeCast::class] = NodeCastService()
+        map[NodeCast::class] = NodeCastService(nodeHandlerService)
 
         //------------------------ Array
-        val nodeArrayService = NodeArrayService()
+        val nodeArrayService = NodeArrayService(nodeHandlerService)
         map[NodeArrayFindElement::class] = nodeArrayService
         map[NodeArrayGetElement::class] = nodeArrayService
         map[NodeArraySize::class] = nodeArrayService
 
 
         //------------------------ Exec
-        map[NodeArrayAssignElement::class] = NodeArrayAssignElementService()
-        map[NodeSetVariable::class] = NodeSetVariableService()
-        map[NodeArrayResize::class] = NodeArrayResizeService()
-        map[NodePrintString::class] = NodePrintStringService()
+        map[NodeArrayAssignElement::class] = NodeArrayAssignElementService(nodeHandlerService)
+        map[NodeSetVariable::class] = NodeSetVariableService(nodeHandlerService)
+        map[NodeArrayResize::class] = NodeArrayResizeService(nodeHandlerService)
+        map[NodePrintString::class] = NodePrintStringService(nodeHandlerService)
         return map
     }
 

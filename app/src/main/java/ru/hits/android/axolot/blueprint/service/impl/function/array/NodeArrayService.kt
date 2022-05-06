@@ -5,28 +5,39 @@ import ru.hits.android.axolot.blueprint.node.function.array.NodeArrayFindElement
 import ru.hits.android.axolot.blueprint.node.function.array.NodeArrayGetElement
 import ru.hits.android.axolot.blueprint.node.function.array.NodeArraySize
 import ru.hits.android.axolot.blueprint.service.NodeDependencyService
+import ru.hits.android.axolot.blueprint.service.NodeHandlerService
 import ru.hits.android.axolot.blueprint.type.Type
 import ru.hits.android.axolot.blueprint.variable.Variable
 import ru.hits.android.axolot.interpreter.InterpreterContext
 
 
-class NodeArrayService : NodeDependencyService {
+class NodeArrayService(private val nodeHandlerService: NodeHandlerService) : NodeDependencyService {
 
     override fun invoke(node: Node, context: InterpreterContext): Variable {
-        if(node is NodeArrayFindElement){
-            val array = node.dependencies[NodeArrayFindElement.ARRAY]!!.invoke(context).getArray()!!
-            val element = node.dependencies[NodeArrayFindElement.ELEMENT]!!.invoke(context).value
+        if (node is NodeArrayFindElement) {
+            val array =
+                nodeHandlerService.invoke(node[NodeArrayFindElement.ARRAY], context)
+                    .getArray()!!
+            val element = nodeHandlerService.invoke(
+                node[NodeArrayFindElement.ELEMENT],
+                context
+            ).value
 
             return Variable(Type.INT, array.find { it.value == element })
-        }
-        else if(node is NodeArrayGetElement){
-            val array = node.dependencies[NodeArrayGetElement.ARRAY]!!.invoke(context).getArray()!!
-            val index = node.dependencies[NodeArrayGetElement.INDEX]!!.invoke(context)[Type.INT]!!
+        } else if (node is NodeArrayGetElement) {
+            val array =
+                nodeHandlerService.invoke(node[NodeArrayGetElement.ARRAY], context)
+                    .getArray()!!
+            val index = nodeHandlerService.invoke(
+                node[NodeArrayGetElement.INDEX],
+                context
+            )[Type.INT]!!
 
             return array[index]
         }
         else if(node is NodeArraySize){
-            val array = node.dependencies[NodeArraySize.ARRAY]!!.invoke(context).getArray()!!
+            val array = nodeHandlerService.invoke(node[NodeArraySize.ARRAY], context)
+                .getArray()!!
 
             return Variable(Type.INT, array.size)
         }

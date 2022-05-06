@@ -15,11 +15,15 @@ class NodeHandlerService() {
     }
 
     fun invoke(node: NodeDependency, context: InterpreterContext): Variable {
-        return nodeToService[node::class]?.invoke(node, context) as Variable
+        val service = nodeToService[node::class]
+        requireNotNull(service) { "Сервис для узла ${node::class} не зарегистрирован" }
+        return service.invoke(node, context) as Variable
     }
 
     fun invoke(node: NodeExecutable, context: InterpreterContext): NodeExecutable? {
-        return nodeToService[node::class]?.invoke(node, context) as? NodeExecutable
+        val service = nodeToService[node::class]
+        requireNotNull(service) { "Сервис для узла ${node::class} не зарегистрирован" }
+        return service.invoke(node, context) as? NodeExecutable
     }
 
 }

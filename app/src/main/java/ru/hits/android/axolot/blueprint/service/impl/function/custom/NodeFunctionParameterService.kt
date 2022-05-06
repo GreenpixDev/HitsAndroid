@@ -10,7 +10,7 @@ class NodeFunctionParameterService : NodeDependencyService {
 
     override fun invoke(node: Node, context: InterpreterContext): Variable {
         if(node is NodeFunctionParameter) {
-            return context.stack[this]!!
+            return context.stack[node]!!
         }
         throw createIllegalException(node)
     }

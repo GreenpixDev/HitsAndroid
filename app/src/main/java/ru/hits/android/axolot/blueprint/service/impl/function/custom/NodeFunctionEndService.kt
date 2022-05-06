@@ -4,16 +4,18 @@ import ru.hits.android.axolot.blueprint.node.Node
 import ru.hits.android.axolot.blueprint.node.NodeExecutable
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionEnd
 import ru.hits.android.axolot.blueprint.service.NodeExecutableService
+import ru.hits.android.axolot.blueprint.service.NodeHandlerService
 import ru.hits.android.axolot.interpreter.InterpreterContext
 
-class NodeFunctionEndService : NodeExecutableService {
+class NodeFunctionEndService(private val nodeHandlerService: NodeHandlerService) :
+    NodeExecutableService {
 
     override fun invoke(node: Node, context: InterpreterContext): NodeExecutable? {
-        if(node is NodeFunctionEnd) {
+        if (node is NodeFunctionEnd) {
             // Записываем все входные переменные функции в стек
             node.dependencies.forEach {
                 val key = context.stack.peek().invocable to it.key
-                context.stack.peek(1).variables[key] = it.value.invoke(context)
+                context.stack.peek(1).variables[key] = nodeHandlerService.invoke(it.value, context)
             }
             return null
         }
