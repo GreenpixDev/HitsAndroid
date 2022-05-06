@@ -1,6 +1,6 @@
 package ru.hits.android.axolot.interpreter
 
-import ru.hits.android.axolot.blueprint.node.*
+import ru.hits.android.axolot.blueprint.node.NodeExecutable
 import ru.hits.android.axolot.blueprint.scope.Scope
 import ru.hits.android.axolot.blueprint.service.NodeHandlerService
 import ru.hits.android.axolot.blueprint.service.ServiceInit
@@ -14,7 +14,7 @@ class BlueprintInterpreter(val scope: Scope) : Interpreter {
     val stack = SuppliedThreadLocal { Stack() }
 
     init {
-        val serviceInit = ServiceInit()
+        val serviceInit = ServiceInit(nodeHandlerService)
         nodeHandlerService.init(serviceInit.intiHandler())
     }
 

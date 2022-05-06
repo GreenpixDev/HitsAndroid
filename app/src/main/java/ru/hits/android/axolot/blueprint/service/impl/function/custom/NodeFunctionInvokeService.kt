@@ -4,18 +4,20 @@ import ru.hits.android.axolot.blueprint.node.Node
 import ru.hits.android.axolot.blueprint.node.NodeExecutable
 import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionInvoke
 import ru.hits.android.axolot.blueprint.service.NodeExecutableService
+import ru.hits.android.axolot.blueprint.service.NodeHandlerService
 import ru.hits.android.axolot.blueprint.stack.StackFrame
 import ru.hits.android.axolot.blueprint.variable.Variable
 import ru.hits.android.axolot.interpreter.InterpreterContext
 
-class NodeFunctionInvokeService : NodeExecutableService {
+class NodeFunctionInvokeService(private val nodeHandlerService: NodeHandlerService) :
+    NodeExecutableService {
 
     override fun invoke(node: Node, context: InterpreterContext): NodeExecutable? {
-        if(node is NodeFunctionInvoke){
+        if (node is NodeFunctionInvoke) {
             // Получаем все входные переменные функции
             val params = hashMapOf<Any, Variable>()
             node.dependencies.forEach {
-                params[node.function.input[it.key]!!] = it.value.invoke(context)
+                params[node.function.input[it.key]!!] = nodeHandlerService.invoke(it.value, context)
             }
 
             // Увеличиваем стек (вход в функцию)

@@ -5,10 +5,11 @@ import ru.hits.android.axolot.interpreter.InterpreterContext
 
 interface NodeService<T> {
 
+
     fun invoke(node: Node, context: InterpreterContext): T
 
     fun createIllegalException(node: Node) : IllegalArgumentException{
         return IllegalArgumentException("Неверный тип ноды ${node::class}")
     }
-    
+
 }

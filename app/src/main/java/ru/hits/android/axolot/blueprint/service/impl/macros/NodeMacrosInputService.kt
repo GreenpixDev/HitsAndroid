@@ -13,6 +13,6 @@ class NodeMacrosInputService : NodeExecutableService {
             return node.nextNode
         }
         throw createIllegalException(node)
-
     }
+
 }

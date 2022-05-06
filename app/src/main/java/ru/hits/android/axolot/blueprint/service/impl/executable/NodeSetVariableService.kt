@@ -4,13 +4,16 @@ import ru.hits.android.axolot.blueprint.node.Node
 import ru.hits.android.axolot.blueprint.node.NodeExecutable
 import ru.hits.android.axolot.blueprint.node.executable.NodeSetVariable
 import ru.hits.android.axolot.blueprint.service.NodeExecutableService
+import ru.hits.android.axolot.blueprint.service.NodeHandlerService
 import ru.hits.android.axolot.interpreter.InterpreterContext
 
-class NodeSetVariableService : NodeExecutableService {
+class NodeSetVariableService(private val nodeHandlerService: NodeHandlerService) :
+    NodeExecutableService {
 
     override fun invoke(node: Node, context: InterpreterContext): NodeExecutable? {
-        if(node is NodeSetVariable) {
-            val value = node.dependencies[NodeSetVariable.INPUT]!!.invoke(context)
+        if (node is NodeSetVariable) {
+            val value =
+                nodeHandlerService.invoke(node.dependencies[NodeSetVariable.INPUT]!!, context)
             context.scope.setVariable(node.name, value)
             return node.nextNode
         }
