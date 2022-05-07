@@ -27,7 +27,8 @@
     <string name="open_code">Загрузить код из блоков</string>
     <string name="exit">Выход</string>
 
-    <string name="titleVariable">Переменные</string>
+    <string name="titleFunctions">Функции</string>
+    <string name="titleVariables">Переменные</string>
     <string-array name="btnBlocksVariables">
         <item>Integer</item>
         <item>Double</item>
@@ -43,6 +44,7 @@
     </string-array>
 
     <string name="titleConditions">Условия</string>
+    <string name="new_function">Новая функция</string>
     <string-array name="btnBlocksConditions">
         <item>if else</item>
     </string-array>

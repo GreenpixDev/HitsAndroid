@@ -13,15 +13,16 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:contentDescription="@string/settings_icon_description"
+        android:onClick="onSettings"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:onClick="onSettings"
         app:layout_constraintHorizontal_bias="0.976"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.956"
-        app:srcCompat="@drawable/ic_settings_icon" />
+        app:srcCompat="@drawable/ic_settings_icon"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <ImageView
         android:id="@+id/imageViewPlay"
@@ -56,16 +57,17 @@
         android:layout_height="40dp"
         android:background="@drawable/circle_button"
         android:contentDescription="@string/show_and_not_show_toolbar"
+        android:onClick="onClickShowMenu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.023"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.043"
-        android:onClick="onClickShowMenu"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <ScrollView
+        android:id="@+id/scrollViewMenu"
         android:layout_width="220dp"
         android:layout_height="300dp"
         android:layout_marginStart="16dp"
@@ -79,87 +81,89 @@
         app:layout_constraintTop_toBottomOf="@+id/showMenu">
 
         <LinearLayout
+            android:id="@+id/linearLayoutMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-            <Button
-                android:id="@+id/button1"
+            <LinearLayout
+                android:id="@+id/linearLayoutFunctionsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:backgroundTint="@color/circle_button"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="кнопка"
-                android:textColor="@color/black" />
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:backgroundTint="@color/circle_button"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="кнопка"
-                android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/titleFunctions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/titleFunctions"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:backgroundTint="@color/circle_button"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="кнопка"
-                android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/newFunction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/new_function"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"/>
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/button4"
+            <LinearLayout
+                android:id="@+id/linearLayoutVariablesContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:backgroundTint="@color/circle_button"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="кнопка"
-                android:textColor="@color/black" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/button5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:backgroundTint="@color/circle_button"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="кнопка"
-                android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/titleVariables"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/titleVariables"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/button6"
+            <LinearLayout
+                android:id="@+id/linearLayoutCyclesContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:backgroundTint="@color/circle_button"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="кнопка"
-                android:textColor="@color/black" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/button7"
+                <TextView
+                    android:id="@+id/titleCycles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/titleCycles"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutConditionsContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:backgroundTint="@color/circle_button"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="кнопка"
-                android:textColor="@color/black" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/titleConditions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/titleConditions"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>
