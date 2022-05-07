@@ -2,13 +2,17 @@ package ru.hits.android.axolot
 
 import android.content.ClipData
 import android.content.ClipDescription
-import android.view.View
 import android.os.Build
+import android.view.DragEvent
+import kotlinx.android.synthetic.main.activity_main.*
+import java.time.chrono.JapaneseEra.values
+
+import androidx.constraintlayout.widget.ConstraintLayout
+import android.view.View
 import android.os.Bundle
 import android.content.Intent
-import android.view.DragEvent
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
 import ru.hits.android.axolot.view.BlockView
 
@@ -41,95 +45,109 @@ class BlueprintActivity : AppCompatActivity() {
 
         //добавление блока
         binding.addVar.setOnClickListener() {
+            val imageView = ImageView( this )
+            imageView.layoutParams = ConstraintLayout.LayoutParams(400, 400)
+            imageView.x = 20f
+            imageView.y = 20f
+
+            val imgResId = R.drawable.ic_info_icon
+            var resId = imgResId
+
+            imageView.setImageResource(resId)
+
+//            val layout = findViewById<RelativeLayout>(R.id.layout)
+//            layout?.addView(imageView)
+
             binding.codeField.addView(BlockView(this))
+
             blocksList.add(BlockView(this))
         }
 
         //перещение блоков добавленных первоначально в xml
-        attachViewDragListener()
-        binding.blueprintLayout.setOnDragListener(blockDragListener)
+//        attachViewDragListener()
+//        binding.blueprintLayout.setOnDragListener(blockDragListener)
     }
 
-    private fun attachViewDragListener() {
-        binding.varBlock.setOnLongClickListener {view: View ->
-
-            val clipText = "This is out Clipdata text"
-            val item = ClipData.Item(clipText)
-
-            val dataToDrag = ClipData (clipText, arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
-
-            val blockShadow = View.DragShadowBuilder(view)
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                //support pre-Nougat versions
-                @Suppress("DEPRECATION")
-                view.startDragAndDrop(dataToDrag, blockShadow, view, 0)
-            } else {
-                //supports Nougat and beyond
-                view.startDragAndDrop(dataToDrag, blockShadow, view, 0)
-            }
-
-            view.visibility = View.INVISIBLE
-
-            true
-        }
-    }
-
-    private val blockDragListener = View.OnDragListener { view, dragEvent->
-        val draggableItem = dragEvent.localState as View
-
-        when (dragEvent.action) {
-            DragEvent.ACTION_DRAG_STARTED -> {
-                true
-            }
-
-            DragEvent.ACTION_DRAG_ENTERED -> {
-                binding.varBlock.alpha = 0.3f
-                true
-            }
-
-            DragEvent.ACTION_DRAG_LOCATION -> {
-                true
-            }
-
-            DragEvent.ACTION_DRAG_EXITED -> {
-                binding.varBlock.alpha = 1.0f
-                draggableItem.visibility = View.VISIBLE
-                view.invalidate()
-                true
-            }
-
-            DragEvent.ACTION_DROP -> {
-                binding.varBlock.alpha = 1.0f
-
-                draggableItem.x = dragEvent.x - (draggableItem.width/2)
-                draggableItem.y = dragEvent.y - (draggableItem.height/2)
-
-                val parent = draggableItem.parent as ConstraintLayout
-
-                parent.removeView(draggableItem)
-
-                val dropArea = view as ConstraintLayout
-
-                dropArea.addView(draggableItem)
-
-                if (dragEvent.clipDescription.hasMimeType((ClipDescription.MIMETYPE_TEXT_PLAIN))) {
-                    val draggedData = dragEvent.clipData.getItemAt(0).text
-                }
-
-                true
-            }
-
-            DragEvent.ACTION_DRAG_ENDED -> {
-                draggableItem.visibility = View.VISIBLE
-
-                view.invalidate()
-                true
-            }
-
-            else -> {
-                false
-            }
-        }
-    }
+//    private fun attachViewDragListener() {
+//        binding.varBlock.setOnLongClickListener {view: View ->
+//
+//            val clipText = "This is out Clipdata text"
+//            val item = ClipData.Item(clipText)
+//
+//            val dataToDrag = ClipData (clipText, arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
+//
+//            val blockShadow = View.DragShadowBuilder(view)
+//
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+//                //support pre-Nougat versions
+//                @Suppress("DEPRECATION")
+//                view.startDragAndDrop(dataToDrag, blockShadow, view, 0)
+//            } else {
+//                //supports Nougat and beyond
+//                view.startDragAndDrop(dataToDrag, blockShadow, view, 0)
+//            }
+//
+//            view.visibility = View.INVISIBLE
+//
+//            true
+//        }
+//    }
+//
+//    private val blockDragListener = View.OnDragListener { view, dragEvent->
+//        val draggableItem = dragEvent.localState as View
+//
+//        when (dragEvent.action) {
+//            DragEvent.ACTION_DRAG_STARTED -> {
+//                true
+//            }
+//
+//            DragEvent.ACTION_DRAG_ENTERED -> {
+//                binding.varBlock.alpha = 0.3f
+//                true
+//            }
+//
+//            DragEvent.ACTION_DRAG_LOCATION -> {
+//                true
+//            }
+//
+//            DragEvent.ACTION_DRAG_EXITED -> {
+//                binding.varBlock.alpha = 1.0f
+//                draggableItem.visibility = View.VISIBLE
+//                view.invalidate()
+//                true
+//            }
+//
+//            DragEvent.ACTION_DROP -> {
+//                binding.varBlock.alpha = 1.0f
+//
+//                draggableItem.x = dragEvent.x - (draggableItem.width/2)
+//                draggableItem.y = dragEvent.y - (draggableItem.height/2)
+//
+//                val parent = draggableItem.parent as ConstraintLayout
+//
+//                parent.removeView(draggableItem)
+//
+//                val dropArea = view as ConstraintLayout
+//
+//                dropArea.addView(draggableItem)
+//
+//                if (dragEvent.clipDescription.hasMimeType((ClipDescription.MIMETYPE_TEXT_PLAIN))) {
+//                    val draggedData = dragEvent.clipData.getItemAt(0).text
+//                }
+//
+//                true
+//            }
+//
+//            DragEvent.ACTION_DRAG_ENDED -> {
+//                draggableItem.visibility = View.VISIBLE
+//
+//                view.invalidate()
+//                true
+//            }
+//
+//            else -> {
+//                false
+//            }
+//        }
+//    }
 }
