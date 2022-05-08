@@ -109,7 +109,7 @@ class BlockView @JvmOverloads constructor(
         }
 
         attachViewDragListener()
-        bin = ActivityBlueprintBinding.inflate(LayoutInflater.from(context))
+//        bin = ActivityBlueprintBinding.inflate(LayoutInflater.from(context))
         binding.block.setOnDragListener(blockDragListener)
     }
 

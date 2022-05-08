@@ -57,5 +57,6 @@
     </string-array>
 
     <string name="titleFunctions">Пользовательские функции</string>
+    <string name="newFunction">Добавить новую функцию</string>
 
 </resources>
