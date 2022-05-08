@@ -13,20 +13,24 @@ class AboutUsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         aboutUsBinding = ActivityAboutUsBinding.inflate(layoutInflater)
         setContentView(aboutUsBinding.root)
+
+        addEventListeners()
     }
 
-    fun onMain(view: View) {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
+    private fun addEventListeners() {
+        aboutUsBinding.mainTextView.setOnClickListener() {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
-    fun onInformation(view: View) {
-        val intent = Intent(this, InformationActivity::class.java)
-        startActivity(intent)
-    }
+        aboutUsBinding.informationIcon.setOnClickListener() {
+            val intent = Intent(this, InformationActivity::class.java)
+            startActivity(intent)
+        }
 
-    fun onSettings(view: View) {
-        val intent = Intent(this, SettingsActivity::class.java)
-        startActivity(intent)
+        aboutUsBinding.settingsIcon.setOnClickListener() {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

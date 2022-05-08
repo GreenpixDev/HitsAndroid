@@ -13,7 +13,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:contentDescription="@string/settings_icon_description"
-        android:onClick="onSettings"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +56,6 @@
         android:layout_height="40dp"
         android:background="@drawable/circle_button"
         android:contentDescription="@string/show_and_not_show_toolbar"
-        android:onClick="onClickShowMenu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.023"
@@ -96,21 +94,21 @@
                     android:id="@+id/titleFunctions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_regular"
+                    android:fontFamily="@font/montserrat_medium"
                     android:text="@string/titleFunctions"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:textSize="28sp" />
 
                 <TextView
                     android:id="@+id/newFunction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_regular"
+                    android:fontFamily="@font/montserrat_italic"
                     android:text="@string/new_function"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -123,11 +121,11 @@
                     android:id="@+id/titleVariables"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_regular"
+                    android:fontFamily="@font/montserrat_medium"
                     android:text="@string/titleVariables"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:textSize="28sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -140,11 +138,11 @@
                     android:id="@+id/titleCycles"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_regular"
+                    android:fontFamily="@font/montserrat_medium"
                     android:text="@string/titleCycles"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:textSize="28sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -157,11 +155,11 @@
                     android:id="@+id/titleConditions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_regular"
+                    android:fontFamily="@font/montserrat_medium"
                     android:text="@string/titleConditions"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:textSize="28sp" />
             </LinearLayout>
 
 

@@ -30,7 +30,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/montserrat_regular"
-        android:onClick="goMainActivity"
         android:text="@string/back_to_main"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -49,7 +48,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/montserrat_regular"
-        android:onClick="goBluePrintActivity"
         android:text="@string/go_to_the_game"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -60,38 +58,6 @@
         app:layout_constraintStart_toEndOf="@+id/title"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
-
-    <ImageView
-        android:id="@+id/left_arrow"
-        android:layout_width="150dp"
-        android:layout_height="30dp"
-        android:contentDescription="@string/left_arrow_description"
-        android:onClick="goMainActivity"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/backToMain"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/backToMain"
-        app:layout_constraintTop_toBottomOf="@+id/backToMain"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_left_arrow"
-        tools:ignore="TouchTargetSizeCheck" />
-
-    <ImageView
-        android:id="@+id/right_arrow"
-        android:layout_width="150dp"
-        android:layout_height="28dp"
-        android:contentDescription="@string/right_arrow_description"
-        android:onClick="goBluePrintActivity"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/start"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/start"
-        app:layout_constraintTop_toBottomOf="@+id/start"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_right_arrow"
-        tools:ignore="TouchTargetSizeCheck" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

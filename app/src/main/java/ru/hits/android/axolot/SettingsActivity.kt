@@ -13,16 +13,18 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         settingsBinding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(settingsBinding.root)
+        addEventListeners()
     }
 
-    fun goMainActivity(view: View) {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
+    private fun addEventListeners() {
+        settingsBinding.backToMain.setOnClickListener(){
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
-    fun goBluePrintActivity(view: View) {
-        val intent = Intent(this, BluePrintActivity::class.java)
-        startActivity(intent)
+        settingsBinding.start.setOnClickListener(){
+            val intent = Intent(this, BluePrintActivity::class.java)
+            startActivity(intent)
+        }
     }
-
 }

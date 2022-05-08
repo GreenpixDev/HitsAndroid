@@ -13,15 +13,18 @@ class InformationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         informationBinding = ActivityInformationBinding.inflate(layoutInflater)
         setContentView(informationBinding.root)
+
+        addEventListeners()
     }
 
-    fun goMainActivity(view: View){
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    }
-
-    fun goBluePrintActivity(view: View){
-        val intent = Intent(this, BluePrintActivity::class.java)
-        startActivity(intent)
+    private fun addEventListeners() {
+        informationBinding.backToMain.setOnClickListener() {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+        informationBinding.start.setOnClickListener() {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
