@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/informationIcon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/info_icon_description"
@@ -26,8 +26,8 @@
 
     <ImageView
         android:id="@+id/settingsIcon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/settings_icon_description"
@@ -42,36 +42,35 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
+        android:layout_width="238dp"
+        android:layout_height="83dp"
         android:fontFamily="@font/montserrat_regular"
         android:text="@string/welcome"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="40sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.500"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
-        app:layout_constraintVertical_bias="0.502" />
+        app:layout_constraintVertical_bias="0.356" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
         android:backgroundTint="@color/buttons"
         android:fontFamily="@font/montserrat_regular"
         android:text="@string/begin"
         android:textColor="@color/black"
-        android:textSize="24sp"
-        app:cornerRadius="40dp"
+        app:cornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/settingsIcon"
-        app:layout_constraintHorizontal_bias="0.500"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toEndOf="@+id/informationIcon"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.425" />
+        app:layout_constraintVertical_bias="0.461" />
 
     <View
         android:id="@+id/view"
@@ -89,7 +88,7 @@
         android:id="@+id/mainTextView"
         android:layout_width="126dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="64dp"
         android:fontFamily="@font/montserrat_medium"
         android:text="@string/main"
         android:textColor="@color/black"
@@ -103,7 +102,7 @@
         android:id="@+id/aboutUsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="64dp"
         android:fontFamily="@font/montserrat_regular"
         android:text="@string/aboutUs"
         android:textColor="@color/black"

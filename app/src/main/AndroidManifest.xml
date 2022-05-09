@@ -22,7 +22,7 @@
         <activity
             android:name=".AboutUsActivity"
             android:exported="false"
-            android:screenOrientation="userLandscape" />
+            android:screenOrientation="fullUser" />
         <activity
             android:name=".BluePrintActivity"
             android:exported="false"
@@ -30,10 +30,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="userLandscape">
+            android:screenOrientation="fullUser">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
