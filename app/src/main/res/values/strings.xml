@@ -36,6 +36,13 @@
     <string name="outputTrue">True</string>
     <string name="outputFalse">False</string>
 
+    <string-array name="TypeBlock">
+        <item>Integer</item>
+        <item>String</item>
+        <item>Boolean</item>
+        <item>Function</item>
+    </string-array>
+
     <string name="titleVariable">Переменные</string>
     <string-array name="btnBlocksVariables">
         <item>Integer</item>

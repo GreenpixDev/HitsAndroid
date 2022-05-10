@@ -6,6 +6,11 @@
         <attr name="bgBlock" format="color"/>
         <attr name="edit_absoluteX" format="string"/>
         <attr name="edit_absoluteY" format="string"/>
+        <attr name="isVariable" format="string"/>
+        <attr name="isCycle" format="string"/>
+        <attr name="isCondition" format="string"/>
     </declare-styleable>
+
+    <attr name="blockStyle" format="reference"/>
 
 </resources>

@@ -8,4 +8,8 @@
         <item name="android:textAlignment">center</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
     </style>
+
+    <style name="BlocksVariables">
+        <item name="bgBlock">@color/bgBlock</item>
+    </style>
 </resources>
