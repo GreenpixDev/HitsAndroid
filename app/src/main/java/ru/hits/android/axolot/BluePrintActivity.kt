@@ -1,19 +1,13 @@
 package ru.hits.android.axolot
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
-import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.Typeface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import kotlinx.android.synthetic.main.activity_blue_print.*
 import kotlinx.android.synthetic.main.activity_blue_print.view.*
 import ru.hits.android.axolot.databinding.ActivityBluePrintBinding
 
@@ -32,7 +26,7 @@ class BluePrintActivity : AppCompatActivity() {
 
     fun addEventListeners() {
         //закрыть/открыть меню
-        bluePrintBinding.showMenu.setOnClickListener(){
+        bluePrintBinding.showMenu.setOnClickListener() {
             if (menuIsVisible) {
                 bluePrintBinding.menu.visibility = View.GONE
                 menuIsVisible = false
@@ -45,6 +39,12 @@ class BluePrintActivity : AppCompatActivity() {
         //перейти в настройки
         bluePrintBinding.imageViewSettings.setOnClickListener() {
             val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
+
+        //перейти в сохранение кода
+        bluePrintBinding.imageViewSave.setOnClickListener() {
+            val intent = Intent(this, SaveActivity::class.java)
             startActivity(intent)
         }
 

@@ -45,6 +45,7 @@
 
     <string name="titleConditions">Условия</string>
     <string name="new_function">+ новая функция</string>
+    <string name="text">текст</string>
     <string-array name="btnBlocksConditions">
         <item>if else</item>
     </string-array>
