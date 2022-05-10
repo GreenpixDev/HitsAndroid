@@ -70,24 +70,18 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     private fun attachBlockDragListener() = View.OnLongClickListener {view: View ->
-        val clipText = "This is out ClipData text"
-        val item = ClipData.Item(clipText)
-
-        val dataToDrag = ClipData (clipText, arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
-
+        val clipText = ClipData.newPlainText("","")
         val blockShadow = View.DragShadowBuilder(view)
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             //support pre-Nougat versions
             @Suppress("DEPRECATION")
-            view.startDragAndDrop(dataToDrag, blockShadow, view, 0)
+            view.startDragAndDrop(clipText, blockShadow, view, 0)
         } else {
             //supports Nougat and beyond
-            view.startDragAndDrop(dataToDrag, blockShadow, view, 0)
+            view.startDragAndDrop(clipText, blockShadow, view, 0)
         }
-
-        view.visibility = View.INVISIBLE
-
+        dragView = view as View
         true
     }
 
@@ -156,66 +150,6 @@ class BlueprintActivity : AppCompatActivity() {
 //                binding.scrollViewMenu.linearLayoutMenu.linearLayoutCyclesContainer.addView(textView)
 //            } else if (stringArray.toString() == "conditions") {
 //                binding.scrollViewMenu.linearLayoutMenu.linearLayoutConditionsContainer.addView(textView)
-//            }
-//        }
-//    }
-
-//    @SuppressLint("ClickableViewAccessibility")
-//    private fun longClickListener() = View.OnLongClickListener { view ->
-//        val data = ClipData.newPlainText("label", "smth text")
-//        val shadowBuilder = View.DragShadowBuilder(view)
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-//            @Suppress("DEPRECATION")
-//            view.startDrag(data, shadowBuilder, view, 0)
-//        } else {
-//            view.startDragAndDrop(data, shadowBuilder, view, 0)
-//        }
-//        dragView = view as View
-//        true
-//    }
-
-//    private fun blockDragListener() = OnDragListener { view, dragEvent->
-//        val draggableItem = dragEvent.localState as View
-//
-//        when (dragEvent.action) {
-//            DragEvent.ACTION_DRAG_ENTERED -> {
-//                binding.block.alpha = 0.3f
-//                true
-//            }
-//
-//            DragEvent.ACTION_DRAG_EXITED -> {
-//                binding.block.alpha = 1.0f
-//                draggableItem.visibility = View.VISIBLE
-//
-//                view.invalidate()
-//                true
-//            }
-//
-//            DragEvent.ACTION_DROP -> {
-//                val item = dragEvent.clipData.getItemAt(0)
-//
-//                binding.block.alpha = 1.0f
-//
-//                draggableItem.x = dragEvent.x - (draggableItem.width/2)
-//                draggableItem.y = dragEvent.y - (draggableItem.height/2)
-//
-//                val parent = draggableItem.parent as ConstraintLayout
-//                parent.removeView(draggableItem)
-//
-//                val dropArea = view as ConstraintLayout
-//                dropArea.addView(draggableItem)
-//
-//                true
-//            }
-//
-//            DragEvent.ACTION_DRAG_ENDED -> {
-//                draggableItem.visibility = View.VISIBLE
-//                view.invalidate()
-//                true
-//            }
-//
-//            else -> {
-//                false
 //            }
 //        }
 //    }

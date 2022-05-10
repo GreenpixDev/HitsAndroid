@@ -23,8 +23,8 @@ class BlockRowView @JvmOverloads constructor(
     var expressionField = true
     var outputField = true
 
-    var expression = "Nop"
-    var description = "Nop"
+    var description = "BlaBla"
+    var expression = "BlaBla"
     var typeBlock = BlockView.Companion.TypeBlock.INTEGER
 
     init {
