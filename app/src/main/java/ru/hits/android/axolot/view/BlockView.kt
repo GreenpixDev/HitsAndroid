@@ -32,18 +32,39 @@ class BlockView @JvmOverloads constructor(
 ): ConstraintLayout(context, attrs, defstyleAttr, defstyleRes) {
 
     private val binding = BlockItemBinding.inflate(LayoutInflater.from(context), this)
-    //var rows = listOf(binding.blockField.getChildAt(1) as BlockRowView)
 
-    companion object{
-        enum class TypeBlock { INTEGER, STRING, BOOLEAN, FUNCTION }
+    //TODO: сделать 2 массива inputNode и outputNode
+
+    fun addInput() {
 
     }
 
-    init {
-        //создание атрибутов
-        initializeAttributes(attrs, defstyleAttr, defstyleRes)
+    fun addOutput() {
 
-        //initNode(isWhat)
+    }
+
+    fun removeInput() {
+
+    }
+
+    fun removeOutput() {
+
+    }
+
+    fun connectInput() {
+
+    }
+
+    fun connectOutput() {
+
+    }
+
+    fun disConnectInput() {
+
+    }
+
+    fun disConnectOutput() {
+
     }
 
     @SuppressLint("Recycle")
@@ -59,54 +80,9 @@ class BlockView @JvmOverloads constructor(
         typedArray.recycle()
     }
 
-    @SuppressLint("ResourceType")
-    private fun initNode(isWhat: String?) {
-        when(isWhat) {
-            "isVariable" -> addNode(1, 1)
-            "isCycle" -> {
-                addNode(1, 1)
-                addNode(2, 1)
-            }
-            "isCondition" -> {
-                addNode(1, 2)
-                addNode(2, 2)
-                addNode(3, 1)
-            }
-        }
-    }
+    init {
+        //создание атрибутов
+        initializeAttributes(attrs, defstyleAttr, defstyleRes)
 
-    private fun addNode(level: Int, count: Int) {
-        val node = ImageButton(context)
-        val params = ConstraintLayout.LayoutParams(
-            block.width - 40,
-            block.height - 40
-        )
-
-        when(level) {
-            1 -> {
-                binding.level1.addView(node, params)
-            }
-
-            2 -> {
-                var k = 0
-                while (k < count){
-                    binding.level2.addView(node, params)
-                    //как-то добавить несколько node в один row
-                    k++
-                }
-            }
-
-            3 -> {
-                var k = 0
-                while (k < count){
-                    binding.level3.addView(node, params)
-
-                    k++
-                }
-            }
-        }
-
-        //задать параметры расположения
-        node.setImageResource(R.drawable.button_shape_circle_stroke)
     }
 }

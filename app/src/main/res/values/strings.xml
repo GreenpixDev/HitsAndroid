@@ -48,7 +48,7 @@
         <item>Integer</item>
         <item>Double</item>
         <item>Boolean</item>
-        <item>Char</item>
+        <item>String</item>
     </string-array>
 
     <string name="titleCycles">Циклы</string>

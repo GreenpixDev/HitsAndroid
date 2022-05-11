@@ -3,35 +3,34 @@ package ru.hits.android.axolot.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.ArrayAdapter
 import androidx.constraintlayout.widget.ConstraintLayout
 import ru.hits.android.axolot.R
+import ru.hits.android.axolot.databinding.BlockItemBinding
 import ru.hits.android.axolot.databinding.BlockRowItemBinding
-import java.lang.reflect.Type
+import ru.hits.android.axolot.interpreter.type.Type
 
 class BlockRowView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
 ): ConstraintLayout(context, attrs) {
 
-    private  var binding: BlockRowItemBinding
-    var inputField = true
-    var definiteInput = false
+    private val binding = BlockRowItemBinding.inflate(LayoutInflater.from(context), this)
+    var inputNode = true
+    var outputNode = true
 
     var inputTypeField = true
     var descriptionField = true
-    var expressionField = true
-    var outputField = true
 
     var description = "BlaBla"
     var expression = "BlaBla"
-    var typeBlock = BlockView.Companion.TypeBlock.INTEGER
+
+    var definiteInput = false
+    var expressionField = true
+
+    var typeBlock:Type = Type.INT
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.block_item, this, true)
-        binding = BlockRowItemBinding.bind(this)
-
-        overrideData()
+        //overrideData()
         initComponents()
         setDescription()
         setDefaultExpression()
@@ -43,20 +42,25 @@ class BlockRowView @JvmOverloads constructor(
     }
 
     private fun initComponents() {
-        if (!outputField) {
-            binding.rowBlock.removeViewAt(4)
+
+        if (!inputNode) {
+            binding.rowBlock.removeViewAt(0)
         }
-        if (!expressionField) {
-            binding.rowBlock.removeViewAt(3)
-        }
-        if (!descriptionField) {
-            binding.rowBlock.removeViewAt(2)
-        }
+
         if (!inputTypeField) {
             binding.rowBlock.removeViewAt(1)
         }
-        if (!inputField) {
-            binding.rowBlock.removeViewAt(0)
+
+        if (!descriptionField) {
+            binding.rowBlock.removeViewAt(2)
+        }
+
+        if (!expressionField) {
+            binding.rowBlock.removeViewAt(3)
+        }
+
+        if (!outputNode) {
+            binding.rowBlock.removeViewAt(4)
         }
     }
 
@@ -72,10 +76,11 @@ class BlockRowView @JvmOverloads constructor(
         if (!definiteInput) return
 
         val type = when (typeBlock) {
-            BlockView.Companion.TypeBlock.INTEGER -> "Boolean"
-            BlockView.Companion.TypeBlock.STRING -> "Double"
-            BlockView.Companion.TypeBlock.BOOLEAN -> "String"
-            BlockView.Companion.TypeBlock.FUNCTION -> "Function"
+            Type.INT -> "Integer"
+            Type.BOOLEAN -> "Boolean"
+            Type.FLOAT -> "Double"
+            Type.STRING -> "String"
+            else -> "Function" //эта строчка бред, не воспринимайте всерьез
         }
 
         val spinnerArray: MutableList<String> = ArrayList()

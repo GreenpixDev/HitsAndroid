@@ -32,17 +32,17 @@
         app:threeFingersScrollEnabled="true"
         app:minZoom="2"
         app:minZoomType="zoom"
-        app:maxZoom="8"
+        app:maxZoom="200"
         app:maxZoomType="zoom"
         app:animationDuration="280"
         app:hasClickableChildren="true"
-        tools:ignore="MissingClass">
+        tools:ignore="MissingClass,MissingConstraints">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/codeField"
-            android:background="@color/bg_main"
-            android:layout_width="2000dp"
-            android:layout_height="2000dp"/>
+            android:background="@drawable/ic_launcher_background"
+            android:layout_width="100000dp"
+            android:layout_height="100000dp"/>
 
     </com.otaliastudios.zoom.ZoomLayout>
 
@@ -91,14 +91,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-               <TextView
-                   android:id="@+id/addVariable"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:text="@string/titleVariable"
-                   android:fontFamily="@font/montserrat_regular"
-                   android:layout_gravity="center"
-                   android:textSize="25sp"/>
+                <TextView
+                    android:id="@+id/titleFunctions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:text="@string/titleFunctions"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -108,13 +109,14 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/addCycle"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/titleVariables"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/titleCycles"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:layout_gravity="center"
-                    android:textSize="25sp"/>
+                    android:fontFamily="@font/montserrat_medium"
+                    android:text="@string/titleVariable"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="28sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -124,13 +126,31 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/addCondition"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/titleCycles"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:text="@string/titleCycles"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="28sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutConditionsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/titleConditions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_medium"
                     android:text="@string/titleConditions"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:layout_gravity="center"
-                    android:textSize="25sp"/>
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="28sp" />
             </LinearLayout>
 
         </LinearLayout>

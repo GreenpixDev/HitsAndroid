@@ -9,14 +9,17 @@
         android:id="@+id/rowBlock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:background="@drawable/shape_rect"        >
+        tools:background="@color/bg_header"        >
 
-        <RadioButton
+        <ImageButton
             android:id="@+id/inputRadioButton"
-            android:layout_width="34dp"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/toolBar_color"
-            android:layout_marginEnd="10dp"/>
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginStart="7dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/button_shape_circle_stroke"
+            android:buttonTint="@color/toolBar_color" />
 
         <Spinner
             android:id="@+id/typeSpinner"
@@ -47,14 +50,16 @@
             android:text=""
             android:layout_marginStart="3dp"/>
 
-        <RadioButton
+        <ImageButton
             android:id="@+id/outputRadioButton"
-            android:layout_width="35dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/button_shape_circle_stroke"
             android:buttonTint="@color/toolBar_color"
+            android:layout_weight="1"
+            android:layout_marginEnd="7dp"
+            android:layout_marginStart="7dp"
             tools:ignore="TouchTargetSizeCheck" />
     </TableRow>
 

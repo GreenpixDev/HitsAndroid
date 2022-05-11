@@ -10,7 +10,6 @@
         android:id="@+id/block"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_rect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -19,8 +18,9 @@
 
         <TableLayout
             android:id="@+id/blockField"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape_rect"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="5dp"
                 android:background="@null"
-                android:gravity="center_vertical"
+                android:gravity="center_horizontal"
                 android:text="block"
                 app:layout_constraintBottom_toTopOf="@+id/forUser"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -1,46 +1,35 @@
 package ru.hits.android.axolot
 
 import android.annotation.SuppressLint
-import android.content.ClipData
-import android.os.Build
-import android.view.DragEvent
 import androidx.constraintlayout.widget.ConstraintLayout
 import android.view.View
 import android.os.Bundle
 import android.content.Intent
 import android.graphics.Color
+import android.os.Handler
+import android.os.Looper
 import android.view.MotionEvent
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
-import android.widget.Toast
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_blueprint.*
-import kotlinx.android.synthetic.main.activity_blueprint.view.*
+import androidx.core.content.res.ResourcesCompat
+import kotlinx.android.synthetic.main.block_item.view.*
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
+import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.util.Vec2f
+import ru.hits.android.axolot.view.BlockRowView
 import ru.hits.android.axolot.view.BlockView
 
 /**
  * Активити редактора исходного кода нашего языка
  */
-
-class Point (
-    var x: Float,
-    var y: Float )
-
 class BlueprintActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBlueprintBinding
-
-    private lateinit var dragView: View
-    private var location = Point(0f, 0f)
     private var offset = Vec2f.ZERO
 
     private var menuIsVisible = true
     private var blocksList = mutableListOf<View>()
-//    private var counterVar = 1
-//    private var counterCyc = 1
-//    private var counterCon = 1
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +37,19 @@ class BlueprintActivity : AppCompatActivity() {
         binding = ActivityBlueprintBinding.inflate(layoutInflater)
         setContentView(binding.blueprintLayout)
 
+        addEventListeners()
+        createTextView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Это самый тупой костыль, но я уже не вывожу (author: Рома)
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.zoomLayout.zoomTo(binding.zoomLayout.getMaxZoom(), false)
+        }, 0)
+    }
+
+    private fun addEventListeners() {
         //скрывание и показ меню
         binding.showMenu.setOnClickListener() {
             if (menuIsVisible) {
@@ -63,44 +65,104 @@ class BlueprintActivity : AppCompatActivity() {
         binding.ToPageSettings.setOnClickListener() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+    }
+
+    private fun createTextView() {
+        val variables = resources.getStringArray(R.array.btnBlocksVariables)
+        val cycles = resources.getStringArray(R.array.btnBlocksCycles)
+        val conditions = resources.getStringArray(R.array.btnBlocksConditions)
+
+        someFunctionName(variables, 1)
+        someFunctionName(cycles, 2)
+        someFunctionName(conditions, 3)
+    }
+
+    private fun someFunctionName(array: Array<String>, textViewType: Int) {
+        //textViewType == 1 - variables
+        //             == 2 - cycles
+        //             == 3 - conditions
+        //это нужно как-то красивее сделать, но я не придумал как (как-то убрать textViewType и передавать что-то другое)
+
+        val textSize = 20f
+        val textColor = Color.BLACK
+        val textAlign = View.TEXT_ALIGNMENT_CENTER
+        val fontFamily = ResourcesCompat.getFont(this, R.font.montserrat_regular)
+
+        for (typeView in array) {
+
+            val textView = TextView(this)
+            textView.text = typeView.toString()
+            textView.setTextColor(textColor)
+            textView.textAlignment = textAlign
+            textView.textSize = textSize
+            textView.typeface = fontFamily
 
 
-        //добавление блока
-        binding.addVariable.setOnClickListener {
-            addBlockOnField(BlockView(this))
+            when (textViewType) {
+                1 -> {
+                    binding.linearLayoutVariablesContainer.addView(textView)
+                    textView.setOnClickListener() {
+                        addBlockOnField(BlockView(this), BlockRowView(this), typeView)
+                    }
+                }
+                2 -> {
+                    binding.linearLayoutCyclesContainer.addView(textView)
+                    textView.setOnClickListener() {
+                        addBlockOnField(BlockView(this), BlockRowView(this), typeView)
+                    }
+                }
+                3 -> {
+                    binding.linearLayoutConditionsContainer.addView(textView)
+                    textView.setOnClickListener() {
+                        addBlockOnField(BlockView(this), BlockRowView(this), typeView)
+                    }
+                }
+
+            }
+
         }
-
-        //перещение блоков
-//        attachBlockDragListener()
-//        binding.codeField.setOnDragListener(dragListener())
-
-//        binding.scrollViewMenu.linearLayoutFunctionsContainer.newFunction.setOnClickListener() {
-//            Toast.makeText(applicationContext, "Пока что это затычка", Toast.LENGTH_SHORT).show()
-//        }
     }
 
     /**
      * Метод создания блока на поле
      */
-    private fun addBlockOnField(view: View) {
+    private fun addBlockOnField(view: View, rowView: BlockRowView, typeView: String) {
         //TODO: подправить генерирацию блоков нужного размера
-        val params = ConstraintLayout.LayoutParams(
-            250,
-            100
-        )
 
-        view.setBackgroundColor(Color.GREEN)
         // Координаты
-        view.x += 1000
-        view.y += 500
-        //view.setOnLongClickListener(attachBlockDragListener())
+        view.x = binding.codeField.width / 2f
+        view.y = binding.codeField.height / 2f
         view.translationZ = 30f
+
+        when(typeView) {
+            "Integer" -> {
+                //TODO: сгенерировать ноды и все остальное для блока
+                rowView.typeBlock = Type.INT
+                rowView.inputNode = false
+                rowView.descriptionField = false
+                rowView.expressionField = false
+
+                view.level1.addView(rowView)
+            }
+            "Double" -> {
+                //TODO: сгенерировать ноды и все остальное для блока
+                view.level1.addView(rowView)
+            }
+            "Boolean" -> {
+                //TODO: сгенерировать ноды и все остальное для блока
+                view.level1.addView(rowView)
+            }
+            "String" -> {
+                //TODO: сгенерировать ноды и все остальное для блока
+                view.level1.addView(rowView)
+            }
+        }
 
         // Обработка событий
         view.setOnTouchListener(this::onTouch)
 
         // Добавляем блок на поле и List
-        codeField.addView(view, params)
+        binding.codeField.addView(view)
         blocksList.add(view)
     }
 
@@ -122,55 +184,6 @@ class BlueprintActivity : AppCompatActivity() {
         return true
     }
 
-    private fun attachBlockDragListener() = View.OnLongClickListener {view: View ->
-        val clipText = ClipData.newPlainText("","")
-        val blockShadow = View.DragShadowBuilder(view)
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            //support pre-Nougat versions
-            @Suppress("DEPRECATION")
-            view.startDragAndDrop(clipText, blockShadow, view, 0)
-        } else {
-            //supports Nougat and beyond
-            view.startDragAndDrop(clipText, blockShadow, view, 0)
-        }
-        dragView = view as View
-        true
-    }
-    private fun dragListener() = View.OnDragListener { view, event ->
-        when (event.action) {
-            DragEvent.ACTION_DRAG_STARTED -> {
-                dragView.visibility = INVISIBLE
-            }
-            DragEvent.ACTION_DRAG_LOCATION -> {
-                if (view == binding.codeField) {
-                    location.x = event.x
-                    location.y = event.y
-                }
-            }
-            DragEvent.ACTION_DROP -> {
-                when (view) {
-                    dragView.parent -> {
-                        dragView.translationZ = 30f
-                        dragView.x = (location.x - dragView.width / 2)
-                        dragView.y = location.y - dragView.height / 2
-                    }
-
-                    binding.codeField -> {
-                        binding.codeField.removeView(dragView)
-                        binding.codeField.addView(dragView)
-                        dragView.translationZ = 30f
-                        dragView.x = location.x - dragView.width / 2
-                        dragView.y = location.y - dragView.height / 2
-                    }
-                }
-            }
-            DragEvent.ACTION_DRAG_ENDED -> {
-                dragView.visibility = VISIBLE
-            }
-        }
-        true
-    }
 
 //    fun addTextView(stringArray : Array<String>) {
 //        for (textViewName in stringArray){
@@ -186,20 +199,6 @@ class BlueprintActivity : AppCompatActivity() {
 //                binding.scrollViewMenu.linearLayoutMenu.linearLayoutConditionsContainer.addView(textView)
 //            }
 //        }
-//    }
-
-//    @SuppressLint("ClickableViewAccessibility")
-//    private fun longClickListener() = View.OnLongClickListener { view ->
-//        val data = ClipData.newPlainText("label", "smth text")
-//        val shadowBuilder = View.DragShadowBuilder(view)
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-//            @Suppress("DEPRECATION")
-//            view.startDrag(data, shadowBuilder, view, 0)
-//        } else {
-//            view.startDragAndDrop(data, shadowBuilder, view, 0)
-//        }
-//        dragView = view as View
-//        true
 //    }
 
 }
