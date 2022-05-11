@@ -1,25 +1,13 @@
 package ru.hits.android.axolot.view
 
 import android.annotation.SuppressLint
-import android.content.ClipData
-import android.content.ClipDescription
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.os.Build
 import android.util.AttributeSet
-import android.view.DragEvent
 import android.view.LayoutInflater
-import android.view.View
-import android.view.View.OnDragListener
-import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import kotlinx.android.synthetic.main.activity_blueprint.*
-import kotlinx.android.synthetic.main.activity_blueprint.view.*
-import kotlinx.android.synthetic.main.activity_information.view.*
-import kotlinx.android.synthetic.main.block_item.view.*
 import ru.hits.android.axolot.R
-import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
 import ru.hits.android.axolot.databinding.BlockItemBinding
 
 
