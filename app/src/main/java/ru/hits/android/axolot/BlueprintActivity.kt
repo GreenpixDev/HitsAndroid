@@ -2,19 +2,27 @@ package ru.hits.android.axolot
 
 import android.annotation.SuppressLint
 import android.content.ClipData
-import android.content.ClipDescription
 import android.os.Build
 import android.view.DragEvent
 import androidx.constraintlayout.widget.ConstraintLayout
 import android.view.View
 import android.os.Bundle
 import android.content.Intent
+import android.graphics.Color
+import android.view.MotionEvent
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_blueprint.*
+import kotlinx.android.synthetic.main.activity_blueprint.view.*
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
+import ru.hits.android.axolot.util.Vec2f
 import ru.hits.android.axolot.view.BlockView
+
+/**
+ * Активити редактора исходного кода нашего языка
+ */
 
 class Point (
     var x: Float,
@@ -26,12 +34,13 @@ class BlueprintActivity : AppCompatActivity() {
 
     private lateinit var dragView: View
     private var location = Point(0f, 0f)
+    private var offset = Vec2f.ZERO
 
     private var menuIsVisible = true
     private var blocksList = mutableListOf<View>()
-    private var counterVar = 1
-    private var counterCyc = 1
-    private var counterCon = 1
+//    private var counterVar = 1
+//    private var counterCyc = 1
+//    private var counterCon = 1
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,16 +66,60 @@ class BlueprintActivity : AppCompatActivity() {
 
 
         //добавление блока
-        binding.addVariable.setOnClickListener() {
-            val blockView= BlockView( "isVariable",this )
-
-            addBlockToStack(blockView)
-            counterVar++
+        binding.addVariable.setOnClickListener {
+            addBlockOnField(BlockView(this))
         }
 
         //перещение блоков
-        attachBlockDragListener()
-        binding.codeField.setOnDragListener(dragListener())
+//        attachBlockDragListener()
+//        binding.codeField.setOnDragListener(dragListener())
+
+//        binding.scrollViewMenu.linearLayoutFunctionsContainer.newFunction.setOnClickListener() {
+//            Toast.makeText(applicationContext, "Пока что это затычка", Toast.LENGTH_SHORT).show()
+//        }
+    }
+
+    /**
+     * Метод создания блока на поле
+     */
+    private fun addBlockOnField(view: View) {
+        //TODO: подправить генерирацию блоков нужного размера
+        val params = ConstraintLayout.LayoutParams(
+            250,
+            100
+        )
+
+        view.setBackgroundColor(Color.GREEN)
+        // Координаты
+        view.x += 1000
+        view.y += 500
+        //view.setOnLongClickListener(attachBlockDragListener())
+        view.translationZ = 30f
+
+        // Обработка событий
+        view.setOnTouchListener(this::onTouch)
+
+        // Добавляем блок на поле и List
+        codeField.addView(view, params)
+        blocksList.add(view)
+    }
+
+    private fun onTouch(view: View, event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                offset = Vec2f(view.x - event.rawX, view.y - event.rawY)
+
+                // Нужно вызывать, когда кликаешь по вьюшке,
+                // чтобы все стандартные события android срабатывали.
+                // Короче, нужно использовать, чтобы не получить warning
+                view.performClick()
+            }
+            MotionEvent.ACTION_MOVE -> {
+                view.x = event.rawX + offset.x
+                view.y = event.rawY + offset.y
+            }
+        }
+        return true
     }
 
     private fun attachBlockDragListener() = View.OnLongClickListener {view: View ->
@@ -84,7 +137,6 @@ class BlueprintActivity : AppCompatActivity() {
         dragView = view as View
         true
     }
-
     private fun dragListener() = View.OnDragListener { view, event ->
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
@@ -120,24 +172,6 @@ class BlueprintActivity : AppCompatActivity() {
         true
     }
 
-    private fun addBlockToStack(view: View) {
-        //TODO: подправить генерирацию блоков нужного размера
-        val params = ConstraintLayout.LayoutParams(
-            codeField.width - 40,
-            codeField.height - 40
-        )
-        val currentId = "1${counterVar}"
-
-        codeField.addView(view, params)
-        blocksList.add(view)
-
-        view.x += 20
-        view.y += 20
-        view.id = currentId.toInt()
-        view.setOnLongClickListener(attachBlockDragListener())
-        view.translationZ = 30f
-    }
-
 //    fun addTextView(stringArray : Array<String>) {
 //        for (textViewName in stringArray){
 //            val textView = TextView(this)
@@ -153,4 +187,19 @@ class BlueprintActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
+
+//    @SuppressLint("ClickableViewAccessibility")
+//    private fun longClickListener() = View.OnLongClickListener { view ->
+//        val data = ClipData.newPlainText("label", "smth text")
+//        val shadowBuilder = View.DragShadowBuilder(view)
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+//            @Suppress("DEPRECATION")
+//            view.startDrag(data, shadowBuilder, view, 0)
+//        } else {
+//            view.startDragAndDrop(data, shadowBuilder, view, 0)
+//        }
+//        dragView = view as View
+//        true
+//    }
+
 }

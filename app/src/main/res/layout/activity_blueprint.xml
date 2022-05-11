@@ -11,45 +11,45 @@
     tools:openDrawer="start"
     tools:context=".BlueprintActivity">
 
-<!--    <com.otaliastudios.zoom.ZoomLayout-->
-<!--        android:id="@+id/zoomLayout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:scrollbars="none"-->
-<!--        app:transformation="centerInside"-->
-<!--        app:transformationGravity="auto"-->
-<!--        app:alignment="center"-->
-<!--        app:overScrollHorizontal="true"-->
-<!--        app:overScrollVertical="true"-->
-<!--        app:overPinchable="true"-->
-<!--        app:horizontalPanEnabled="true"-->
-<!--        app:verticalPanEnabled="true"-->
-<!--        app:zoomEnabled="true"-->
-<!--        app:flingEnabled="true"-->
-<!--        app:scrollEnabled="true"-->
-<!--        app:oneFingerScrollEnabled="true"-->
-<!--        app:twoFingersScrollEnabled="true"-->
-<!--        app:threeFingersScrollEnabled="true"-->
-<!--        app:minZoom="2"-->
-<!--        app:minZoomType="zoom"-->
-<!--        app:maxZoom="8"-->
-<!--        app:maxZoomType="zoom"-->
-<!--        app:animationDuration="280"-->
-<!--        app:hasClickableChildren="true"-->
-<!--        tools:ignore="MissingClass">-->
-
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/codeField"-->
-<!--            android:background="@drawable/ic_info_icon"-->
-<!--            android:layout_width="2000dp"-->
-<!--            android:layout_height="2000dp"/>-->
-
-<!--    </com.otaliastudios.zoom.ZoomLayout>-->
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/codeField"
+    <com.otaliastudios.zoom.ZoomLayout
+        android:id="@+id/zoomLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        app:transformation="centerInside"
+        app:transformationGravity="auto"
+        app:alignment="center"
+        app:overScrollHorizontal="true"
+        app:overScrollVertical="true"
+        app:overPinchable="true"
+        app:horizontalPanEnabled="true"
+        app:verticalPanEnabled="true"
+        app:zoomEnabled="true"
+        app:flingEnabled="true"
+        app:scrollEnabled="true"
+        app:oneFingerScrollEnabled="true"
+        app:twoFingersScrollEnabled="true"
+        app:threeFingersScrollEnabled="true"
+        app:minZoom="2"
+        app:minZoomType="zoom"
+        app:maxZoom="8"
+        app:maxZoomType="zoom"
+        app:animationDuration="280"
+        app:hasClickableChildren="true"
+        tools:ignore="MissingClass">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/codeField"
+            android:background="@color/bg_main"
+            android:layout_width="2000dp"
+            android:layout_height="2000dp"/>
+
+    </com.otaliastudios.zoom.ZoomLayout>
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/codeField"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"/>-->
 
     <View
         android:id="@+id/menu"

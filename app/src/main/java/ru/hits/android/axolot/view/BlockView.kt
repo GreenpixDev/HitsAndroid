@@ -25,7 +25,6 @@ import ru.hits.android.axolot.databinding.BlockItemBinding
 
 @SuppressLint("ViewConstructor")
 class BlockView @JvmOverloads constructor(
-    isWhat: String?,
     context: Context,
     attrs: AttributeSet? = null,
     defstyleAttr: Int = 0,
@@ -44,7 +43,7 @@ class BlockView @JvmOverloads constructor(
         //создание атрибутов
         initializeAttributes(attrs, defstyleAttr, defstyleRes)
 
-        initNode(isWhat)
+        //initNode(isWhat)
     }
 
     @SuppressLint("Recycle")
@@ -85,11 +84,7 @@ class BlockView @JvmOverloads constructor(
 
         when(level) {
             1 -> {
-                var k = 0
-                while (k < count){
-                    binding.level1.addView(node, params)
-                    k++
-                }
+                binding.level1.addView(node, params)
             }
 
             2 -> {
@@ -114,35 +109,4 @@ class BlockView @JvmOverloads constructor(
         //задать параметры расположения
         node.setImageResource(R.drawable.button_shape_circle_stroke)
     }
-
-//    private fun addSetRows(){
-//        for (row in rows){
-//            binding.blockField.addView(row)
-//        }
-//    }
-
-//    private fun attachBlockDragListener(){
-//        binding.block.setOnLongClickListener {view: View ->
-//
-//            val clipText = "This is out ClipData text"
-//            val item = ClipData.Item(clipText)
-//
-//            val dataToDrag = ClipData (clipText, arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
-//
-//            val blockShadow = View.DragShadowBuilder(view)
-//
-//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-//                //support pre-Nougat versions
-//                @Suppress("DEPRECATION")
-//                view.startDragAndDrop(dataToDrag, blockShadow, view, 0)
-//            } else {
-//                //supports Nougat and beyond
-//                view.startDragAndDrop(dataToDrag, blockShadow, view, 0)
-//            }
-//
-//            view.visibility = View.INVISIBLE
-//
-//            true
-//        }
-//    }
 }
