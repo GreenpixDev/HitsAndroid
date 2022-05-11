@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
-import ru.hits.android.axolot.R
-import ru.hits.android.axolot.databinding.BlockItemBinding
 import ru.hits.android.axolot.databinding.BlockRowItemBinding
 import ru.hits.android.axolot.interpreter.type.Type
 
