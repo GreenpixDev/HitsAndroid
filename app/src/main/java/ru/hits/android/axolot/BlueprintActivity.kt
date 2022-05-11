@@ -1,15 +1,13 @@
 package ru.hits.android.axolot
 
 import android.annotation.SuppressLint
-import androidx.constraintlayout.widget.ConstraintLayout
-import android.view.View
-import android.os.Bundle
 import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
-import android.view.ViewGroup
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
