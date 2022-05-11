@@ -1,10 +1,10 @@
-package ru.hits.android.axolot.blueprint.node.function.math.real
+package ru.hits.android.axolot.interpreter.node.function.math.real
 
 import ru.hits.android.axolot.interpreter.InterpreterContext
-import ru.hits.android.axolot.blueprint.node.NodeDependency
-import ru.hits.android.axolot.blueprint.node.NodeFunction
-import ru.hits.android.axolot.blueprint.type.Type
-import ru.hits.android.axolot.blueprint.variable.Variable
+import ru.hits.android.axolot.interpreter.node.NodeDependency
+import ru.hits.android.axolot.interpreter.node.NodeFunction
+import ru.hits.android.axolot.interpreter.type.Type
+import ru.hits.android.axolot.interpreter.variable.Variable
 import kotlin.math.min
 
 class NodeFloatMin : NodeFunction() {
