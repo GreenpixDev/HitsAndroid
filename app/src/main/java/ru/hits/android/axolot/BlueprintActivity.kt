@@ -2,6 +2,7 @@ package ru.hits.android.axolot
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -12,8 +13,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
+import ru.hits.android.axolot.blueprint.declaration.BlockType
+import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
-import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.util.Vec2f
 import ru.hits.android.axolot.view.BlockRowView
 import ru.hits.android.axolot.view.BlockView
@@ -27,7 +29,8 @@ class BlueprintActivity : AppCompatActivity() {
     private var offset = Vec2f.ZERO
 
     private var menuIsVisible = true
-    private var blocksList = mutableListOf<View>()
+
+    private val program = AxolotProgram.create()
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +39,7 @@ class BlueprintActivity : AppCompatActivity() {
         setContentView(binding.blueprintLayout)
 
         addEventListeners()
-        createTextView()
+        createMenu()
     }
 
     override fun onResume() {
@@ -65,52 +68,62 @@ class BlueprintActivity : AppCompatActivity() {
         }
     }
 
-    private fun createTextView() {
-        val variables = resources.getStringArray(R.array.btnBlocksVariables)
-        val cycles = resources.getStringArray(R.array.btnBlocksCycles)
-        val conditions = resources.getStringArray(R.array.btnBlocksConditions)
-
-        //someFunctionName(variables, "Variables")
-        someFunctionName(cycles, "Cycles")
-        someFunctionName(conditions, "Conditions")
-    }
-
-    private fun someFunctionName(array: Array<String>, typeBlock: String) {
-        val textSize = 20f
-        val textColor = Color.BLACK
-        val textAlign = View.TEXT_ALIGNMENT_CENTER
-        val fontFamily = ResourcesCompat.getFont(this, R.font.montserrat_regular)
-
-        for (typeView in array) {
+    private fun createMenu() {
+        program.blockTypes.values.forEach {
+            val nameBlock = getLocalizationName(it.fullName)
             val textView = TextView(this)
-            textView.text = typeView.toString()
-            textView.setTextColor(textColor)
-            textView.textAlignment = textAlign
-            textView.textSize = textSize
-            textView.typeface = fontFamily
 
-            when (typeBlock) {
-                "Variables" -> {
-                    binding.linearLayoutVariablesContainer.addView(textView)
-                    textView.setOnClickListener() {
-                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
-                    }
-                }
-                "Cycles" -> {
-                    binding.linearLayoutCyclesContainer.addView(textView)
-                    textView.setOnClickListener() {
-                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
-                    }
-                }
-                "Conditions" -> {
-                    binding.linearLayoutConditionsContainer.addView(textView)
-                    textView.setOnClickListener() {
-                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
-                    }
-                }
+            textView.text = nameBlock
+            textView.setTextColor(Color.BLACK)
+            textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+            textView.textSize = 20f
+            textView.typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
+
+            binding.listBlocks.addView(textView)
+
+            textView.setOnClickListener { _ ->
+                addBlockOnField(BlockView(this), BlockRowView(this), it)
             }
         }
+
     }
+
+//    private fun someFunctionName(array: Array<String>, typeBlock: String) {
+//        val textSize = 20f
+//        val textColor = Color.BLACK
+//        val textAlign = View.TEXT_ALIGNMENT_CENTER
+//        val fontFamily = ResourcesCompat.getFont(this, R.font.montserrat_regular)
+//
+//        for (typeView in array) {
+//            val textView = TextView(this)
+//            textView.text = typeView.toString()
+//            textView.setTextColor(textColor)
+//            textView.textAlignment = textAlign
+//            textView.textSize = textSize
+//            textView.typeface = fontFamily
+//
+//            when (typeBlock) {
+//                "Variables" -> {
+//                    binding.linearLayoutVariablesContainer.addView(textView)
+//                    textView.setOnClickListener() {
+//                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
+//                    }
+//                }
+//                "Cycles" -> {
+//                    binding.linearLayoutCyclesContainer.addView(textView)
+//                    textView.setOnClickListener() {
+//                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
+//                    }
+//                }
+//                "Conditions" -> {
+//                    binding.linearLayoutConditionsContainer.addView(textView)
+//                    textView.setOnClickListener() {
+//                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     /**
      * Метод создания блока на поле
@@ -118,8 +131,7 @@ class BlueprintActivity : AppCompatActivity() {
     private fun addBlockOnField(
         block: BlockView,
         rowBlock: BlockRowView,
-        typeView: String,
-        typeBlock: String
+        typeBlock: BlockType
     ) {
 
         // Координаты
@@ -131,20 +143,20 @@ class BlueprintActivity : AppCompatActivity() {
         rowBlock.description = false
         rowBlock.expression = false
 
-        when (typeView) {
-            "Boolean" -> {
-                rowBlock.typeBlock = Type.BOOLEAN
-            }
-            "Integer" -> {
-                rowBlock.typeBlock = Type.INT
-            }
-            "Double" -> {
-                rowBlock.typeBlock = Type.FLOAT
-            }
-            "String" -> {
-                rowBlock.typeBlock = Type.STRING
-            }
-        }
+//        when (typeView) {
+//            "Boolean" -> {
+//                rowBlock.typeBlock = Type.BOOLEAN
+//            }
+//            "Integer" -> {
+//                rowBlock.typeBlock = Type.INT
+//            }
+//            "Double" -> {
+//                rowBlock.typeBlock = Type.FLOAT
+//            }
+//            "String" -> {
+//                rowBlock.typeBlock = Type.STRING
+//            }
+//        }
         //инициализируем и добавляем row в основной блок
         rowBlock.initComponents()
         rowBlock.setInputType()
@@ -154,9 +166,8 @@ class BlueprintActivity : AppCompatActivity() {
         block.setOnTouchListener(this::onTouch)
 
         // Добавляем блок на поле и List
-        block.title.text = typeBlock
+        block.title.text = getLocalizationName(typeBlock.fullName)
         binding.codeField.addView(block)
-        blocksList.add(block)
     }
 
     private fun onTouch(view: View, event: MotionEvent): Boolean {
@@ -193,5 +204,13 @@ class BlueprintActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
+
+    private fun getLocalizationName(key: String): String {
+        return try {
+            resources.getString(resources.getIdentifier(key, "string", packageName))
+        } catch (e: Resources.NotFoundException) {
+            key
+        }
+    }
 
 }

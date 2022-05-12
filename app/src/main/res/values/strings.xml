@@ -51,19 +51,28 @@
         <item>String</item>
     </string-array>
 
-    <string name="titleCycles">Циклы</string>
-    <string-array name="btnBlocksCycles">
-        <item>while</item>
+    <string-array name="listBlocks">
+        <item name="native.while">while</item>
         <item>for</item>
         <item>forEach</item>
-    </string-array>
-
-    <string name="titleConditions">Условия</string>
-    <string-array name="btnBlocksConditions">
         <item>if else</item>
+        <!--        это branch-->
+        <item>main</item>
+        <item>print string</item>
+        <item>сложение</item>
     </string-array>
 
-    <string name="titleFunctions">Пользовательские функции</string>
+    <string name="native.while">while</string>
+    <string name="native.for">for</string>
+    <string name="native.sequence">последовательно</string>
+    <string name="native.foreach">forEach</string>
+    <string name="native.branch">if else</string>
+    <string name="native.main">main</string>
+    <string name="native.print">print string</string>
+    <string name="native.math.int.add">сложение integer</string>
+    <string name="native.math.float.add">сложение float</string>
+
+    <string name="titleFunctions">Функции</string>
     <string name="newFunction">Добавить новую функцию</string>
 
 </resources>
