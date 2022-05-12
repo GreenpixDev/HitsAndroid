@@ -17,7 +17,7 @@ class LineCanvasView @JvmOverloads constructor(
 
     companion object {
         const val POINTSCOUNT =
-            50 // количество промежуточных точек на прямой (меньше - сплайн более кривой), больше сплайн лучше, но нагружает пк.
+            10 // количество промежуточных точек на прямой (меньше - сплайн более кривой), больше сплайн лучше, но нагружает пк.
     }
 
     var mPaint: Paint = Paint();
@@ -60,6 +60,7 @@ class LineCanvasView @JvmOverloads constructor(
         }
 
         for (i in 0 until points.size - 1) {
+            drawPoints.add(points[i])
             var t = 0f
             val b = 0f
             val c = 0f
@@ -92,7 +93,9 @@ class LineCanvasView @JvmOverloads constructor(
                 drawPoints.add(Vec2f(x, y))
                 t += step
             }
+
         }
+        drawPoints.add(points[points.size - 1])
         return drawPoints
     }
 
