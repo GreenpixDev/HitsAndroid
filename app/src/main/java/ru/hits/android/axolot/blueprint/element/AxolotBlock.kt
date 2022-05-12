@@ -1,13 +1,13 @@
 package ru.hits.android.axolot.blueprint.element
 
-import ru.hits.android.axolot.blueprint.declaration.DeclaredBlock
+import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.element.pin.Pin
 
 /**
  * Класс блока на плоскости.
  * Содержит в себе тип блока (декларацию блока), а также
  */
-class AxolotBlock(val type: DeclaredBlock) : AxolotOwner {
+class AxolotBlock(val type: BlockType) : AxolotOwner {
 
     /**
      * Координата X для UI

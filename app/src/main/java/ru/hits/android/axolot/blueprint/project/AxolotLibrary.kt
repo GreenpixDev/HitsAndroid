@@ -1,7 +1,8 @@
 package ru.hits.android.axolot.blueprint.project
 
-import ru.hits.android.axolot.blueprint.declaration.DeclaredBlock
+import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.project.libs.AxolotDefaultLibrary
+import ru.hits.android.axolot.interpreter.type.VariableType
 
 /**
  * Класс библиотеки для языка Axolot.
@@ -9,7 +10,9 @@ import ru.hits.android.axolot.blueprint.project.libs.AxolotDefaultLibrary
  */
 open class AxolotLibrary : AxolotProject {
 
-    override val declarations = mutableMapOf<String, DeclaredBlock>()
+    override val variableTypes = mutableMapOf<String, VariableType<*>>()
+
+    override val blockTypes = mutableMapOf<String, BlockType>()
 
     companion object {
 
@@ -19,10 +22,6 @@ open class AxolotLibrary : AxolotProject {
             return library
         }
 
-    }
-
-    override fun addLibrary(library: AxolotLibrary) {
-        declarations.putAll(library.declarations)
     }
 
 }

@@ -4,11 +4,14 @@ import ru.hits.android.axolot.blueprint.element.AxolotOwner
 import ru.hits.android.axolot.blueprint.element.pin.impl.InputDataPin
 import ru.hits.android.axolot.interpreter.node.Node
 import ru.hits.android.axolot.interpreter.node.NodeDependency
+import ru.hits.android.axolot.interpreter.type.Type
+import ru.hits.android.axolot.interpreter.type.VariableType
 
 class DeclaredVarargInputDataPin @JvmOverloads constructor(
     private val minArgs: Int,
     private val handler: (Collection<Node>, NodeDependency) -> Unit,
-    private val namePattern: (Int) -> String = { "$it" }
+    private val namePattern: (Int) -> String = { "$it" },
+    val type: VariableType<*>
 ) : DeclaredPin {
 
     @Suppress("unchecked_cast")

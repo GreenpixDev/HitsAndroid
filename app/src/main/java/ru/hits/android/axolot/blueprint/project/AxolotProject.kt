@@ -1,6 +1,7 @@
 package ru.hits.android.axolot.blueprint.project
 
-import ru.hits.android.axolot.blueprint.declaration.DeclaredBlock
+import ru.hits.android.axolot.blueprint.declaration.BlockType
+import ru.hits.android.axolot.interpreter.type.VariableType
 
 /**
  * Общий интерфейс проекта на языке Axolot.
@@ -8,8 +9,13 @@ import ru.hits.android.axolot.blueprint.declaration.DeclaredBlock
  */
 interface AxolotProject {
 
-    val declarations: MutableMap<String, DeclaredBlock>
+    val variableTypes: MutableMap<String, VariableType<*>>
 
-    fun addLibrary(library: AxolotLibrary)
+    val blockTypes: MutableMap<String, BlockType>
+
+    fun addLibrary(library: AxolotLibrary) {
+        blockTypes.putAll(library.blockTypes)
+        variableTypes.putAll(library.variableTypes)
+    }
 
 }

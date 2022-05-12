@@ -1,12 +1,12 @@
 package ru.hits.android.axolot.compiler
 
-import ru.hits.android.axolot.blueprint.declaration.DeclaredProgramMainBlock
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredAutonomicPin
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.element.AxolotSource
 import ru.hits.android.axolot.blueprint.element.pin.PinToOne
 import ru.hits.android.axolot.blueprint.element.pin.TypedPin
 import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
+import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.interpreter.node.Node
 import ru.hits.android.axolot.interpreter.node.NodeConstant
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
@@ -79,7 +79,7 @@ class BlueprintCompiler : Compiler {
         // использовать в интерпретаторе. Для этого нужно найти входный узел нашей программы.
 
         // Находим входной блок нашей программы
-        val main = source.blocks.find { it.type is DeclaredProgramMainBlock }
+        val main = source.blocks.find { it.type == AxolotNativeLibrary.BLOCK_MAIN }
         requireNotNull(main) { "cannot find main block of program" }
 
         // Получаем из блока входной узел для интерпретатора
