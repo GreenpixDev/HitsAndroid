@@ -34,19 +34,19 @@ class LineCanvasView @JvmOverloads constructor(
         points.add(Vec2f(500f, 100f))
     }
 
-    fun h1(t: Float): Float {
+    private fun h1(t: Float): Float {
         return 2 * t * t * t - 3 * t * t + 1
     }
 
-    fun h2(t: Float): Float {
+    private fun h2(t: Float): Float {
         return -2 * t * t * t + 3 * t * t;
     }
 
-    fun h3(t: Float): Float {
+    private fun h3(t: Float): Float {
         return t * t * t - 2 * t * t + t;
     }
 
-    fun h4(t: Float): Float {
+    private fun h4(t: Float): Float {
         return t * t * t - t * t;
     }
 
@@ -73,22 +73,22 @@ class LineCanvasView @JvmOverloads constructor(
             if (i != 0) {
                 previosPoint = points[i - 1]
             }
-            var dix =
+            val dix =
                 (1f - t) * (1f + b) * (1f + c) / 2f * (currentPoint.x - previosPoint.x) + (1f - t) * (1f - b) * (1f - c) / 2f * (nextPoint.x - currentPoint.x)
-            var diy =
+            val diy =
                 (1f - t) * (1f + b) * (1f + c) / 2f * (currentPoint.y - previosPoint.y) + (1f - t) * (1f - b) * (1f - c) / 2f * (nextPoint.y - currentPoint.y)
-            var dinextx =
+            val dinextx =
                 (1f - t) * (1f + b) * (1f - c) / 2f * (nextPoint.x - currentPoint.x) + (1f - t) * (1f - b) * (1f - c) / 2f * (next2Point.x - nextPoint.x)
-            var dinexty =
+            val dinexty =
                 (1f - t) * (1f + b) * (1f - c) / 2f * (nextPoint.y - currentPoint.y) + (1f - t) * (1f - b) * (1f - c) / 2f * (next2Point.y - nextPoint.y)
 
-            var step = 1f / POINTSCOUNT
+            val step = 1f / POINTSCOUNT
             t = 0f
             for (j in 0 until POINTSCOUNT) {
-                var x: Float
-                var y: Float
-                x = dix * h3(t) + currentPoint.x * h1(t) + nextPoint.x * h2(t) + dinextx * h4(t);
-                y = diy * h3(t) + currentPoint.y * h1(t) + nextPoint.y * h2(t) + dinexty * h4(t);
+                val x: Float =
+                    dix * h3(t) + currentPoint.x * h1(t) + nextPoint.x * h2(t) + dinextx * h4(t);
+                val y: Float =
+                    diy * h3(t) + currentPoint.y * h1(t) + nextPoint.y * h2(t) + dinexty * h4(t);
                 drawPoints.add(Vec2f(x, y))
                 t += step
             }
