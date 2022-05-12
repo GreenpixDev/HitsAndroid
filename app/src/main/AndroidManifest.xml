@@ -12,6 +12,10 @@
         android:theme="@style/Theme.HitsAndroid"
         tools:ignore="ExtraText">
         <activity
+            android:name=".SaveActivity"
+            android:exported="false"
+            android:screenOrientation="userLandscape" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:screenOrientation="userLandscape" />
@@ -33,6 +37,7 @@
             android:screenOrientation="fullUser">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

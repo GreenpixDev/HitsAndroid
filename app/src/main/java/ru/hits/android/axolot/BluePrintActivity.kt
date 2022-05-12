@@ -54,6 +54,12 @@ class BluePrintActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        //перейти в сохранение кода
+        bluePrintBinding.imageViewSave.setOnClickListener() {
+            val intent = Intent(this, SaveActivity::class.java)
+            startActivity(intent)
+        }
+
         //добавление новой функции
         bluePrintBinding.menuScrollView.linearLayoutFunctionsContainer.newFunction.setOnClickListener() {
             Toast.makeText(applicationContext, "Пока что это затычка", Toast.LENGTH_SHORT).show()
@@ -108,6 +114,8 @@ class BluePrintActivity : AppCompatActivity() {
                 bluePrintBinding.linearLayoutCyclesContainer.addView(textView)
             } else if (textViewType == 3) {
                 bluePrintBinding.linearLayoutConditionsContainer.addView(textView)
+            } else {
+                //что-то не так...
             }
 
             counter++

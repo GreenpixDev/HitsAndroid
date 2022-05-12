@@ -12,14 +12,16 @@
         android:id="@+id/imageViewSettings"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:contentDescription="@string/settings_icon_description"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.956"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/ic_settings_icon"
         tools:ignore="TouchTargetSizeCheck" />
 
@@ -27,15 +29,28 @@
         android:id="@+id/imageViewPlay"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:contentDescription="@string/play_icon_description"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.043"
+        app:layout_constraintVertical_bias="0"
         app:srcCompat="@drawable/ic_play_icon" />
+
+    <ImageView
+        android:id="@+id/imageViewSave"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="20dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewSettings"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewSettings"
+        app:layout_constraintTop_toTopOf="@+id/imageViewSettings"
+        app:srcCompat="@drawable/ic_save_icon" />
 
     <View
         android:id="@+id/menuView"
@@ -172,10 +187,10 @@
         android:id="@+id/imageViewConsole"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="80dp"
+        android:layout_marginEnd="20dp"
         android:contentDescription="@string/console_icon_description"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewSettings"
-        app:layout_constraintEnd_toStartOf="@+id/imageViewSettings"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewSave"
         app:layout_constraintTop_toTopOf="@+id/imageViewSettings"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/ic_console_icon" />
@@ -183,7 +198,7 @@
     <View
         android:id="@+id/consoleView"
         android:layout_width="400dp"
-        android:layout_height="250dp"
+        android:layout_height="300dp"
         android:background="@drawable/round_rectangle"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewConsole"
         app:layout_constraintEnd_toStartOf="@+id/imageViewConsole"

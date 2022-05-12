@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_main"
+    tools:context=".SaveActivity">
+
+    <View
+        android:id="@+id/roundRectangle"
+        android:layout_width="600dp"
+        android:layout_height="300dp"
+        android:background="@drawable/round_rectangle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.725" />
+
+    <LinearLayout
+        android:layout_width="500dp"
+        android:layout_height="300dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/roundRectangle"
+        app:layout_constraintEnd_toEndOf="@+id/roundRectangle"
+        app:layout_constraintStart_toStartOf="@+id/roundRectangle"
+        app:layout_constraintTop_toTopOf="@+id/roundRectangle"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/buttons"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@string/text"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:cornerRadius="100dp" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/buttons"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@string/text"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:cornerRadius="100dp" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/buttons"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@string/text"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:cornerRadius="100dp" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/buttons"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@string/text"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:cornerRadius="100dp" />
+
+        <Button
+            android:id="@+id/goBack"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/buttons"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@string/back_to_game"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:cornerRadius="100dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_regular"
+        android:text="Тут будет умный текст, который будет нести в себе смысл"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/roundRectangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.326" />
+</androidx.constraintlayout.widget.ConstraintLayout>

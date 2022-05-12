@@ -47,6 +47,7 @@
     <string name="new_function">+ новая функция</string>
     <string name="console">Это консоль</string>
     <string name="console_icon_description">Кнопка, открывающая и закрывающая консоль</string>
+    <string name="text">текст</string>
     <string-array name="btnBlocksConditions">
         <item>if else</item>
     </string-array>
