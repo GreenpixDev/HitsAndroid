@@ -70,24 +70,18 @@ class BlueprintActivity : AppCompatActivity() {
         val cycles = resources.getStringArray(R.array.btnBlocksCycles)
         val conditions = resources.getStringArray(R.array.btnBlocksConditions)
 
-        someFunctionName(variables, 1)
-        someFunctionName(cycles, 2)
-        someFunctionName(conditions, 3)
+        //someFunctionName(variables, "Variables")
+        someFunctionName(cycles, "Cycles")
+        someFunctionName(conditions, "Conditions")
     }
 
-    private fun someFunctionName(array: Array<String>, textViewType: Int) {
-        //textViewType == 1 - variables
-        //             == 2 - cycles
-        //             == 3 - conditions
-        //это нужно как-то красивее сделать, но я не придумал как (как-то убрать textViewType и передавать что-то другое)
-
+    private fun someFunctionName(array: Array<String>, typeBlock: String) {
         val textSize = 20f
         val textColor = Color.BLACK
         val textAlign = View.TEXT_ALIGNMENT_CENTER
         val fontFamily = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
         for (typeView in array) {
-
             val textView = TextView(this)
             textView.text = typeView.toString()
             textView.setTextColor(textColor)
@@ -95,73 +89,74 @@ class BlueprintActivity : AppCompatActivity() {
             textView.textSize = textSize
             textView.typeface = fontFamily
 
-
-            when (textViewType) {
-                1 -> {
+            when (typeBlock) {
+                "Variables" -> {
                     binding.linearLayoutVariablesContainer.addView(textView)
                     textView.setOnClickListener() {
-                        addBlockOnField(BlockView(this), BlockRowView(this), typeView)
+                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
                     }
                 }
-                2 -> {
+                "Cycles" -> {
                     binding.linearLayoutCyclesContainer.addView(textView)
                     textView.setOnClickListener() {
-                        addBlockOnField(BlockView(this), BlockRowView(this), typeView)
+                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
                     }
                 }
-                3 -> {
+                "Conditions" -> {
                     binding.linearLayoutConditionsContainer.addView(textView)
                     textView.setOnClickListener() {
-                        addBlockOnField(BlockView(this), BlockRowView(this), typeView)
+                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
                     }
                 }
-
             }
-
         }
     }
 
     /**
      * Метод создания блока на поле
      */
-    private fun addBlockOnField(view: View, rowView: BlockRowView, typeView: String) {
-        //TODO: подправить генерирацию блоков нужного размера
+    private fun addBlockOnField(
+        block: BlockView,
+        rowBlock: BlockRowView,
+        typeView: String,
+        typeBlock: String
+    ) {
 
         // Координаты
-        view.x = binding.codeField.width / 2f
-        view.y = binding.codeField.height / 2f
-        view.translationZ = 30f
+        block.x = binding.codeField.width / 2f
+        block.y = binding.codeField.height / 2f
+        block.translationZ = 30f
 
-        when(typeView) {
+        rowBlock.inputNode = false
+        rowBlock.description = false
+        rowBlock.expression = false
+
+        when (typeView) {
+            "Boolean" -> {
+                rowBlock.typeBlock = Type.BOOLEAN
+            }
             "Integer" -> {
-                //TODO: сгенерировать ноды и все остальное для блока
-                rowView.typeBlock = Type.INT
-                rowView.inputNode = false
-                rowView.descriptionField = false
-                rowView.expressionField = false
-
-                view.level1.addView(rowView)
+                rowBlock.typeBlock = Type.INT
             }
             "Double" -> {
-                //TODO: сгенерировать ноды и все остальное для блока
-                view.level1.addView(rowView)
-            }
-            "Boolean" -> {
-                //TODO: сгенерировать ноды и все остальное для блока
-                view.level1.addView(rowView)
+                rowBlock.typeBlock = Type.FLOAT
             }
             "String" -> {
-                //TODO: сгенерировать ноды и все остальное для блока
-                view.level1.addView(rowView)
+                rowBlock.typeBlock = Type.STRING
             }
         }
+        //инициализируем и добавляем row в основной блок
+        rowBlock.initComponents()
+        rowBlock.setInputType()
+        block.level1.addView(rowBlock)
 
         // Обработка событий
-        view.setOnTouchListener(this::onTouch)
+        block.setOnTouchListener(this::onTouch)
 
         // Добавляем блок на поле и List
-        binding.codeField.addView(view)
-        blocksList.add(view)
+        block.title.text = typeBlock
+        binding.codeField.addView(block)
+        blocksList.add(block)
     }
 
     private fun onTouch(view: View, event: MotionEvent): Boolean {

@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import kotlinx.android.synthetic.main.block_row_item.view.*
 import ru.hits.android.axolot.databinding.BlockRowItemBinding
 import ru.hits.android.axolot.interpreter.type.Type
+
 
 class BlockRowView @JvmOverloads constructor(
     context: Context,
@@ -16,19 +18,19 @@ class BlockRowView @JvmOverloads constructor(
     var inputNode = true
     var outputNode = true
 
-    var inputTypeField = true
-    var descriptionField = true
+    var inputType = true
+    var description = true
+    var expression = true
 
-    var description = "BlaBla"
-    var expression = "BlaBla"
+    var descriptionText = "BlaBla"
+    var expressionText = "BlaBla"
 
     var definiteInput = false
-    var expressionField = true
 
-    var typeBlock:Type = Type.INT
+
+    var typeBlock: Type = Type.INT
 
     init {
-        //overrideData()
         initComponents()
         setDescription()
         setDefaultExpression()
@@ -39,38 +41,43 @@ class BlockRowView @JvmOverloads constructor(
 
     }
 
-    private fun initComponents() {
+    fun initComponents() {
 
         if (!inputNode) {
-            binding.rowBlock.removeViewAt(0)
+            binding.rowBlock.removeView(binding.rowBlock.inputNode)
+            //binding.rowBlock.removeViewAt(0)
         }
 
-        if (!inputTypeField) {
-            binding.rowBlock.removeViewAt(1)
+        if (!inputType) {
+            binding.rowBlock.removeView(binding.rowBlock.typeSpinner)
+            //binding.rowBlock.removeViewAt(1)
         }
 
-        if (!descriptionField) {
-            binding.rowBlock.removeViewAt(2)
+        if (!description) {
+            binding.rowBlock.removeView(binding.rowBlock.descriptionTextView)
+            //binding.rowBlock.removeViewAt(2)
         }
 
-        if (!expressionField) {
-            binding.rowBlock.removeViewAt(3)
+        if (!expression) {
+            binding.rowBlock.removeView(binding.rowBlock.expressionTextView)
+            //binding.rowBlock.removeViewAt(3)
         }
 
         if (!outputNode) {
-            binding.rowBlock.removeViewAt(4)
+            binding.rowBlock.removeView(binding.rowBlock.outputNode)
+            //binding.rowBlock.removeViewAt(4)
         }
     }
 
     private fun setDefaultExpression() {
-        if (descriptionField) binding.expressionTextView.text = expression
+        if (description) binding.expressionTextView.text = expressionText
     }
 
     private fun setDescription() {
-        if (descriptionField) binding.descriptionTextView.text = description
+        if (description) binding.descriptionTextView.text = descriptionText
     }
 
-    private fun setInputType() {
+    fun setInputType() {
         if (!definiteInput) return
 
         val type = when (typeBlock) {
@@ -78,16 +85,23 @@ class BlockRowView @JvmOverloads constructor(
             Type.BOOLEAN -> "Boolean"
             Type.FLOAT -> "Double"
             Type.STRING -> "String"
-            else -> "Function" //эта строчка бред, не воспринимайте всерьез
+            else -> "Something" //эта строчка бред, не воспринимайте всерьез
         }
+
+        binding.typeSpinner
 
         val spinnerArray: MutableList<String> = ArrayList()
         spinnerArray.add(type)
 
-//        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
-//            context, R.layout.simple_spinner_item, spinnerArray
+        // Настраиваем адаптер
+        // Настраиваем адаптер
+//        val adapter: ArrayAdapter<*> = ArrayAdapter.createFromResource(
+//            this, ,
+//            R.layout.simple_spinner_item
 //        )
-//
-//        binding.typeSpinner.adapter = adapter
+//        adapter.setDropDownViewResource(R.layout.)
+
+        // Вызываем адаптер
+        //binding.typeSpinner.adapter = adapter
     }
 }

@@ -12,21 +12,24 @@
         tools:background="@color/bg_header"        >
 
         <ImageButton
-            android:id="@+id/inputRadioButton"
+            android:id="@+id/inputNode"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_marginEnd="7dp"
             android:layout_marginStart="7dp"
+            android:layout_marginBottom="4dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/button_shape_circle_stroke"
             android:buttonTint="@color/toolBar_color" />
 
         <Spinner
             android:id="@+id/typeSpinner"
-            android:layout_width="70dp"
+            android:layout_width="75dp"
             android:layout_height="wrap_content"
             android:background="@color/buttons"
             android:entries="@array/TypeBlock"
+            android:layout_marginStart="7dp"
+            android:layout_marginBottom="4dp"
             tools:ignore="TouchTargetSizeCheck" />
 
         <TextView
@@ -34,8 +37,9 @@
             android:layout_width="wrap_content"
             android:textColor="@color/white"
             android:text="description"
-            android:gravity="center"
-            android:layout_marginStart="10dp"/>
+            android:gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="4dp" />
 
         <TextView
             android:id="@+id/expressionTextView"
@@ -44,14 +48,16 @@
             android:maxWidth="200dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:paddingBottom="5dp"
             android:textColor="@color/black"
             android:text=""
-            android:layout_marginStart="3dp"/>
+            android:layout_marginEnd="7dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginBottom="4dp" />
 
         <ImageButton
-            android:id="@+id/outputRadioButton"
+            android:id="@+id/outputNode"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_gravity="center_vertical"
@@ -60,6 +66,7 @@
             android:layout_weight="1"
             android:layout_marginEnd="7dp"
             android:layout_marginStart="7dp"
+            android:layout_marginBottom="4dp"
             tools:ignore="TouchTargetSizeCheck" />
     </TableRow>
 

@@ -9,7 +9,7 @@
     tools:context=".SettingsActivity">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/titleSettings"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -35,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" >
+        app:layout_constraintTop_toBottomOf="@+id/titleSettings">
 
         <Button
             android:id="@+id/exit"

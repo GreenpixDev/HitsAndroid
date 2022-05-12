@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import kotlinx.android.synthetic.main.block_item.view.*
 import ru.hits.android.axolot.R
 import ru.hits.android.axolot.databinding.BlockItemBinding
 
@@ -61,11 +62,17 @@ class BlockView @JvmOverloads constructor(
             context.obtainStyledAttributes(attrs, R.styleable.BlockView, defstyleAttr, defstyleRes)
 
         with(binding) {
+            //val titleBlock = typedArray.getString(R.styleable.BlockView_blockTitle)
+            //block.title.text = titleBlock
             val bgBlock = typedArray.getColor(R.styleable.BlockView_bgBlock, Color.WHITE)
             block.backgroundTintList = ColorStateList.valueOf(bgBlock)
         }
 
         typedArray.recycle()
+    }
+
+    fun changeTitleBlock(title: String) {
+        block.title.text = title
     }
 
     init {
