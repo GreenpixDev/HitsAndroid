@@ -15,6 +15,7 @@ class BluePrintActivity : AppCompatActivity() {
     private lateinit var bluePrintBinding: ActivityBluePrintBinding
     private var menuIsVisible = true
     private var consoleIsVisible = false
+    private var consoleLines: MutableList<TextView> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +40,7 @@ class BluePrintActivity : AppCompatActivity() {
             }
         }
 
+        //скрыть/показать консоль, по нажатию на иконки консоли в правом нижнем углу
         bluePrintBinding.imageViewConsole.setOnClickListener() {
             if (consoleIsVisible) {
                 closeConsole()
@@ -63,6 +65,22 @@ class BluePrintActivity : AppCompatActivity() {
         //добавление новой функции
         bluePrintBinding.menuScrollView.linearLayoutFunctionsContainer.newFunction.setOnClickListener() {
             Toast.makeText(applicationContext, "Пока что это затычка", Toast.LENGTH_SHORT).show()
+        }
+
+        //вывод текста в консоль
+        bluePrintBinding.imageViewSend.setOnClickListener() {
+            var textView = TextView(this)
+
+            textView.text = bluePrintBinding.consoleInput.text
+
+            //костыльное задание стилей, пока не разобрался как их подключить из styles.xml
+            textView.textSize = 18f
+            textView.setTypeface(ResourcesCompat.getFont(this, R.font.montserrat_regular))
+            textView.setTextColor(Color.BLACK)
+            bluePrintBinding.linearLayoutConsole.addView(textView)
+
+            //насколько я понимаю, нам будет полезно хранить эти TextView в списке
+            consoleLines.add(textView)
         }
     }
 
@@ -136,15 +154,21 @@ class BluePrintActivity : AppCompatActivity() {
         menuIsVisible = false
     }
 
+    //показывает консоль
     private fun openConsole() {
         bluePrintBinding.consoleView.visibility = View.VISIBLE
         bluePrintBinding.consoleScrollView.visibility = View.VISIBLE
+        bluePrintBinding.consoleInput.visibility = View.VISIBLE
+        bluePrintBinding.imageViewSend.visibility = View.VISIBLE
         consoleIsVisible = true
     }
 
+    //скрывает консоль
     private fun closeConsole() {
         bluePrintBinding.consoleView.visibility = View.GONE
         bluePrintBinding.consoleScrollView.visibility = View.GONE
+        bluePrintBinding.consoleInput.visibility = View.GONE
+        bluePrintBinding.imageViewSend.visibility = View.GONE
         consoleIsVisible = false
     }
 }
