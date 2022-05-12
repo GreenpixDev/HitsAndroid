@@ -18,6 +18,9 @@ class LineCanvasView @JvmOverloads constructor(
     companion object {
         const val POINTSCOUNT =
             10 // количество промежуточных точек на прямой (меньше - сплайн более кривой), больше сплайн лучше, но нагружает пк.
+        const val BUFFERPOINTSLEN = 100f // растояние вспомогательных точек
+
+        const val BUFFERPOINTS = true //нужно ли рисовать вспомогательные точки
     }
 
     var mPaint: Paint = Paint();
@@ -28,10 +31,9 @@ class LineCanvasView @JvmOverloads constructor(
         mPaint.setColor(Color.BLUE)
         mPaint.setStrokeWidth(3f)
         points.add(Vec2f(0f, 0f))
-        points.add(Vec2f(10f, 0f))
         points.add(Vec2f(200f, 0f))
         points.add(Vec2f(200f, 100f))
-        points.add(Vec2f(500f, 100f))
+        points.add(Vec2f(500f, 200f))
     }
 
     private fun h1(t: Float): Float {
@@ -52,6 +54,14 @@ class LineCanvasView @JvmOverloads constructor(
 
     fun generateDrawPoints(): MutableList<Vec2f> {
         val drawPoints = mutableListOf<Vec2f>()
+        if (BUFFERPOINTS) {
+            points.add(1, Vec2f(points[0].x + BUFFERPOINTSLEN, points[0].y))
+            points.add(
+                points.size - 1,
+                Vec2f(points[points.size - 1].x - BUFFERPOINTSLEN, points[points.size - 1].y)
+            )
+        }
+
         if (points.size < 2) {
             for (i in 0 until points.size) {
                 drawPoints.add(points[i])
