@@ -4,11 +4,15 @@ import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 
 /**
- * Декларация макроса
+ * Декларация функции
  */
-class DeclaredMacros(
+class FunctionType(
+    override val simpleName: String,
     override val declaredPins: List<DeclaredPin>
-) : DeclaredBlock {
+) : BlockType {
+
+    override val fullName: String
+        get() = "function.$simpleName"
 
     override fun createBlock(): AxolotBlock {
         TODO("Not yet implemented")

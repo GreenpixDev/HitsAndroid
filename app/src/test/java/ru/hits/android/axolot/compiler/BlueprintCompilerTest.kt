@@ -19,8 +19,8 @@ class BlueprintCompilerTest {
         val compiler = BlueprintCompiler()
         val program = AxolotProgram.create()
 
-        val mainBlock = program.declarations["main"]!!.createBlock()
-        val printBlock = program.declarations["print"]!!.createBlock()
+        val mainBlock = program.blockTypes["native.main"]!!.createBlock()
+        val printBlock = program.blockTypes["native.print"]!!.createBlock()
 
         program.addBlock(mainBlock)
         program.addBlock(printBlock)

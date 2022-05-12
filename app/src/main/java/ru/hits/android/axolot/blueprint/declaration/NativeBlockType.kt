@@ -6,12 +6,16 @@ import ru.hits.android.axolot.blueprint.element.AxolotBlock
 /**
  * Нативная декларация блока
  */
-open class DeclaredNativeBlock(
-    override val declaredPins: List<DeclaredPin>,
-) : DeclaredBlock {
+open class NativeBlockType(
+    override val simpleName: String,
+    override val declaredPins: List<DeclaredPin>
+) : BlockType {
 
-    constructor(vararg pins: DeclaredPin)
-            : this(pins.toList())
+    constructor(simpleName: String, vararg pins: DeclaredPin)
+            : this(simpleName, pins.toList())
+
+    override val fullName: String
+        get() = "native.$simpleName"
 
     override fun createBlock(): AxolotBlock {
         val block = AxolotBlock(this)

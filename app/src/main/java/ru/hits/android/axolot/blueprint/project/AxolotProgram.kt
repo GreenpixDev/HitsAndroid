@@ -1,6 +1,6 @@
 package ru.hits.android.axolot.blueprint.project
 
-import ru.hits.android.axolot.blueprint.declaration.DeclaredBlock
+import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.element.AxolotSource
 import ru.hits.android.axolot.blueprint.element.pin.Pin
@@ -15,13 +15,16 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 /**
  * Класс исполняемой программы на языке Axolot.
  */
-class AxolotProgram : AxolotProject, AxolotSource {
+class AxolotProgram private constructor() : AxolotProject, AxolotSource {
 
     override val blocks = hashSetOf<AxolotBlock>()
 
+    @Deprecated("Пока не знаю, будет ли использоваться")
     override val contacts = hashSetOf<Pin>()
 
-    override val declarations = mutableMapOf<String, DeclaredBlock>()
+    override val variableTypes = mutableMapOf<String, VariableType<*>>()
+
+    override val blockTypes = mutableMapOf<String, BlockType>()
 
     companion object {
 
@@ -31,13 +34,6 @@ class AxolotProgram : AxolotProject, AxolotSource {
             return program
         }
 
-    }
-
-    /**
-     * Добавить библиотеку в проект
-     */
-    override fun addLibrary(library: AxolotLibrary) {
-        declarations.putAll(library.declarations)
     }
 
     /**
