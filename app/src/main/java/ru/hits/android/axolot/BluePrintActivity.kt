@@ -14,25 +14,37 @@ import ru.hits.android.axolot.databinding.ActivityBluePrintBinding
 class BluePrintActivity : AppCompatActivity() {
     private lateinit var bluePrintBinding: ActivityBluePrintBinding
     private var menuIsVisible = true
+    private var consoleIsVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bluePrintBinding = ActivityBluePrintBinding.inflate(layoutInflater)
         setContentView(bluePrintBinding.root)
 
+        closeConsole()
+        openMenu()
+
         addEventListeners()
-        createTextView()
+        createMenuList()
     }
 
     fun addEventListeners() {
-        //закрыть/открыть меню
+        //скрыть/показать меню, по нажатию на круглую кнопку
         bluePrintBinding.showMenu.setOnClickListener() {
             if (menuIsVisible) {
-                bluePrintBinding.menu.visibility = View.GONE
-                menuIsVisible = false
+                closeMenu()
             } else {
-                bluePrintBinding.menu.visibility = View.VISIBLE
-                menuIsVisible = true
+                closeConsole()
+                openMenu()
+            }
+        }
+
+        bluePrintBinding.imageViewConsole.setOnClickListener() {
+            if (consoleIsVisible) {
+                closeConsole()
+            } else {
+                closeMenu()
+                openConsole()
             }
         }
 
@@ -49,23 +61,23 @@ class BluePrintActivity : AppCompatActivity() {
         }
 
         //добавление новой функции
-        bluePrintBinding.scrollViewMenu.linearLayoutFunctionsContainer.newFunction.setOnClickListener() {
+        bluePrintBinding.menuScrollView.linearLayoutFunctionsContainer.newFunction.setOnClickListener() {
             Toast.makeText(applicationContext, "Пока что это затычка", Toast.LENGTH_SHORT).show()
         }
     }
 
-
-    fun createTextView() {
+    //генерация списка в меню из файла с ресурсами
+    private fun createMenuList() {
         var variables = resources.getStringArray(R.array.btnBlocksVariables)
         var cycles = resources.getStringArray(R.array.btnBlocksCycles)
         var conditions = resources.getStringArray(R.array.btnBlocksConditions)
 
-        someFunctionName(variables, 1)
-        someFunctionName(cycles, 2)
-        someFunctionName(conditions, 3)
+        generateMenuListFromArray(variables, 1)
+        generateMenuListFromArray(cycles, 2)
+        generateMenuListFromArray(conditions, 3)
     }
 
-    fun someFunctionName(array: Array<String>, textViewType: Int) {
+    private fun generateMenuListFromArray(array: Array<String>, textViewType: Int) {
         //textViewType == 1 - variables
         //             == 2 - cycles
         //             == 3 - conditions
@@ -110,4 +122,29 @@ class BluePrintActivity : AppCompatActivity() {
         }
     }
 
+    //показывает боковое меню
+    private fun openMenu() {
+        bluePrintBinding.menuView.visibility = View.VISIBLE
+        bluePrintBinding.menuScrollView.visibility = View.VISIBLE
+        menuIsVisible = true
+    }
+
+    //скрывает боковое меню
+    private fun closeMenu() {
+        bluePrintBinding.menuView.visibility = View.GONE
+        bluePrintBinding.menuScrollView.visibility = View.GONE
+        menuIsVisible = false
+    }
+
+    private fun openConsole() {
+        bluePrintBinding.consoleView.visibility = View.VISIBLE
+        bluePrintBinding.consoleScrollView.visibility = View.VISIBLE
+        consoleIsVisible = true
+    }
+
+    private fun closeConsole() {
+        bluePrintBinding.consoleView.visibility = View.GONE
+        bluePrintBinding.consoleScrollView.visibility = View.GONE
+        consoleIsVisible = false
+    }
 }

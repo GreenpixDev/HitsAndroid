@@ -38,7 +38,7 @@
         app:srcCompat="@drawable/ic_play_icon" />
 
     <View
-        android:id="@+id/menu"
+        android:id="@+id/menuView"
         android:layout_width="255dp"
         android:layout_height="0dp"
         android:background="@color/buttons"
@@ -50,32 +50,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageButton
-        android:id="@+id/showMenu"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/circle_button"
-        android:contentDescription="@string/show_and_not_show_toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.023"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.043"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck,ImageContrastCheck" />
-
     <ScrollView
-        android:id="@+id/scrollViewMenu"
-        android:layout_width="220dp"
-        android:layout_height="300dp"
+        android:id="@+id/menuScrollView"
+        android:layout_width="224dp"
+        android:layout_height="306dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:contentDescription="@string/menu_description"
-        app:layout_constraintBottom_toBottomOf="@+id/menu"
-        app:layout_constraintEnd_toEndOf="@+id/menu"
-        app:layout_constraintStart_toStartOf="@+id/menu"
+        app:layout_constraintBottom_toBottomOf="@+id/menuView"
+        app:layout_constraintEnd_toEndOf="@+id/menuView"
+        app:layout_constraintStart_toStartOf="@+id/menuView"
         app:layout_constraintTop_toBottomOf="@+id/showMenu">
 
         <LinearLayout
@@ -166,17 +152,89 @@
         </LinearLayout>
     </ScrollView>
 
-    <ImageView
-        android:id="@+id/imageViewSave"
+    <ImageButton
+        android:id="@+id/showMenu"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:scaleType="fitXY"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/circle_button"
+        android:contentDescription="@string/show_and_not_show_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <ImageView
+        android:id="@+id/imageViewConsole"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="80dp"
+        android:contentDescription="@string/console_icon_description"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewSettings"
         app:layout_constraintEnd_toStartOf="@+id/imageViewSettings"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginEnd="20dp"
         app:layout_constraintTop_toTopOf="@+id/imageViewSettings"
-        app:srcCompat="@drawable/ic_save_icon" />
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic_console_icon" />
+
+    <View
+        android:id="@+id/consoleView"
+        android:layout_width="400dp"
+        android:layout_height="250dp"
+        android:background="@drawable/round_rectangle"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewConsole"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewConsole"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ScrollView
+        android:id="@+id/consoleScrollView"
+        android:layout_width="350dp"
+        android:layout_height="250dp"
+        android:contentDescription="@string/console"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewConsole"
+        app:layout_constraintEnd_toEndOf="@+id/consoleView"
+        app:layout_constraintStart_toStartOf="@+id/consoleView"
+        app:layout_constraintTop_toTopOf="@+id/consoleView">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutConsole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextViewConsole"
+                android:text="Тут может быть много разных textView, это все будет скроллится" />
+
+            <TextView
+                style="@style/TextViewConsole"
+                android:text="Тут может быть много разных textView, это все будет скроллится" />
+
+            <TextView
+                style="@style/TextViewConsole"
+                android:text="Тут может быть много разных textView, это все будет скроллится" />
+
+            <TextView
+                style="@style/TextViewConsole"
+                android:text="Тут может быть много разных textView, это все будет скроллится" />
+
+            <TextView
+                style="@style/TextViewConsole"
+                android:text="Тут может быть много разных textView, это все будет скроллится" />
+
+            <TextView
+                style="@style/TextViewConsole"
+                android:text="Тут может быть много разных textView, это все будет скроллится" />
+
+            <TextView
+                style="@style/TextViewConsole"
+                android:text="Тут может быть много разных textView, это все будет скроллится" />
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
