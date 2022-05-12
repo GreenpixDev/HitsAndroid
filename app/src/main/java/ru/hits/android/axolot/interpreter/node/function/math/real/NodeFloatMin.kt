@@ -5,7 +5,7 @@ import ru.hits.android.axolot.interpreter.node.NodeDependency
 import ru.hits.android.axolot.interpreter.node.NodeFunction
 import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.interpreter.variable.Variable
-import kotlin.math.max
+import kotlin.math.min
 
 class NodeFloatMin : NodeFunction() {
 
@@ -16,11 +16,11 @@ class NodeFloatMin : NodeFunction() {
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        var max = Double.NEGATIVE_INFINITY
+        var min = Double.POSITIVE_INFINITY
         for (i in dependencies.values.indices) {
             val input = dependencies[i]!!.invoke(context)[Type.FLOAT]!!
-            max = max(max, input)
+            min = min(min, input)
         }
-        return Variable(Type.FLOAT, max)
+        return Variable(Type.FLOAT, min)
     }
 }
