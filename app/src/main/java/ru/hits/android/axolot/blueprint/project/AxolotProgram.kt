@@ -15,7 +15,7 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 /**
  * Класс исполняемой программы на языке Axolot.
  */
-class AxolotProgram : AxolotProject, AxolotSource {
+class AxolotProgram private constructor() : AxolotProject, AxolotSource {
 
     override val blocks = hashSetOf<AxolotBlock>()
 

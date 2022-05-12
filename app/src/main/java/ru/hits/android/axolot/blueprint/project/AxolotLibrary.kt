@@ -8,7 +8,7 @@ import ru.hits.android.axolot.interpreter.type.VariableType
  * Класс библиотеки для языка Axolot.
  * Можно подключать к другим библиотекам или программам.
  */
-open class AxolotLibrary : AxolotProject {
+open class AxolotLibrary private constructor() : AxolotProject {
 
     override val variableTypes = mutableMapOf<String, VariableType<*>>()
 
