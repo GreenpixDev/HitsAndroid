@@ -116,6 +116,7 @@ class BlueprintActivity : AppCompatActivity() {
     /**
      * Метод создания блока на поле
      */
+    @SuppressLint("ClickableViewAccessibility")
     private fun createBlock(
         block: BlockView,
         type: BlockType
@@ -333,19 +334,20 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
 
+    /**
+     * Метод передвижения вьюшек с учетом зума
+     */
     private fun onTouch(view: View, event: MotionEvent): Boolean {
+        val zoom = binding.zoomLayout.realZoom
+        val pan = Vec2f(binding.zoomLayout.panX, binding.zoomLayout.panY) * -1
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                offset = Vec2f(view.x - event.rawX, view.y - event.rawY)
-
-                // Нужно вызывать, когда кликаешь по вьюшке,
-                // чтобы все стандартные события android срабатывали.
-                // Короче, нужно использовать, чтобы не получить warning
-                view.performClick()
+                offset = (Vec2f(view.x, view.y) - pan) * zoom - Vec2f(event.rawX, event.rawY)
             }
             MotionEvent.ACTION_MOVE -> {
-                view.x = event.rawX + offset.x
-                view.y = event.rawY + offset.y
+                view.x = (event.rawX + offset.x) / zoom + pan.x
+                view.y = (event.rawY + offset.y) / zoom + pan.y
             }
         }
         return true
