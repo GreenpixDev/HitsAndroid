@@ -34,6 +34,11 @@
             android:id="@+id/level2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"></TableLayout>
+
+        <TableLayout
+            android:id="@+id/level3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></TableLayout>
     </TableLayout>
 </merge>
 

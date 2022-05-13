@@ -25,37 +25,37 @@ class BlockView @JvmOverloads constructor(
 
     //TODO: сделать 2 массива inputNode и outputNode
 
-    fun addInput() {
-
-    }
-
-    fun addOutput() {
-
-    }
-
-    fun removeInput() {
-
-    }
-
-    fun removeOutput() {
-
-    }
-
-    fun connectInput() {
-
-    }
-
-    fun connectOutput() {
-
-    }
-
-    fun disConnectInput() {
-
-    }
-
-    fun disConnectOutput() {
-
-    }
+//    fun addInput() {
+//
+//    }
+//
+//    fun addOutput() {
+//
+//    }
+//
+//    fun removeInput() {
+//
+//    }
+//
+//    fun removeOutput() {
+//
+//    }
+//
+//    fun connectInput() {
+//
+//    }
+//
+//    fun connectOutput() {
+//
+//    }
+//
+//    fun disConnectInput() {
+//
+//    }
+//
+//    fun disConnectOutput() {
+//
+//    }
 
     @SuppressLint("Recycle")
     private fun initializeAttributes(attrs: AttributeSet?, defstyleAttr: Int, defstyleRes: Int) {

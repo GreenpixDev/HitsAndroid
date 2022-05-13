@@ -7,6 +7,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TableRow
@@ -15,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.add_node_item.view.*
 import kotlinx.android.synthetic.main.block_item.view.*
+import kotlinx.android.synthetic.main.variable_creator_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
@@ -69,10 +73,23 @@ class BlueprintActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
+        //создание новой переменной и доавление ее в список в менюшке
         binding.plusVariable.setOnClickListener {
             val view = VariableCreatorView(this)
             binding.listVariables.addView(view)
             createBlockVariable(view, BlockView(this))
+        }
+
+        //создание новой функции
+        binding.plusFunction.setOnClickListener {
+            val view = VariableCreatorView(this)
+
+            binding.listFunction.addView(view)
+        }
+
+        //создание нового макроса
+        binding.plusMacros.setOnClickListener {
+
         }
     }
 
@@ -96,17 +113,6 @@ class BlueprintActivity : AppCompatActivity() {
 
     }
 
-    private fun createUserFunctionAndMacros() {
-        binding.plusFunction.setOnClickListener {
-
-        }
-
-        binding.plusMacros.setOnClickListener {
-
-        }
-    }
-
-
     /**
      * Метод создания блока на поле
      */
@@ -123,16 +129,7 @@ class BlueprintActivity : AppCompatActivity() {
         when (type.fullName) {
             "native.main" -> {
                 block.level1.setBackgroundColor(Color.RED)
-                val inputRow = InputRowView(this)
-                val outputRow = OutputRowView(this)
-                val addNode = AddNodeView(this)
-
-                inputRow.inputNode = false
-                inputRow.description = false
-                outputRow.description = false
-                addNode.addNode = false
-
-                addBlockOnField(block, inputRow, outputRow, addNode)
+                createNode(block)
             }
 
             "native.branch" -> {
@@ -165,6 +162,7 @@ class BlueprintActivity : AppCompatActivity() {
                 val addNode = AddNodeView(this)
 
                 inputRow.description = false
+                outputRow.outputNode = false
                 outputRow.description = false
 
                 addBlockOnField(block, inputRow, outputRow, addNode)
@@ -218,21 +216,6 @@ class BlueprintActivity : AppCompatActivity() {
         addNode: AddNodeView
     ) {
         val newRow = TableRow(this)
-//        val paramsInput = LinearLayout.LayoutParams(
-//            LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT
-//        ).apply {
-//            weight = 2F
-//            gravity = Gravity.LEFT
-//        }
-//
-//        val paramsOutput = LinearLayout.LayoutParams(
-//            LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT
-//        ). apply {
-//            gravity = Gravity.RIGHT
-//        }
-
-//        inputRow.layoutParams = paramsInput
-//        outputRow.layoutParams = paramsOutput
 
         //инициализируем row
         inputRow.initComponents()
@@ -247,14 +230,58 @@ class BlueprintActivity : AppCompatActivity() {
 
         if (addNode.addNode) {
             val newRow2 = TableRow(this)
+            val row = TableRow(this)
 
-            newRow2.addView(TableRow(this))
+            val params = TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = Gravity.START
+                weight = 3f
+            }
+
+            row.layoutParams = params
+
+            newRow2.addView(row)
             newRow2.addView(addNode)
 
-            block.level2.addView(newRow2)
+            block.level3.addView(newRow2)
+
+            block.level3.textAddNode.setOnClickListener {
+                createNode(block)
+            }
         }
     }
 
+    private fun createNode(block: BlockView) {
+        val newRow2 = TableRow(this)
+        val row = TableRow(this)
+        val outputRow = OutputRowView(this)
+
+        outputRow.description = false
+        outputRow.initComponents()
+
+//        val node = ImageButton(this)
+//        node.setImageResource(R.drawable.button_shape_circle_stroke)
+
+        val params = TableRow.LayoutParams(
+            TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = android.view.Gravity.START
+            weight = 3f
+        }
+
+        row.layoutParams = params
+
+        newRow2.addView(row)
+        newRow2.addView(outputRow)
+
+        block.level2.addView(newRow2)
+    }
+
+
+    /**
+     * Метод создания блока-переменной на поле
+     */
     private fun createBlockVariable(view: VariableCreatorView, newBlock: BlockView) {
         val outputRow = OutputRowView(this)
 
@@ -281,8 +308,26 @@ class BlueprintActivity : AppCompatActivity() {
             }
         }
 
-        newBlock.level2.addView(outputRow)
-        newBlock.title.text = view.getNameVariable()
+        newBlock.level1.addView(outputRow)
+        newBlock.title.text = "variable" //default name variable
+
+        // Обработка событий
+        newBlock.setOnTouchListener(this::onTouch)
+
+        view.nameVariable.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(title: Editable) {}
+            override fun beforeTextChanged(
+                title: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(title: CharSequence, start: Int, before: Int, count: Int) {
+                newBlock.title.setText(title)
+            }
+        })
 
         binding.codeField.addView(newBlock)
     }
@@ -306,23 +351,6 @@ class BlueprintActivity : AppCompatActivity() {
         return true
     }
 
-
-//    fun addTextView(stringArray : Array<String>) {
-//        for (textViewName in stringArray){
-//            val textView = TextView(this)
-//            textView.setTextAppearance(R.style.TextViewStyleForMenu)
-//            textView.text = textViewName.toString()
-//
-//            if (stringArray.toString() == "variables") {
-//                binding.scrollViewMenu.linearLayoutMenu.linearLayoutVariablesContainer.addView(textView)
-//            } else if (stringArray.toString() == "cycles") {
-//                binding.scrollViewMenu.linearLayoutMenu.linearLayoutCyclesContainer.addView(textView)
-//            } else if (stringArray.toString() == "conditions") {
-//                binding.scrollViewMenu.linearLayoutMenu.linearLayoutConditionsContainer.addView(textView)
-//            }
-//        }
-//    }
-
     private fun getLocalizationName(key: String): String {
         return try {
             resources.getString(resources.getIdentifier(key, "string", packageName))
@@ -332,39 +360,3 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
 }
-//    private fun someFunctionName(array: Array<String>, typeBlock: String) {
-//        val textSize = 20f
-//        val textColor = Color.BLACK
-//        val textAlign = View.TEXT_ALIGNMENT_CENTER
-//        val fontFamily = ResourcesCompat.getFont(this, R.font.montserrat_regular)
-//
-//        for (typeView in array) {
-//            val textView = TextView(this)
-//            textView.text = typeView.toString()
-//            textView.setTextColor(textColor)
-//            textView.textAlignment = textAlign
-//            textView.textSize = textSize
-//            textView.typeface = fontFamily
-//
-//            when (typeBlock) {
-//                "Variables" -> {
-//                    binding.linearLayoutVariablesContainer.addView(textView)
-//                    textView.setOnClickListener() {
-//                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
-//                    }
-//                }
-//                "Cycles" -> {
-//                    binding.linearLayoutCyclesContainer.addView(textView)
-//                    textView.setOnClickListener() {
-//                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
-//                    }
-//                }
-//                "Conditions" -> {
-//                    binding.linearLayoutConditionsContainer.addView(textView)
-//                    textView.setOnClickListener() {
-//                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
-//                    }
-//                }
-//            }
-//        }
-//    }

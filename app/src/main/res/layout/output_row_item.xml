@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/outputViewLayout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     tools:parentTag="android.widget.TableLayout">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <TableRow
         android:id="@+id/outputRowBlock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
         tools:background="@color/bgBlock">
 
         <TextView
@@ -21,7 +21,7 @@
             android:gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="7dp" />
 
         <ImageButton
@@ -37,6 +37,6 @@
             android:layout_marginBottom="4dp"
             android:layout_marginTop="5dp"
             tools:ignore="TouchTargetSizeCheck" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </TableRow>
 
 </merge>
