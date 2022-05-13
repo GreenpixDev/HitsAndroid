@@ -22,7 +22,7 @@ class AxolotBlock(val type: BlockType) : AxolotOwner {
     /**
      * Множество контактов (пинов) у блока
      */
-    val contacts = hashSetOf<Pin>()
+    val contacts = linkedSetOf<Pin>()
 
     fun addFixedPin(pin: Pin) {
         contacts.add(pin)
