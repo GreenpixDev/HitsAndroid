@@ -1,69 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/block"
+    <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/bgBlock">
 
-        <TableLayout
-            android:id="@+id/blockField"
-            android:layout_width="wrap_content"
+        <TableRow
+            android:id="@+id/level1"
             android:layout_height="wrap_content"
-            android:background="@color/bgBlock"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            tools:layout_editor_absoluteX="85dp">
+            android:layout_width="wrap_content"
+            android:background="@color/buttons">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:background="@null"
-                android:gravity="center_horizontal"
+                android:textColor="@color/black"
                 android:text="block"
-                app:layout_constraintBottom_toTopOf="@+id/forUser"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="TouchTargetSizeCheck" />
+        </TableRow>
 
-            <TableRow
-                android:id="@+id/level1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/level2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TableRow
-                android:id="@+id/level3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </TableLayout>
-
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
+        <TableLayout
+            android:id="@+id/level2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></TableLayout>
+    </TableLayout>
 </merge>
 
-    <!--еще подходит для get если убрать основные круглежки-->
+    <!--<TableRow-->
+    <!--android:id="@+id/level1"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" >-->
+    <!--</TableRow>-->
+
+    <!--<TableRow-->
+    <!--android:id="@+id/level2"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <!--<TableRow-->
+    <!--android:id="@+id/level3"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" />-->
