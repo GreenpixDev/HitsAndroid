@@ -14,7 +14,6 @@ import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
 import kotlinx.android.synthetic.main.pin_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
-import ru.hits.android.axolot.blueprint.declaration.NativeBlockType
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargInputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
@@ -110,24 +109,22 @@ class BlueprintActivity : AppCompatActivity() {
      * Метод создания всех вьюшек  нативных типов блоков
      */
     private fun createBlockTypeViews() {
-        program.blockTypes.values
-            .filterIsInstance<NativeBlockType>()
-            .forEach {
-                val nameBlock = getLocalizedString(it.fullName)
-                val textView = TextView(this)
+        program.blockTypes.values.forEach {
+            val nameBlock = getLocalizedString(it.fullName)
+            val textView = TextView(this)
 
-                textView.text = nameBlock
-                textView.setTextColor(Color.BLACK)
-                textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-                textView.textSize = 20f
-                textView.typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
+            textView.text = nameBlock
+            textView.setTextColor(Color.BLACK)
+            textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+            textView.textSize = 20f
+            textView.typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
-                binding.listBlocks.addView(textView)
+            binding.listBlocks.addView(textView)
 
-                textView.setOnClickListener { _ ->
-                    createBlock(BlockView(this), it)
-                }
+            textView.setOnClickListener { _ ->
+                createBlock(BlockView(this), it)
             }
+        }
     }
 
     /**
