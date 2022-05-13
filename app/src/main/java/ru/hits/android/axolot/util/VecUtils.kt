@@ -38,4 +38,6 @@ data class Vec2f(override val x: Float, override val y: Float) : Vec2 {
 
     override operator fun unaryMinus() = this * -1f
 
+    override fun toString() = "Vec2f(x=$x, y=$y)"
+
 }

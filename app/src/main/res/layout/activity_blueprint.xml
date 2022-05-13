@@ -30,7 +30,7 @@
         app:oneFingerScrollEnabled="true"
         app:twoFingersScrollEnabled="true"
         app:threeFingersScrollEnabled="true"
-        app:minZoom="2"
+        app:minZoom="10"
         app:minZoomType="zoom"
         app:maxZoom="200"
         app:maxZoomType="zoom"
@@ -40,7 +40,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/codeField"
-            android:background="@color/bg_main"
+            android:background="@drawable/ic_launcher_background"
             android:layout_width="100000dp"
             android:layout_height="100000dp"/>
 
