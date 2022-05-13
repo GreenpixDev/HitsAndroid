@@ -113,43 +113,6 @@ class BlueprintActivity : AppCompatActivity() {
 
     }
 
-//    private fun someFunctionName(array: Array<String>, typeBlock: String) {
-//        val textSize = 20f
-//        val textColor = Color.BLACK
-//        val textAlign = View.TEXT_ALIGNMENT_CENTER
-//        val fontFamily = ResourcesCompat.getFont(this, R.font.montserrat_regular)
-//
-//        for (typeView in array) {
-//            val textView = TextView(this)
-//            textView.text = typeView.toString()
-//            textView.setTextColor(textColor)
-//            textView.textAlignment = textAlign
-//            textView.textSize = textSize
-//            textView.typeface = fontFamily
-//
-//            when (typeBlock) {
-//                "Variables" -> {
-//                    binding.linearLayoutVariablesContainer.addView(textView)
-//                    textView.setOnClickListener() {
-//                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
-//                    }
-//                }
-//                "Cycles" -> {
-//                    binding.linearLayoutCyclesContainer.addView(textView)
-//                    textView.setOnClickListener() {
-//                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
-//                    }
-//                }
-//                "Conditions" -> {
-//                    binding.linearLayoutConditionsContainer.addView(textView)
-//                    textView.setOnClickListener() {
-//                        addBlockOnField(BlockView(this), BlockRowView(this), typeView, typeBlock)
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     /**
      * Метод создания блока на поле
      */
@@ -389,23 +352,6 @@ class BlueprintActivity : AppCompatActivity() {
         }
         return true
     }
-
-
-//    fun addTextView(stringArray : Array<String>) {
-//        for (textViewName in stringArray){
-//            val textView = TextView(this)
-//            textView.setTextAppearance(R.style.TextViewStyleForMenu)
-//            textView.text = textViewName.toString()
-//
-//            if (stringArray.toString() == "variables") {
-//                binding.scrollViewMenu.linearLayoutMenu.linearLayoutVariablesContainer.addView(textView)
-//            } else if (stringArray.toString() == "cycles") {
-//                binding.scrollViewMenu.linearLayoutMenu.linearLayoutCyclesContainer.addView(textView)
-//            } else if (stringArray.toString() == "conditions") {
-//                binding.scrollViewMenu.linearLayoutMenu.linearLayoutConditionsContainer.addView(textView)
-//            }
-//        }
-//    }
 
     private fun getLocalizationName(key: String): String {
         return try {
