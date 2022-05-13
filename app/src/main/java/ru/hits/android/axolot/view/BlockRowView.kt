@@ -38,7 +38,6 @@ class BlockRowView @JvmOverloads constructor(
     }
 
     fun overrideData() {
-
     }
 
     fun initComponents() {
@@ -70,7 +69,7 @@ class BlockRowView @JvmOverloads constructor(
     }
 
     private fun setDefaultExpression() {
-        if (description) binding.expressionTextView.text = expressionText
+        if (expression) binding.expressionTextView.text = expressionText
     }
 
     private fun setDescription() {

@@ -7,21 +7,27 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import android.widget.TableRow
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import kotlinx.android.synthetic.main.add_node_item.view.*
 import kotlinx.android.synthetic.main.block_item.view.*
+import kotlinx.android.synthetic.main.variable_creator_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
+import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.util.Vec2f
-import ru.hits.android.axolot.view.BlockRowView
-import ru.hits.android.axolot.view.BlockView
+import ru.hits.android.axolot.view.*
 
 /**
- * Активити редактора исходного кода нашего языка
+ * Активити создания и редактирования кода нашего языка
  */
 class BlueprintActivity : AppCompatActivity() {
 
@@ -66,6 +72,25 @@ class BlueprintActivity : AppCompatActivity() {
         binding.ToPageSettings.setOnClickListener() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+
+        //создание новой переменной и доавление ее в список в менюшке
+        binding.plusVariable.setOnClickListener {
+            val view = VariableCreatorView(this)
+            binding.listVariables.addView(view)
+            createBlockVariable(view, BlockView(this))
+        }
+
+        //создание новой функции
+        binding.plusFunction.setOnClickListener {
+            val view = VariableCreatorView(this)
+
+            binding.listFunction.addView(view)
+        }
+
+        //создание нового макроса
+        binding.plusMacros.setOnClickListener {
+
+        }
     }
 
     private fun createMenu() {
@@ -82,7 +107,7 @@ class BlueprintActivity : AppCompatActivity() {
             binding.listBlocks.addView(textView)
 
             textView.setOnClickListener { _ ->
-                addBlockOnField(BlockView(this), BlockRowView(this), it)
+                createBlock(BlockView(this), it)
             }
         }
 
@@ -129,10 +154,9 @@ class BlueprintActivity : AppCompatActivity() {
      * Метод создания блока на поле
      */
     @SuppressLint("ClickableViewAccessibility")
-    private fun addBlockOnField(
+    private fun createBlock(
         block: BlockView,
-        rowBlock: BlockRowView,
-        typeBlock: BlockType
+        type: BlockType
     ) {
 
         // Координаты
@@ -140,36 +164,212 @@ class BlueprintActivity : AppCompatActivity() {
         block.y = binding.codeField.height / 2f
         block.translationZ = 30f
 
-        rowBlock.inputNode = false
-        rowBlock.description = false
-        rowBlock.expression = false
+        when (type.fullName) {
+            "native.main" -> {
+                block.level1.setBackgroundColor(Color.RED)
+                createNode(block)
+            }
 
-//        when (typeView) {
-//            "Boolean" -> {
-//                rowBlock.typeBlock = Type.BOOLEAN
-//            }
-//            "Integer" -> {
-//                rowBlock.typeBlock = Type.INT
-//            }
-//            "Double" -> {
-//                rowBlock.typeBlock = Type.FLOAT
-//            }
-//            "String" -> {
-//                rowBlock.typeBlock = Type.STRING
-//            }
-//        }
-        //инициализируем и добавляем row в основной блок
-        rowBlock.initComponents()
-        rowBlock.setInputType()
-        block.level1.addView(rowBlock)
+            "native.branch" -> {
+                block.level1.setBackgroundColor(Color.GRAY)
+
+                val inputRow1 = InputRowView(this)
+                val outputRow1 = OutputRowView(this)
+                val addNode = AddNodeView(this)
+
+                addNode.addNode = false
+
+                inputRow1.description = false
+                outputRow1.descriptionText = "True"
+
+                val inputRow2 = InputRowView(this)
+                val outputRow2 = OutputRowView(this)
+
+                inputRow2.descriptionText = "Condition"
+                outputRow2.descriptionText = "False"
+
+                addBlockOnField(block, inputRow1, outputRow1, addNode)
+                addBlockOnField(block, inputRow2, outputRow2, addNode)
+            }
+
+            "native.sequence" -> {
+                block.level1.setBackgroundColor(Color.GREEN)
+
+                val inputRow = InputRowView(this)
+                val outputRow = OutputRowView(this)
+                val addNode = AddNodeView(this)
+
+                inputRow.description = false
+                outputRow.outputNode = false
+                outputRow.description = false
+
+                addBlockOnField(block, inputRow, outputRow, addNode)
+
+                block.btnAddNode.setOnClickListener {
+                    //добавление новых node
+                }
+            }
+
+            "native.print" -> {
+                block.level1.setBackgroundColor(Color.BLUE)
+
+                val inputRow1 = InputRowView(this)
+                val outputRow1 = OutputRowView(this)
+                val addNode = AddNodeView(this)
+
+                addNode.addNode = false
+
+                inputRow1.description = false
+                outputRow1.description = false
+
+                val inputRow2 = InputRowView(this)
+                val outputRow2 = OutputRowView(this)
+
+                inputRow2.descriptionText = "In string"
+                outputRow2.outputNode = false
+                outputRow2.description = false
+
+                addBlockOnField(block, inputRow1, outputRow1, addNode)
+                addBlockOnField(block, inputRow2, outputRow2, addNode)
+            }
+        }
+
+        //присваиваем нужный тип блока
+        block.typeBlock = type
+
+        //переименовывем блок
+        block.title.text = getLocalizationName(type.fullName)
 
         // Обработка событий
         block.setOnTouchListener(this::onTouch)
 
-        // Добавляем блок на поле и List
-        block.title.text = getLocalizationName(typeBlock.fullName)
+        // добавляем готовый блок на поле
         binding.codeField.addView(block)
     }
+
+    private fun addBlockOnField(
+        block: BlockView,
+        inputRow: InputRowView,
+        outputRow: OutputRowView,
+        addNode: AddNodeView
+    ) {
+        val newRow = TableRow(this)
+
+        //инициализируем row
+        inputRow.initComponents()
+        outputRow.initComponents()
+        addNode.initComponents()
+
+        // добавляем 2 row в основной row
+        newRow.addView(inputRow)
+        newRow.addView(outputRow)
+
+        block.level2.addView(newRow)
+
+        if (addNode.addNode) {
+            val newRow2 = TableRow(this)
+            val row = TableRow(this)
+
+            val params = TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = Gravity.START
+                weight = 3f
+            }
+
+            row.layoutParams = params
+
+            newRow2.addView(row)
+            newRow2.addView(addNode)
+
+            block.level3.addView(newRow2)
+
+            block.level3.textAddNode.setOnClickListener {
+                createNode(block)
+            }
+        }
+    }
+
+    private fun createNode(block: BlockView) {
+        val newRow2 = TableRow(this)
+        val row = TableRow(this)
+        val outputRow = OutputRowView(this)
+
+        outputRow.description = false
+        outputRow.initComponents()
+
+//        val node = ImageButton(this)
+//        node.setImageResource(R.drawable.button_shape_circle_stroke)
+
+        val params = TableRow.LayoutParams(
+            TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = android.view.Gravity.START
+            weight = 3f
+        }
+
+        row.layoutParams = params
+
+        newRow2.addView(row)
+        newRow2.addView(outputRow)
+
+        block.level2.addView(newRow2)
+    }
+
+
+    /**
+     * Метод создания блока-переменной на поле
+     */
+    private fun createBlockVariable(view: VariableCreatorView, newBlock: BlockView) {
+        val outputRow = OutputRowView(this)
+
+        // Координаты
+        newBlock.x = binding.codeField.width / 2f
+        newBlock.y = binding.codeField.height / 2f
+        newBlock.translationZ = 30f
+
+        outputRow.description = false
+        outputRow.initComponents()
+
+        when (view.getTypeVariable()) {
+            "Boolean" -> {
+                newBlock.typeVar = Type.BOOLEAN
+            }
+            "Integer" -> {
+                newBlock.typeVar = Type.INT
+            }
+            "Double" -> {
+                newBlock.typeVar = Type.FLOAT
+            }
+            "String" -> {
+                newBlock.typeVar = Type.STRING
+            }
+        }
+
+        newBlock.level1.addView(outputRow)
+        newBlock.title.text = "variable" //default name variable
+
+        // Обработка событий
+        newBlock.setOnTouchListener(this::onTouch)
+
+        view.nameVariable.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(title: Editable) {}
+            override fun beforeTextChanged(
+                title: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(title: CharSequence, start: Int, before: Int, count: Int) {
+                newBlock.title.setText(title)
+            }
+        })
+
+        binding.codeField.addView(newBlock)
+    }
+
 
     /**
      * Метод передвижения вьюшек с учетом зума
@@ -189,6 +389,7 @@ class BlueprintActivity : AppCompatActivity() {
         }
         return true
     }
+
 
 //    fun addTextView(stringArray : Array<String>) {
 //        for (textViewName in stringArray){

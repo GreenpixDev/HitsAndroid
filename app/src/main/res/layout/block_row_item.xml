@@ -9,12 +9,13 @@
         android:id="@+id/rowBlock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:background="@color/bg_header"        >
+        tools:background="@color/bgBlock">
 
         <ImageButton
             android:id="@+id/inputNode"
             android:layout_width="15dp"
             android:layout_height="15dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="7dp"
             android:layout_marginStart="7dp"
             android:layout_marginBottom="4dp"
@@ -26,10 +27,11 @@
             android:id="@+id/typeSpinner"
             android:layout_width="75dp"
             android:layout_height="wrap_content"
-            android:background="@color/buttons"
+            android:background="@color/white"
             android:entries="@array/TypeBlock"
             android:layout_marginStart="7dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginTop="3dp"
             tools:ignore="TouchTargetSizeCheck" />
 
         <TextView
@@ -39,7 +41,8 @@
             android:text="description"
             android:gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="3dp" />
 
         <TextView
             android:id="@+id/expressionTextView"
@@ -54,7 +57,8 @@
             android:text=""
             android:layout_marginEnd="7dp"
             android:layout_marginStart="3dp"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="1dp" />
 
         <ImageButton
             android:id="@+id/outputNode"
@@ -67,6 +71,7 @@
             android:layout_marginEnd="7dp"
             android:layout_marginStart="7dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginTop="5dp"
             tools:ignore="TouchTargetSizeCheck" />
     </TableRow>
 
