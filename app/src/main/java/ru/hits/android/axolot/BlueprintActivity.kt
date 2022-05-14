@@ -96,12 +96,18 @@ class BlueprintActivity : AppCompatActivity() {
         binding.plusFunction.setOnClickListener {
             val view = CreatorView(this)
 
+            view.typeExpression = false
+
             binding.listFunction.addView(view)
         }
 
         // Создание нового макроса
         binding.plusMacros.setOnClickListener {
+            val view = CreatorView(this)
 
+            view.typeExpression = false
+
+            binding.listMacros.addView(view)
         }
     }
 
@@ -224,6 +230,10 @@ class BlueprintActivity : AppCompatActivity() {
      */
     private fun createVariableView() {
         val view = CreatorView(this)
+
+        view.edit = false
+        view.initComponents()
+
         binding.listVariables.addView(view)
     }
 
