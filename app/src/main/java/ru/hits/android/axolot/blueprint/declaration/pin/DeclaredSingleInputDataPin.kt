@@ -12,7 +12,6 @@ class DeclaredSingleInputDataPin @JvmOverloads constructor(
     val type: VariableType<*>
 ) : DeclaredPin {
 
-    @Suppress("unchecked_cast")
     override fun handle(target: Collection<Node>, node: Node) {
         handler.invoke(target, node as NodeDependency)
     }

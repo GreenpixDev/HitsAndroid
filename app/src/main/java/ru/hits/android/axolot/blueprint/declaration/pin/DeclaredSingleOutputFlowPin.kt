@@ -10,7 +10,6 @@ class DeclaredSingleOutputFlowPin @JvmOverloads constructor(
     private val name: String = ""
 ) : DeclaredPin {
 
-    @Suppress("unchecked_cast")
     override fun handle(target: Collection<Node>, node: Node) {
         handler.invoke(target, node as NodeExecutable)
     }
