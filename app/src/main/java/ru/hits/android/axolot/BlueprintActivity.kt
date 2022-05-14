@@ -26,8 +26,8 @@ import ru.hits.android.axolot.util.getLocalizedString
 import ru.hits.android.axolot.util.getThemeColor
 import ru.hits.android.axolot.view.AddNodeView
 import ru.hits.android.axolot.view.BlockView
+import ru.hits.android.axolot.view.CreatorView
 import ru.hits.android.axolot.view.PinView
-import ru.hits.android.axolot.view.VariableCreatorView
 
 /**
  * Активити создания и редактирования кода нашего языка
@@ -94,7 +94,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Создание новой функции
         binding.plusFunction.setOnClickListener {
-            val view = VariableCreatorView(this)
+            val view = CreatorView(this)
 
             binding.listFunction.addView(view)
         }
@@ -223,7 +223,7 @@ class BlueprintActivity : AppCompatActivity() {
      * Метод создания новой переменной в меню
      */
     private fun createVariableView() {
-        val view = VariableCreatorView(this)
+        val view = CreatorView(this)
         binding.listVariables.addView(view)
     }
 
