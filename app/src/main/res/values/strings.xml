@@ -1,3 +1,78 @@
 <resources>
     <string name="app_name">HitsAndroid</string>
+    <string name="welcome">Добро пожаловать</string>
+    <string name="begin">Начать</string>
+    <string name="aboutUs">О нас</string>
+    <string name="main">Главная</string>
+    <string name="info_icon_description">Кнопка, ведущая на страницу с инструкцией</string>
+    <string name="settings_icon_description">Кнопка, ведущая на страницу с настройками</string>
+    <string name="play_icon_description">Это кнопка, запускающая сформированный вами код</string>
+    <string name="show_and_not_show_toolbar">Это кнопка, закрывающая и открывающая тулбар</string>
+    <string name="menu_description">Это меню, где можно выбрать блок для визуального программирования</string>
+
+    <string name="Konstantin">Константин</string>
+    <string name="Elena">Елена</string>
+    <string name="Roman">Роман</string>
+    <string name="Ivan">Иван</string>
+
+    <string name="title_information_activity">Справка по взаимодействию с CodeBlock</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In auctor suscipit augue fermentum varius. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam eu sapien placerat, vestibulum est vel, varius arcu. Maecenas pharetra velit ut ornare porta. Donec tristique sapien ut posuere pulvinar. Nunc volutpat quam enim, a porttitor dolor tincidunt ut. Duis vel dui eget libero fermentum feugiat. Phasellus in diam congue, bibendum velit non, tincidunt nisi. Morbi scelerisque ullamcorper nisl sit amet blandit. Vestibulum imperdiet pretium felis in venenatis. Duis ac massa dui. Nulla rhoncus leo quis eros lobortis convallis. Donec vitae pretium quam.</string>
+
+    <string name="settings">Настройки</string>
+    <string name="back_to_main">Вернуться на главную</string>
+    <string name="go_to_the_game">Перейти к игре</string>
+    <string name="left_arrow_description">imageView, ведущая на основую страницу</string>
+    <string name="right_arrow_description">imageView, ведущая на страницу, где можно начать работать</string>
+    <string name="back_to_game">Вернуться к игре</string>
+    <string name="exit">Выход</string>
+
+    <string name="variable">variable</string>
+
+    <string name="blockSET">SET</string>
+    <string name="blockAdd">Add</string>
+    <string name="blockGet">Get</string>
+    <string name="blockBranch">Branch</string>
+    <string name="inputData">Condition</string>
+    <string name="outputTrue">True</string>
+    <string name="outputFalse">False</string>
+
+    <string-array name="TypeBlock">
+        <item>Boolean</item>
+        <item>Integer</item>
+        <item>Double</item>
+        <item>String</item>
+    </string-array>
+
+    <string name="titleVariable">Переменные</string>
+    <string-array name="btnBlocksVariables">
+        <item>Integer</item>
+        <item>Double</item>
+        <item>Boolean</item>
+        <item>String</item>
+    </string-array>
+
+    <string-array name="listBlocks">
+        <item name="native.while">while</item>
+        <item>for</item>
+        <item>forEach</item>
+        <item>if else</item>
+        <!--        это branch-->
+        <item>main</item>
+        <item>print string</item>
+        <item>сложение</item>
+    </string-array>
+
+    <string name="native.while">while</string>
+    <string name="native.for">for</string>
+    <string name="native.sequence">последовательно</string>
+    <string name="native.foreach">forEach</string>
+    <string name="native.branch">if else</string>
+    <string name="native.main">main</string>
+    <string name="native.print">print string</string>
+    <string name="native.math.int.add">сложение integer</string>
+    <string name="native.math.float.add">сложение float</string>
+
+    <string name="titleFunctions">Функции</string>
+    <string name="newFunction">Добавить новую функцию</string>
+
 </resources>

@@ -1,18 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_main"
     tools:context=".MainActivity">
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Hello World!"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintLeft_toLeftOf="parent"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/bg_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/toMainPage"
+            android:layout_width="130dp"
+            android:layout_height="50dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/main"
+            android:textSize="25sp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/toAboutUsPage"
+            android:layout_width="85dp"
+            android:layout_height="50dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/aboutUs"
+            android:textSize="25sp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textHello"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/welcome"
+        android:textSize="30sp"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintVertical_bias="0.402" />
+
+    <Button
+        android:id="@+id/startBtn"
+        android:layout_width="183dp"
+        android:layout_height="71dp"
+        android:backgroundTint="@color/buttons"
+        android:elevation="10dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center_horizontal|center_vertical"
+        android:stateListAnimator="@null"
+        android:text="@string/begin"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:translationZ="7dp"
+        app:cornerRadius="35dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textHello"
+        app:layout_constraintVertical_bias="0.364" />
+
+    <ImageButton
+        android:id="@+id/btn_info"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginBottom="13dp"
+        android:contentDescription="@string/info_icon_description"
+        android:scaleType="fitXY"
+        android:background="@color/bg_main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_info_icon" />
+
+    <ImageButton
+        android:id="@+id/btn_settings"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="13dp"
+        android:contentDescription="@string/settings_icon_description"
+        android:scaleType="fitXY"
+        android:background="@color/bg_main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_settings_icon" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

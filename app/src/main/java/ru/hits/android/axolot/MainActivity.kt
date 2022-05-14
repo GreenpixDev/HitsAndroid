@@ -1,11 +1,39 @@
 package ru.hits.android.axolot
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.hits.android.axolot.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.startBtn.setOnClickListener {
+            startActivity(Intent(this, BlueprintActivity::class.java))
+        }
+
+        binding.btnInfo.setOnClickListener() {
+            startActivity(Intent(this, InformationActivity::class.java))
+        }
+
+        binding.btnSettings.setOnClickListener() {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
+        binding.toMainPage.setOnClickListener() {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
+        binding.toAboutUsPage.setOnClickListener() {
+            startActivity(Intent(this, AboutUsActivity::class.java))
+        }
     }
+
+
 }
