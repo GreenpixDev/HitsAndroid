@@ -1,35 +1,34 @@
 package ru.hits.android.axolot.interpreter
 
 import org.junit.Test
-import ru.hits.android.axolot.blueprint.element.BlueprintFunction
-import ru.hits.android.axolot.blueprint.element.BlueprintMacros
-import ru.hits.android.axolot.blueprint.node.NodeConstant
-import ru.hits.android.axolot.blueprint.node.function.NodeCast
-import ru.hits.android.axolot.blueprint.node.executable.NodePrintString
-import ru.hits.android.axolot.blueprint.node.executable.NodeSetVariable
-import ru.hits.android.axolot.blueprint.node.executable.array.NodeArrayAssignElement
-import ru.hits.android.axolot.blueprint.node.executable.array.NodeArrayResize
-import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeBranch
-import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeForLoop
-import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeForLoopIndex
-import ru.hits.android.axolot.blueprint.node.flowcontrol.NodeSequence
-import ru.hits.android.axolot.blueprint.node.function.math.trig.NodeSin
-import ru.hits.android.axolot.blueprint.node.function.NodeGetVariable
-import ru.hits.android.axolot.blueprint.node.function.array.NodeArrayGetElement
-import ru.hits.android.axolot.blueprint.node.function.array.NodeArraySize
-import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionEnd
-import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionInvoke
-import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionParameter
-import ru.hits.android.axolot.blueprint.node.function.custom.NodeFunctionReturned
-import ru.hits.android.axolot.blueprint.node.function.math.bool.NodeBooleanAnd
-import ru.hits.android.axolot.blueprint.node.function.math.bool.NodeBooleanNot
-import ru.hits.android.axolot.blueprint.node.function.math.bool.NodeBooleanOr
-import ru.hits.android.axolot.blueprint.node.function.math.integer.*
-import ru.hits.android.axolot.blueprint.node.macros.*
-import ru.hits.android.axolot.blueprint.scope.GlobalScope
-import ru.hits.android.axolot.blueprint.type.Type
-import ru.hits.android.axolot.blueprint.type.structure.ArrayType
-import ru.hits.android.axolot.blueprint.variable.Variable
+import ru.hits.android.axolot.interpreter.element.InterpretedFunction
+import ru.hits.android.axolot.interpreter.element.InterpretedMacros
+import ru.hits.android.axolot.interpreter.node.NodeConstant
+import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
+import ru.hits.android.axolot.interpreter.node.executable.NodeSetVariable
+import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayAssignElement
+import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayResize
+import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
+import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeForLoop
+import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeForLoopIndex
+import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
+import ru.hits.android.axolot.interpreter.node.function.NodeCast
+import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
+import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayGetElement
+import ru.hits.android.axolot.interpreter.node.function.array.NodeArraySize
+import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionEnd
+import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionInvoke
+import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionParameter
+import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionReturned
+import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
+import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNot
+import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanOr
+import ru.hits.android.axolot.interpreter.node.function.math.integer.*
+import ru.hits.android.axolot.interpreter.node.function.math.trig.NodeSin
+import ru.hits.android.axolot.interpreter.node.macros.*
+import ru.hits.android.axolot.interpreter.scope.GlobalScope
+import ru.hits.android.axolot.interpreter.type.Type
+import ru.hits.android.axolot.interpreter.variable.Variable
 
 class BlueprintInterpreterTest {
 
@@ -107,7 +106,7 @@ class BlueprintInterpreterTest {
         /*
          Делаем макрос
          */
-        val macros = BlueprintMacros()
+        val macros = InterpretedMacros()
         macros.inputExecutable["input"] = NodeMacrosInput()
         macros.input["condition"] = NodeMacrosDependency()
         macros.outputExecutable["loopBody"] = NodeMacrosOutput()
@@ -268,7 +267,7 @@ class BlueprintInterpreterTest {
         /*
          Делаем макрос
          */
-        val macros = BlueprintMacros()
+        val macros = InterpretedMacros()
         macros.inputExecutable["input"] = NodeMacrosInput()
         macros.inputExecutable["break"] = NodeMacrosInput()
         macros.input["firstIndex"] = NodeMacrosDependency()
@@ -404,7 +403,7 @@ class BlueprintInterpreterTest {
         val equals1 = NodeIntEqual()
         val equals2 = NodeIntEqual()
 
-        val function = BlueprintFunction(branch)
+        val function = InterpretedFunction(branch)
         function.input["number"] = NodeFunctionParameter()
         function.output["return"] = Type.INT
 
@@ -498,10 +497,10 @@ class BlueprintInterpreterTest {
         val assign2 = NodeArrayAssignElement()
         val assign3 = NodeArrayAssignElement()
 
-        var forLoop = forLoop()
-        var sub = NodeIntSub()
-        var printElement = NodePrintString()
-        var arrayGet = NodeArrayGetElement()
+        val forLoop = forLoop()
+        val sub = NodeIntSub()
+        val printElement = NodePrintString()
+        val arrayGet = NodeArrayGetElement()
 
         // Начало
         printStart.init(NodeConstant.of(Type.STRING, "Start Array Test!"))
@@ -545,8 +544,8 @@ class BlueprintInterpreterTest {
         println("Executed for ${System.currentTimeMillis() - timestamp} ms")
     }
 
-    private fun forLoop(): BlueprintMacros {
-        val macros = BlueprintMacros()
+    private fun forLoop(): InterpretedMacros {
+        val macros = InterpretedMacros()
         macros.inputExecutable["input"] = NodeMacrosInput()
         macros.input["firstIndex"] = NodeMacrosDependency()
         macros.input["lastIndex"] = NodeMacrosDependency()
@@ -554,7 +553,8 @@ class BlueprintInterpreterTest {
         macros.outputExecutable["completed"] = NodeMacrosOutput()
         macros.output["index"] = NodeMacrosDependency()
 
-        val localInt = NodeLocalVariable(Type.INT)              // Нода локальной переменной localInt
+        val localInt =
+            NodeLocalVariable(Type.INT)              // Нода локальной переменной localInt
         val firstAssign = NodeAssignVariable()                  // Нода присваивания
         val lessOrEqual = NodeIntLessOrEqual()                  // Нода a <= b
         val branch = NodeBranch()                               // Нода IF
