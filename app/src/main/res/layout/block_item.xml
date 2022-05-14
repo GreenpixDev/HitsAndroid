@@ -50,7 +50,7 @@
 
             </LinearLayout>
 
-            <!-- Пустая вьюшка для АДАПТИВНОГО отображения -->
+            <!-- Пустой слой для АДАПТИВНОГО отображения -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:minWidth="25dp"
                 android:layout_width="match_parent"
@@ -71,11 +71,5 @@
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!-- Footer (тут хз что будет, поэтому пока-что закомментировал) -->
-        <!--<androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/footer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></androidx.constraintlayout.widget.ConstraintLayout>-->
     </LinearLayout>
 </merge>
