@@ -6,7 +6,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_main"
+    android:clipChildren="false"
     tools:context=".MainActivity">
+
+    <ru.hits.android.axolot.view.LineCanvasView
+
+        android:layout_width="201dp"
+        android:layout_height="135dp"
+        android:layout_marginTop="60dp"
+        android:background="@color/teal_700"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/textHello"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.361"
+        tools:ignore="MissingConstraints" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -24,8 +39,8 @@
             android:fontFamily="@font/montserrat_semibold"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/main"
-            android:textSize="25sp"
             android:textColor="@color/black"
+            android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.05"
@@ -41,8 +56,8 @@
             android:fontFamily="@font/montserrat_regular"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/aboutUs"
-            android:textSize="25sp"
             android:textColor="@color/black"
+            android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.95"
