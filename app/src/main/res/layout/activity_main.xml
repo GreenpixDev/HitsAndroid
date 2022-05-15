@@ -9,7 +9,7 @@
     android:clipChildren="false"
     tools:context=".MainActivity">
 
-    <ru.hits.android.axolot.view.LineCanvasView
+    <!--<ru.hits.android.axolot.view.LineCanvasView
 
         android:layout_width="201dp"
         android:layout_height="135dp"
@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.361"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints" />-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"

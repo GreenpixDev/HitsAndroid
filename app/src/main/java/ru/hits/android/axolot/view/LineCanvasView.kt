@@ -2,11 +2,16 @@ package ru.hits.android.axolot.view
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import ru.hits.android.axolot.R
 import ru.hits.android.axolot.util.Vec2f
+import ru.hits.android.axolot.util.convertDpToPixel
+import ru.hits.android.axolot.util.getThemeColor
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 class LineCanvasView @JvmOverloads constructor(
     context: Context,
@@ -16,24 +21,132 @@ class LineCanvasView @JvmOverloads constructor(
 ) : View(context, attrs, defstyleAttr, defstyleRes) {
 
     companion object {
-        const val POINTSCOUNT =
-            10 // количество промежуточных точек на прямой (меньше - сплайн более кривой), больше сплайн лучше, но нагружает пк.
-        const val BUFFERPOINTSLEN = 100f // растояние вспомогательных точек
+        /**
+         * Количество промежуточных точек на прямой.
+         * Меньше - сплайн более кривой.
+         * Больше сплайн лучше, но менее производительный.
+         */
+        const val POINT_COUNT = 10
 
-        const val BUFFERPOINTS = true //нужно ли рисовать вспомогательные точки
+        /**
+         * Растояние вспомогательных точек
+         */
+        const val BUFFER_POINT_DISTANCE = 75f
+
+        /**
+         * Нужно ли рисовать вспомогательные точки
+         */
+        const val BUFFER_POINT_DRAW_ENABLED = true
+
+        /**
+         * Радиус точки в DPI
+         */
+        const val CIRCLE_RADIUS_DP = 6.25f
     }
 
-    var mPaint: Paint = Paint();
+    private var paintBrush: Paint = Paint()
+
+    var inverse = false
 
     val points = mutableListOf<Vec2f>()
 
     init {
-        mPaint.setColor(Color.BLUE)
-        mPaint.setStrokeWidth(3f)
-        points.add(Vec2f(0f, 0f))
-        points.add(Vec2f(200f, 0f))
-        points.add(Vec2f(200f, 100f))
-        points.add(Vec2f(500f, 200f))
+        paintBrush.color = context.getThemeColor(R.attr.colorLine)
+        paintBrush.strokeWidth = 5f
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+
+        val circleRadius = context.convertDpToPixel(CIRCLE_RADIUS_DP)
+        val drawPoints = generateDrawPoints()
+
+        for (i in 0 until drawPoints.size - 1) {
+            canvas?.drawLine(
+                drawPoints[i].x,
+                drawPoints[i].y,
+                drawPoints[i + 1].x,
+                drawPoints[i + 1].y,
+                paintBrush
+            )
+        }
+
+        for (i in 0 until points.size) {
+            canvas?.drawCircle(points[i].x, points[i].y, circleRadius, paintBrush)
+        }
+    }
+
+    private fun generateDrawPoints(): MutableList<Vec2f> {
+        val sourcePoints = points.toMutableList()
+
+        if (BUFFER_POINT_DRAW_ENABLED) {
+            val delta = abs(sourcePoints[sourcePoints.size - 1].x - sourcePoints[0].x) / 2
+            var distance = min(max(0f, delta), BUFFER_POINT_DISTANCE)
+
+            if (inverse) distance *= -1
+
+            sourcePoints.add(
+                1, Vec2f(
+                    x = sourcePoints[0].x + distance,
+                    y = sourcePoints[0].y
+                )
+            )
+            sourcePoints.add(
+                index = sourcePoints.size - 1,
+                element = Vec2f(
+                    x = sourcePoints[sourcePoints.size - 1].x - distance,
+                    y = sourcePoints[sourcePoints.size - 1].y
+                )
+            )
+        }
+
+        val drawPoints = mutableListOf<Vec2f>()
+
+        if (sourcePoints.size < 2) {
+            for (i in 0 until sourcePoints.size) {
+                drawPoints.add(sourcePoints[i])
+            }
+            return drawPoints
+        }
+
+        for (i in 0 until sourcePoints.size - 1) {
+            drawPoints.add(sourcePoints[i])
+            var t = 0f
+            val b = 0f
+            val c = 0f
+            val currentPoint = sourcePoints[i]
+            val nextPoint = sourcePoints[i + 1]
+            var next2Point = sourcePoints[i + 1]
+            var previosPoint = sourcePoints[i]
+            if (i + 2 < sourcePoints.size) {
+                next2Point = sourcePoints[i + 2]
+            }
+            if (i != 0) {
+                previosPoint = sourcePoints[i - 1]
+            }
+            val dix =
+                (1f - t) * (1f + b) * (1f + c) / 2f * (currentPoint.x - previosPoint.x) + (1f - t) * (1f - b) * (1f - c) / 2f * (nextPoint.x - currentPoint.x)
+            val diy =
+                (1f - t) * (1f + b) * (1f + c) / 2f * (currentPoint.y - previosPoint.y) + (1f - t) * (1f - b) * (1f - c) / 2f * (nextPoint.y - currentPoint.y)
+            val dinextx =
+                (1f - t) * (1f + b) * (1f - c) / 2f * (nextPoint.x - currentPoint.x) + (1f - t) * (1f - b) * (1f - c) / 2f * (next2Point.x - nextPoint.x)
+            val dinexty =
+                (1f - t) * (1f + b) * (1f - c) / 2f * (nextPoint.y - currentPoint.y) + (1f - t) * (1f - b) * (1f - c) / 2f * (next2Point.y - nextPoint.y)
+
+            val step = 1f / POINT_COUNT
+            t = 0f
+            for (j in 0 until POINT_COUNT) {
+                val x: Float =
+                    dix * h3(t) + currentPoint.x * h1(t) + nextPoint.x * h2(t) + dinextx * h4(t);
+                val y: Float =
+                    diy * h3(t) + currentPoint.y * h1(t) + nextPoint.y * h2(t) + dinexty * h4(t);
+                drawPoints.add(Vec2f(x, y))
+                t += step
+            }
+
+        }
+        drawPoints.add(sourcePoints[sourcePoints.size - 1])
+        return drawPoints
     }
 
     private fun h1(t: Float): Float {
@@ -51,81 +164,4 @@ class LineCanvasView @JvmOverloads constructor(
     private fun h4(t: Float): Float {
         return t * t * t - t * t;
     }
-
-    fun generateDrawPoints(): MutableList<Vec2f> {
-        val drawPoints = mutableListOf<Vec2f>()
-        if (BUFFERPOINTS) {
-            points.add(1, Vec2f(points[0].x + BUFFERPOINTSLEN, points[0].y))
-            points.add(
-                points.size - 1,
-                Vec2f(points[points.size - 1].x - BUFFERPOINTSLEN, points[points.size - 1].y)
-            )
-        }
-
-        if (points.size < 2) {
-            for (i in 0 until points.size) {
-                drawPoints.add(points[i])
-            }
-            return drawPoints
-        }
-
-        for (i in 0 until points.size - 1) {
-            drawPoints.add(points[i])
-            var t = 0f
-            val b = 0f
-            val c = 0f
-            val currentPoint = points[i]
-            val nextPoint = points[i + 1]
-            var next2Point = points[i + 1]
-            var previosPoint = points[i]
-            if (i + 2 < points.size) {
-                next2Point = points[i + 2]
-            }
-            if (i != 0) {
-                previosPoint = points[i - 1]
-            }
-            val dix =
-                (1f - t) * (1f + b) * (1f + c) / 2f * (currentPoint.x - previosPoint.x) + (1f - t) * (1f - b) * (1f - c) / 2f * (nextPoint.x - currentPoint.x)
-            val diy =
-                (1f - t) * (1f + b) * (1f + c) / 2f * (currentPoint.y - previosPoint.y) + (1f - t) * (1f - b) * (1f - c) / 2f * (nextPoint.y - currentPoint.y)
-            val dinextx =
-                (1f - t) * (1f + b) * (1f - c) / 2f * (nextPoint.x - currentPoint.x) + (1f - t) * (1f - b) * (1f - c) / 2f * (next2Point.x - nextPoint.x)
-            val dinexty =
-                (1f - t) * (1f + b) * (1f - c) / 2f * (nextPoint.y - currentPoint.y) + (1f - t) * (1f - b) * (1f - c) / 2f * (next2Point.y - nextPoint.y)
-
-            val step = 1f / POINTSCOUNT
-            t = 0f
-            for (j in 0 until POINTSCOUNT) {
-                val x: Float =
-                    dix * h3(t) + currentPoint.x * h1(t) + nextPoint.x * h2(t) + dinextx * h4(t);
-                val y: Float =
-                    diy * h3(t) + currentPoint.y * h1(t) + nextPoint.y * h2(t) + dinexty * h4(t);
-                drawPoints.add(Vec2f(x, y))
-                t += step
-            }
-
-        }
-        drawPoints.add(points[points.size - 1])
-        return drawPoints
-    }
-
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
-        val drawPoints = generateDrawPoints()
-
-        for (i in 0 until drawPoints.size - 1) {
-            canvas?.drawLine(
-                drawPoints[i].x,
-                drawPoints[i].y,
-                drawPoints[i + 1].x,
-                drawPoints[i + 1].y,
-                mPaint
-            )
-        }
-
-        for (i in 0 until points.size) {
-            canvas?.drawCircle(points[i].x, points[i].y, 10f, mPaint)
-        }
-    }
-
 }

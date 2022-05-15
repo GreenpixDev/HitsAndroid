@@ -5,9 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.otaliastudios.zoom.ZoomLayout
 import kotlinx.android.synthetic.main.block_item.view.*
 import kotlinx.android.synthetic.main.pin_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
@@ -23,19 +21,17 @@ class BlockView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defstyleAttr: Int = 0,
     defstyleRes: Int = 0
-): ConstraintLayout(context, attrs, defstyleAttr, defstyleRes) {
+) : ConstraintLayout(context, attrs, defstyleAttr, defstyleRes), BlueprintView {
 
     private val binding = BlockItemBinding.inflate(LayoutInflater.from(context), this)
 
-    private val pinViews = mutableListOf<PinView>()
-
     private var offset = Vec2f.ZERO
 
+    private val _pinViews = mutableListOf<PinView>()
+    val pinViews: List<PinView>
+        get() = _pinViews
+
     lateinit var block: AxolotBlock
-
-    lateinit var zoomLayout: ZoomLayout
-
-    lateinit var codeFieldView: ViewGroup
 
     /**
      * Метод добавления вьюшки пина (или узла/булавочки/круглешочка)
@@ -45,12 +41,10 @@ class BlockView @JvmOverloads constructor(
         val pinView = PinView(context)
 
         pinView.pin = pin
-        pinView.zoomLayout = zoomLayout
-        pinView.codeFieldView = codeFieldView
         pinView.description.text = pin.name
 
         pinView.addViewTo(this, indexGetter)
-        pinViews.add(pinView)
+        _pinViews.add(pinView)
         return pinView
     }
 
@@ -88,14 +82,15 @@ class BlockView @JvmOverloads constructor(
      * Метод передвижения вьюшек с учетом зума
      */
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val zoom = zoomLayout.realZoom
-        val pan = Vec2f(zoomLayout.panX, zoomLayout.panY) * -1
+        val zoom = zoom.realZoom
+        val pan = Vec2f(this.zoom.panX, this.zoom.panY) * -1
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 offset = (Vec2f(x, y) - pan) * zoom - Vec2f(event.rawX, event.rawY)
             }
             MotionEvent.ACTION_MOVE -> {
+
                 x = (event.rawX + offset.x) / zoom + pan.x
                 y = (event.rawY + offset.y) / zoom + pan.y
             }

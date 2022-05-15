@@ -32,6 +32,10 @@ class BlueprintActivity : AppCompatActivity() {
 
     private val program = AxolotProgram.create()
 
+    private val _blockViews = mutableListOf<BlockView>()
+    val blockViews: List<BlockView>
+        get() = _blockViews
+
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,8 +136,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Инициализация
         blockView.block = type.createBlock()
-        blockView.zoomLayout = binding.zoomLayout
-        blockView.codeFieldView = binding.codeField
+        _blockViews.add(blockView)
 
         // Координаты
         blockView.x = binding.codeField.width / 2f
