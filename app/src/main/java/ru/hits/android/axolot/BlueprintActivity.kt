@@ -6,28 +6,18 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
-import kotlinx.android.synthetic.main.pin_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargInputDataPin
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
-import ru.hits.android.axolot.blueprint.element.AxolotBlock
-import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
-import ru.hits.android.axolot.util.Vec2f
 import ru.hits.android.axolot.util.getLocalizedString
 import ru.hits.android.axolot.util.getThemeColor
-import ru.hits.android.axolot.view.AddNodeView
 import ru.hits.android.axolot.view.BlockView
 import ru.hits.android.axolot.view.CreatorView
-import ru.hits.android.axolot.view.PinView
 
 /**
  * Активити создания и редактирования кода нашего языка
@@ -37,8 +27,6 @@ class BlueprintActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBlueprintBinding
 
     private lateinit var blockTitleToColor: Map<Regex, Int>
-
-    private var offset = Vec2f.ZERO
 
     private var menuIsVisible = true
 
@@ -142,13 +130,14 @@ class BlueprintActivity : AppCompatActivity() {
         type: BlockType
     ) {
 
-        // Объект блока
-        val block = type.createBlock()
+        // Инициализация
+        blockView.block = type.createBlock()
+        blockView.zoomLayout = binding.zoomLayout
+        blockView.codeFieldView = binding.codeField
 
         // Координаты
         blockView.x = binding.codeField.width / 2f
         blockView.y = binding.codeField.height / 2f
-        blockView.translationZ = 30f
 
         // Задаем цвет заголовку
         for (it in blockTitleToColor) {
@@ -159,70 +148,16 @@ class BlueprintActivity : AppCompatActivity() {
         }
 
         // Добавляем все пины
-        block.contacts.forEach { createPinView(it, blockView) }
+        blockView.block.contacts.forEach { blockView.createPinView(it) }
 
         // Добавляем плюсики для всех vararg пинов
-        type.declaredPins.forEach { createAddPinView(it, block, blockView) }
+        type.declaredPins.forEach { blockView.createAddPinView(it) }
 
-        //присваиваем нужный тип блока
-        blockView.typeBlock = type
-
-        //переименовывем блок
+        // Переименовывем блок
         blockView.title.text = getLocalizedString(type.fullName)
 
-        // Обработка событий
-        blockView.setOnTouchListener(this::onTouch)
-
-        // добавляем готовый блок на поле
+        // Добавляем готовый блок на поле
         binding.codeField.addView(blockView)
-    }
-
-    /**
-     * Метод добавления вьюшки пина (или узла/булавочки/круглешочка)
-     */
-    private fun createPinView(
-        pin: Pin,
-        blockView: BlockView,
-        indexGetter: (Int) -> Int = { it }
-    ): PinView {
-        val rowView = PinView(pin, this)
-        rowView.description.text = pin.name
-        rowView.addViewTo(blockView, indexGetter)
-        return rowView
-    }
-
-    /**
-     * Метод добавление вьюшки кнопочки "Add Pin"
-     */
-    private fun createAddPinView(
-        declaredPin: DeclaredPin,
-        block: AxolotBlock,
-        blockView: BlockView
-    ) {
-        when (declaredPin) {
-            is DeclaredVarargInputDataPin -> {
-                val view = AddNodeView(this)
-                view.initComponents()
-                view.setOnClickListener { _ ->
-                    declaredPin.createPin(block).forEach { pin ->
-                        block.contacts.add(pin)
-                        createPinView(pin, blockView) { it - 1 }
-                    }
-                }
-                blockView.body.linearLayoutLeft.addView(view)
-            }
-            is DeclaredVarargOutputFlowPin -> {
-                val view = AddNodeView(this)
-                view.initComponents()
-                view.setOnClickListener { _ ->
-                    declaredPin.createPin(block).forEach { pin ->
-                        block.contacts.add(pin)
-                        createPinView(pin, blockView) { it - 1 }
-                    }
-                }
-                blockView.body.linearLayoutRight.addView(view)
-            }
-        }
     }
 
     /**
@@ -235,24 +170,5 @@ class BlueprintActivity : AppCompatActivity() {
         view.initComponents()
 
         binding.listVariables.addView(view)
-    }
-
-    /**
-     * Метод передвижения вьюшек с учетом зума
-     */
-    private fun onTouch(view: View, event: MotionEvent): Boolean {
-        val zoom = binding.zoomLayout.realZoom
-        val pan = Vec2f(binding.zoomLayout.panX, binding.zoomLayout.panY) * -1
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                offset = (Vec2f(view.x, view.y) - pan) * zoom - Vec2f(event.rawX, event.rawY)
-            }
-            MotionEvent.ACTION_MOVE -> {
-                view.x = (event.rawX + offset.x) / zoom + pan.x
-                view.y = (event.rawY + offset.y) / zoom + pan.y
-            }
-        }
-        return true
     }
 }

@@ -4,14 +4,20 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
-import ru.hits.android.axolot.R
-import ru.hits.android.axolot.blueprint.declaration.BlockType
+import com.otaliastudios.zoom.ZoomLayout
+import kotlinx.android.synthetic.main.block_item.view.*
+import kotlinx.android.synthetic.main.pin_item.view.*
+import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
+import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargInputDataPin
+import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
+import ru.hits.android.axolot.blueprint.element.AxolotBlock
+import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.databinding.BlockItemBinding
-import ru.hits.android.axolot.interpreter.type.Type
+import ru.hits.android.axolot.util.Vec2f
 
-
-@SuppressLint("ViewConstructor")
 class BlockView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -20,61 +26,80 @@ class BlockView @JvmOverloads constructor(
 ): ConstraintLayout(context, attrs, defstyleAttr, defstyleRes) {
 
     private val binding = BlockItemBinding.inflate(LayoutInflater.from(context), this)
-    lateinit var typeBlock: BlockType
-    lateinit var typeVar: Type
 
-    //TODO: сделать 2 массива inputNode и outputNode
+    private val pinViews = mutableListOf<PinView>()
 
-//    fun addInput() {
-//
-//    }
-//
-//    fun addOutput() {
-//
-//    }
-//
-//    fun removeInput() {
-//
-//    }
-//
-//    fun removeOutput() {
-//
-//    }
-//
-//    fun connectInput() {
-//
-//    }
-//
-//    fun connectOutput() {
-//
-//    }
-//
-//    fun disConnectInput() {
-//
-//    }
-//
-//    fun disConnectOutput() {
-//
-//    }
+    private var offset = Vec2f.ZERO
 
-    @SuppressLint("Recycle")
-    private fun initializeAttributes(attrs: AttributeSet?, defstyleAttr: Int, defstyleRes: Int) {
-        val typedArray =
-            context.obtainStyledAttributes(attrs, R.styleable.BlockView, defstyleAttr, defstyleRes)
+    lateinit var block: AxolotBlock
 
-        with(binding) {
-//            val titleBlock = typedArray.getString(R.styleable.BlockView_blockTitle)
-//            block.title.text = titleBlock
-            //val bgBlock = typedArray.getColor(R.styleable.BlockView_bgBlock, Color.WHITE)
-            //block.backgroundTintList = ColorStateList.valueOf(bgBlock)
-        }
+    lateinit var zoomLayout: ZoomLayout
 
-        typedArray.recycle()
+    lateinit var codeFieldView: ViewGroup
+
+    /**
+     * Метод добавления вьюшки пина (или узла/булавочки/круглешочка)
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    fun createPinView(pin: Pin, indexGetter: (Int) -> Int = { it }): PinView {
+        val pinView = PinView(context)
+
+        pinView.pin = pin
+        pinView.zoomLayout = zoomLayout
+        pinView.codeFieldView = codeFieldView
+        pinView.description.text = pin.name
+
+        pinView.addViewTo(this, indexGetter)
+        pinViews.add(pinView)
+        return pinView
     }
 
-    init {
-        //создание атрибутов
-        initializeAttributes(attrs, defstyleAttr, defstyleRes)
+    /**
+     * Метод добавление вьюшки кнопочки "Add Pin"
+     */
+    fun createAddPinView(declaredPin: DeclaredPin) {
+        when (declaredPin) {
+            is DeclaredVarargInputDataPin -> {
+                val addNodeView = AddNodeView(context)
+                addNodeView.initComponents()
+                addNodeView.setOnClickListener { _ ->
+                    declaredPin.createPin(block).forEach { pin ->
+                        block.contacts.add(pin)
+                        createPinView(pin) { it - 1 }
+                    }
+                }
+                binding.body.linearLayoutLeft.addView(addNodeView)
+            }
+            is DeclaredVarargOutputFlowPin -> {
+                val addNodeView = AddNodeView(context)
+                addNodeView.initComponents()
+                addNodeView.setOnClickListener { _ ->
+                    declaredPin.createPin(block).forEach { pin ->
+                        block.contacts.add(pin)
+                        createPinView(pin) { it - 1 }
+                    }
+                }
+                binding.body.linearLayoutRight.addView(addNodeView)
+            }
+        }
+    }
 
+    /**
+     * Метод передвижения вьюшек с учетом зума
+     */
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val zoom = zoomLayout.realZoom
+        val pan = Vec2f(zoomLayout.panX, zoomLayout.panY) * -1
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                offset = (Vec2f(x, y) - pan) * zoom - Vec2f(event.rawX, event.rawY)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                x = (event.rawX + offset.x) / zoom + pan.x
+                y = (event.rawY + offset.y) / zoom + pan.y
+            }
+        }
+        return true
     }
 }
