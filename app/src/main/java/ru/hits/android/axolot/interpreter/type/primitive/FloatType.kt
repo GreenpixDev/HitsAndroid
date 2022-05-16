@@ -4,6 +4,9 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 
 class FloatType : NumberType<Double>() {
 
+    override val defaultValue: Double
+        get() = 0.0
+
     override fun cast(variable: Variable): Double {
         if (variable.type is NumberType<*>) {
             return (variable.value as Number).toDouble()

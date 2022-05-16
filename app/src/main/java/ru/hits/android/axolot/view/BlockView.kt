@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.activity_blueprint.*
 import kotlinx.android.synthetic.main.block_item.view.*
-import kotlinx.android.synthetic.main.pin_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargInputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
@@ -31,11 +30,23 @@ class BlockView @JvmOverloads constructor(
 
     private val binding = BlockItemBinding.inflate(LayoutInflater.from(context), this)
 
-    private val pinViews = mutableListOf<PinView>()
+    private val _pinViews = mutableListOf<PinView>()
 
     private var offset = Vec2f.ZERO
 
     lateinit var block: AxolotBlock
+
+    val pinViews: List<PinView>
+        get() = _pinViews
+
+    /**
+     * Отображаемое название блока в заголовке
+     */
+    var displayName: String
+        get() = binding.title.text.toString()
+        set(value) {
+            binding.title.text = value
+        }
 
     /**
      * Метод добавления вьюшки пина (или узла/булавочки/круглешочка)
@@ -45,9 +56,10 @@ class BlockView @JvmOverloads constructor(
         val pinView = PinView(context)
 
         pinView.pin = pin
-        pinView.description.text = pin.name
+        pinView.displayName = pin.name
+        pinView.update()
 
-        pinViews.add(pinView)
+        _pinViews.add(pinView)
         pinView.addViewTo(this, indexGetter)
         return pinView
     }
@@ -101,7 +113,7 @@ class BlockView @JvmOverloads constructor(
                 val delta = to - position
                 position = to
 
-                pinViews.forEach { it.move(delta) }
+                _pinViews.forEach { it.move(delta) }
             }
         }
         return true

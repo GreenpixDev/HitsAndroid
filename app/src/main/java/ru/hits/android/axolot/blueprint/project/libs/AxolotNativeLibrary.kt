@@ -18,42 +18,42 @@ import ru.hits.android.axolot.interpreter.type.Type
 class AxolotNativeLibrary : AxolotLibrary() {
 
     companion object {
-
         val BLOCK_MAIN = NativeBlockType("main", DeclaredSingleOutputFlowPin({ _, _ -> }))
-
     }
 
     init {
         variableTypes["boolean"] = Type.BOOLEAN
-        variableTypes["integer"] = Type.INT
+        variableTypes["int"] = Type.INT
         variableTypes["float"] = Type.FLOAT
         variableTypes["string"] = Type.STRING
 
         // Главный блок программы, с которого всё начинается
-        registerNative(BLOCK_MAIN)
+        registerBlock(BLOCK_MAIN)
 
         // Ветвление (условие IF)
-        registerNative(NativeBlockType("branch",
-            DeclaredSingleInputFlowPin(
-                nodeFabric = { NodeBranch() },
-            ),
-            DeclaredSingleInputDataPin(
-                handler = { target, node ->
-                    target
-                        .filterIsInstance<NodeBranch>()
-                        .first().init(node)
-                },
-                name = "condition",
-                type = Type.BOOLEAN
-            ),
-            DeclaredSingleOutputFlowPin(
-                handler = { target, node ->
-                    target
-                        .filterIsInstance<NodeBranch>()
-                        .first().trueNode = node
-                },
-                name = "true"
-            ),
+        registerBlock(
+            NativeBlockType(
+                "branch",
+                DeclaredSingleInputFlowPin(
+                    nodeFabric = { NodeBranch() },
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeBranch>()
+                            .first().init(node)
+                    },
+                    name = "condition",
+                    type = Type.BOOLEAN
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeBranch>()
+                            .first().trueNode = node
+                    },
+                    name = "true"
+                ),
             DeclaredSingleOutputFlowPin(
                 handler = { target, node ->
                     target
@@ -65,7 +65,7 @@ class AxolotNativeLibrary : AxolotLibrary() {
         ))
 
         // Последовательность команд
-        registerNative(NativeBlockType("sequence",
+        registerBlock(NativeBlockType("sequence",
             DeclaredSingleInputFlowPin(
                 nodeFabric = { NodeSequence() }
             ),
@@ -75,13 +75,13 @@ class AxolotNativeLibrary : AxolotLibrary() {
                         .filterIsInstance<NodeSequence>()
                         .first().then(node)
                 },
-                namePattern = { "then-$it" },
+                lazyName = { "then-$it" },
                 minArgs = 1
             )
         ))
 
         // Вывод в консоль
-        registerNative(NativeBlockType("print",
+        registerBlock(NativeBlockType("print",
             DeclaredSingleInputFlowPin(
                 nodeFabric = { NodePrintString() }
             ),
@@ -102,9 +102,5 @@ class AxolotNativeLibrary : AxolotLibrary() {
                 },
             )
         ))
-    }
-
-    private fun registerNative(block: NativeBlockType) {
-        blockTypes[block.fullName] = block
     }
 }

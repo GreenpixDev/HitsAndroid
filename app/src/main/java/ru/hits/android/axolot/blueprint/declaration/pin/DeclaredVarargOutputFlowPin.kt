@@ -10,7 +10,7 @@ import ru.hits.android.axolot.interpreter.node.NodeExecutable
 class DeclaredVarargOutputFlowPin @JvmOverloads constructor(
     private val minArgs: Int,
     private val handler: (Collection<Node>, NodeExecutable) -> Unit,
-    private val namePattern: (Int) -> String = { "$it" },
+    private val lazyName: (Int) -> String = { "$it" },
 ) : DeclaredPin {
 
     @Suppress("unchecked_cast")
@@ -30,7 +30,7 @@ class DeclaredVarargOutputFlowPin @JvmOverloads constructor(
             OutputFlowPin(
                 owner,
                 this,
-                namePattern.invoke(it + firstIndex)
+                lazyName.invoke(it + firstIndex)
             )
         }.toList()
     }

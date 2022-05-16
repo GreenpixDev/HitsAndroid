@@ -19,6 +19,10 @@ class Variable(val type: VariableType<*>, var value: Any?) {
 
     companion object {
 
+        fun defaultVariable(type: VariableType<*>): Variable {
+            return Variable(type, type.defaultValue)
+        }
+
         fun nullVariable(type: VariableType<*>): Variable {
             return Variable(type, null)
         }

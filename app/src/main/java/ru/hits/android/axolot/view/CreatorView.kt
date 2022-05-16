@@ -8,10 +8,12 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import ru.hits.android.axolot.databinding.CreatorItemBinding
 
-class CreatorView @JvmOverloads constructor(
+open class CreatorView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-) : ConstraintLayout(context, attrs) {
+    defstyleAttr: Int = 0,
+    defstyleRes: Int = 0
+) : ConstraintLayout(context, attrs, defstyleAttr, defstyleRes) {
 
     private val binding = CreatorItemBinding.inflate(LayoutInflater.from(context), this)
 

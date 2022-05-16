@@ -11,9 +11,16 @@ import ru.hits.android.axolot.interpreter.type.VariableType
 class DeclaredVarargInputDataPin @JvmOverloads constructor(
     private val minArgs: Int,
     private val handler: (Collection<Node>, NodeDependency) -> Unit,
-    private val namePattern: (Int) -> String = { "$it" },
-    override val type: VariableType<*>
+    private val lazyName: (Int) -> String = { "$it" },
+    override val lazyType: () -> VariableType<*>
 ) : DeclaredDataPin {
+
+    constructor(
+        minArgs: Int,
+        handler: (Collection<Node>, NodeDependency) -> Unit,
+        lazyName: (Int) -> String = { "$it" },
+        type: VariableType<*>
+    ) : this(minArgs, handler, lazyName, { type })
 
     override fun handle(target: Collection<Node>, node: Node) {
         handler.invoke(target, node as NodeDependency)
@@ -31,7 +38,7 @@ class DeclaredVarargInputDataPin @JvmOverloads constructor(
             InputDataPin(
                 owner,
                 this,
-                namePattern.invoke(it + firstIndex)
+                lazyName.invoke(it + firstIndex)
             )
         }.toList()
     }

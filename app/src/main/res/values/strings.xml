@@ -38,8 +38,8 @@
 
     <string-array name="TypeBlock">
         <item>Boolean</item>
-        <item>Integer</item>
-        <item>Double</item>
+        <item>Int</item>
+        <item>Float</item>
         <item>String</item>
     </string-array>
 
@@ -62,12 +62,14 @@
         <item>сложение</item>
     </string-array>
 
+    <string name="native.main">main</string>
+    <string name="native.getVariable">GET</string>
+    <string name="native.setVariable">SET</string>
     <string name="native.while">while</string>
     <string name="native.for">for</string>
     <string name="native.sequence">последовательно</string>
     <string name="native.foreach">forEach</string>
     <string name="native.branch">if else</string>
-    <string name="native.main">main</string>
     <string name="native.print">print string</string>
     <string name="native.math.int.add">сложение integer</string>
     <string name="native.math.float.add">сложение float</string>
