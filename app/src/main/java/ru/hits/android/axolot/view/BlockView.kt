@@ -94,7 +94,6 @@ class BlockView @JvmOverloads constructor(
                 position = pointer - offset
             }
         }
-        println("$pointer $offset")
         return true
     }
 }
