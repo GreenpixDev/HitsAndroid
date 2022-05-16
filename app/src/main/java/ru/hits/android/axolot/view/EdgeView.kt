@@ -49,8 +49,6 @@ class EdgeView @JvmOverloads constructor(
 
     private var paintBrush: Paint = Paint()
 
-    var inverse = false
-
     val points = mutableListOf<Vec2f>()
 
     init {
@@ -84,9 +82,7 @@ class EdgeView @JvmOverloads constructor(
 
         if (BUFFER_POINT_DRAW_ENABLED) {
             val delta = abs(sourcePoints[sourcePoints.size - 1].x - sourcePoints[0].x) / 2
-            var distance = min(max(0f, delta), BUFFER_POINT_DISTANCE)
-
-            if (inverse) distance *= -1
+            val distance = min(max(0f, delta), BUFFER_POINT_DISTANCE)
 
             sourcePoints.add(
                 1, Vec2f(

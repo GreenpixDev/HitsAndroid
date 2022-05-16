@@ -29,7 +29,7 @@ class PinView @JvmOverloads constructor(
 
     private val binding = PinItemBinding.inflate(LayoutInflater.from(context), this)
 
-    private var edgeView: EdgeView? = null
+    private val edgeViews = mutableListOf<EdgeView>()
 
     lateinit var pin: Pin
 
@@ -52,9 +52,34 @@ class PinView @JvmOverloads constructor(
                 layoutDirection = LAYOUT_DIRECTION_RTL
                 parentView.body.linearLayoutRight
             }
-            else -> throw IllegalArgumentException("fatal error") // TODO нормальное сообщение у ошибки сделать
+            else -> throw IllegalArgumentException("Pin must be InputPin or OutputPin")
         }
         layout.addView(this, indexGetter.invoke(layout.childCount))
+    }
+
+    /**
+     * Сдвинуть конечную точку на ребре на [delta] относительно прошлой позиции
+     */
+    fun move(delta: Vec2f) {
+        edgeViews.forEach {
+            when (pin) {
+                is InputPin -> it.points[it.points.size - 1] += delta
+                is OutputPin -> it.points[0] += delta
+                else -> throw IllegalArgumentException("Pin must be InputPin or OutputPin")
+            }
+            it.invalidate()
+        }
+    }
+
+    /**
+     * Установить конечную точку на ребре в [position] относительно поля
+     */
+    private fun EdgeView.setEndPoint(position: Vec2f) {
+        when (pin) {
+            is InputPin -> points[0] = position - this@setEndPoint.position
+            is OutputPin -> points[points.size - 1] = position - this@setEndPoint.position
+            else -> throw IllegalArgumentException("Pin must be InputPin or OutputPin")
+        }
     }
 
     /**
@@ -69,27 +94,27 @@ class PinView @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 val position = activity.codeField.findRelativePosition(view)
                 val center = position + view.center
+                val edgeView = EdgeView(context)
 
-                edgeView = EdgeView(context)
-                edgeView?.inverse = pin is InputPin
-                edgeView?.position = center
+                edgeView.position = center
 
-                edgeView?.points?.add(Vec2f.ZERO)
-                edgeView?.points?.add(Vec2f.ZERO)
+                edgeView.points.add(Vec2f.ZERO)
+                edgeView.points.add(Vec2f.ZERO)
 
+                edgeViews.add(edgeView)
                 activity.codeField.addView(edgeView)
             }
 
             // Когда двигаем пальцем - отрисовываем каждый кадр
             MotionEvent.ACTION_MOVE -> {
-                edgeView?.let {
-                    it.points[it.points.size - 1] = pointer - it.position
-                    it.invalidate()
-                }
+                val edgeView = edgeViews.last()
+                edgeView.setEndPoint(pointer)
+                edgeView.invalidate()
             }
 
             // Когда отжимаем палец - либо удаляем линию, либо сохраняем её и соединяем пины
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                val edgeView = edgeViews.last()
                 val parent =
                     activity.codeField.findViewAt(pointer) { it !is EdgeView }?.parent
 
@@ -97,16 +122,15 @@ class PinView @JvmOverloads constructor(
                     val position = activity.codeField.findRelativePosition(parent.contact)
                     val center = position + view.center
 
-                    edgeView?.let {
-                        it.points[it.points.size - 1] = center - it.position
-                        it.invalidate()
-                    }
+                    edgeView.setEndPoint(center)
+                    edgeView.invalidate()
 
+                    parent.edgeViews.add(edgeView)
                     // TODO соединить пины в промежуточном слое
                 } else {
+                    edgeViews.removeLast()
                     activity.codeField.removeView(edgeView)
                 }
-                edgeView = null
             }
         }
         return true

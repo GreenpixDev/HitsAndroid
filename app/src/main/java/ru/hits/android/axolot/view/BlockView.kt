@@ -31,6 +31,8 @@ class BlockView @JvmOverloads constructor(
 
     private val binding = BlockItemBinding.inflate(LayoutInflater.from(context), this)
 
+    private val pinViews = mutableListOf<PinView>()
+
     private var offset = Vec2f.ZERO
 
     lateinit var block: AxolotBlock
@@ -45,6 +47,7 @@ class BlockView @JvmOverloads constructor(
         pinView.pin = pin
         pinView.description.text = pin.name
 
+        pinViews.add(pinView)
         pinView.addViewTo(this, indexGetter)
         return pinView
     }
@@ -94,7 +97,11 @@ class BlockView @JvmOverloads constructor(
                 offset = event.position
             }
             MotionEvent.ACTION_MOVE -> {
-                position = pointer - offset
+                val to = pointer - offset
+                val delta = to - position
+                position = to
+
+                pinViews.forEach { it.move(delta) }
             }
         }
         return true
