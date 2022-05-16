@@ -6,19 +6,34 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.MotionEvent
 import android.view.View
+import android.widget.AdapterView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
+import kotlinx.android.synthetic.main.creator_item.*
+import kotlinx.android.synthetic.main.creator_item.view.*
+import kotlinx.android.synthetic.main.pin_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
+import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
+import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargInputDataPin
+import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
+import ru.hits.android.axolot.blueprint.element.AxolotBlock
+import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
-import ru.hits.android.axolot.exception.AxolotException
-import ru.hits.android.axolot.util.*
+import ru.hits.android.axolot.util.Vec2f
+import ru.hits.android.axolot.util.getLocalizedString
+import ru.hits.android.axolot.util.getThemeColor
+import ru.hits.android.axolot.view.AddNodeView
 import ru.hits.android.axolot.view.BlockView
 import ru.hits.android.axolot.view.CreatorView
+import ru.hits.android.axolot.view.PinView
 
 /**
  * Активити создания и редактирования кода нашего языка
@@ -90,6 +105,7 @@ class BlueprintActivity : AppCompatActivity() {
             val view = CreatorView(this)
 
             view.typeExpression = false
+            view.initComponents()
 
             binding.listFunction.addView(view)
         }
@@ -99,6 +115,7 @@ class BlueprintActivity : AppCompatActivity() {
             val view = CreatorView(this)
 
             view.typeExpression = false
+            view.initComponents()
 
             binding.listMacros.addView(view)
         }
@@ -133,7 +150,6 @@ class BlueprintActivity : AppCompatActivity() {
     /**
      * Метод создания блока на поле
      */
-    @Throws(AxolotException::class)
     @SuppressLint("ClickableViewAccessibility")
     private fun createBlock(
         blockView: BlockView,
@@ -188,5 +204,136 @@ class BlueprintActivity : AppCompatActivity() {
         view.initComponents()
 
         binding.listVariables.addView(view)
+        view.btnAdd.setOnClickListener {
+            createVariableOnField(view, BlockView(this))
+        }
+    }
+
+    /**
+     * Метод добавления вьюшки пина (или узла/булавочки/круглешочка)
+     */
+    private fun createPinView(
+        pin: Pin,
+        blockView: BlockView,
+        indexGetter: (Int) -> Int = { it }
+    ): PinView {
+        val rowView = PinView(pin, this)
+        rowView.description.text = pin.name
+        rowView.addViewTo(blockView, indexGetter)
+        return rowView
+    }
+
+    /**
+     * Метод добавление вьюшки кнопочки "Add Pin"
+     */
+    private fun createAddPinView(
+        declaredPin: DeclaredPin,
+        block: AxolotBlock,
+        blockView: BlockView
+    ) {
+        when (declaredPin) {
+            is DeclaredVarargInputDataPin -> {
+                val view = AddNodeView(this)
+                view.initComponents()
+                view.setOnClickListener { _ ->
+                    declaredPin.createPin(block).forEach { pin ->
+                        block.contacts.add(pin)
+                        createPinView(pin, blockView) { it - 1 }
+                    }
+                }
+                blockView.body.linearLayoutLeft.addView(view)
+            }
+            is DeclaredVarargOutputFlowPin -> {
+                val view = AddNodeView(this)
+                view.initComponents()
+                view.setOnClickListener { _ ->
+                    declaredPin.createPin(block).forEach { pin ->
+                        block.contacts.add(pin)
+                        createPinView(pin, blockView) { it - 1 }
+                    }
+                }
+                blockView.body.linearLayoutRight.addView(view)
+            }
+        }
+    }
+
+    /**
+     * Метод создания блока-переменной на поле
+     */
+    private fun createVariableOnField(view: CreatorView, blockView: BlockView) {
+        // инициализация координатов блока
+        initCoordinatesBlock(blockView)
+
+        //имя переменной по дефолту
+        blockView.title.text = view.name.getText().toString()
+
+        // Обработка передвигания блока
+        blockView.setOnTouchListener(this::onTouch)
+
+        //прослушка изменений имени переменной
+        view.name.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(title: Editable) {}
+
+            override fun beforeTextChanged(
+                title: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(title: CharSequence, start: Int, before: Int, count: Int) {
+                blockView.title.setText(title)
+            }
+        })
+
+        //прослушка изменений типа переменной
+        view.type?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                return
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                program.variableTypes[type.selectedItem.toString()
+                    .lowercase(Locale.getDefault())]
+                    ?.let { blockView.typeVar = it }
+            }
+        }
+
+        binding.codeField.addView(blockView)
+    }
+
+    /**
+     * Метод передвижения вьюшек с учетом зума
+     */
+    private fun onTouch(view: View, event: MotionEvent): Boolean {
+        val zoom = binding.zoomLayout.realZoom
+        val pan = Vec2f(binding.zoomLayout.panX, binding.zoomLayout.panY) * -1
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                offset = (Vec2f(view.x, view.y) - pan) * zoom - Vec2f(event.rawX, event.rawY)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                view.x = (event.rawX + offset.x) / zoom + pan.x
+                view.y = (event.rawY + offset.y) / zoom + pan.y
+            }
+        }
+        return true
+    }
+
+    /**
+     * Метод инициализации координатов блока
+     */
+    private fun initCoordinatesBlock(block: BlockView) {
+        block.x = binding.codeField.width / 2f
+        block.y = binding.codeField.height / 2f
+        block.translationZ = 30f
+
     }
 }
