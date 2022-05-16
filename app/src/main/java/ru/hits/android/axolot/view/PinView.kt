@@ -14,6 +14,8 @@ import ru.hits.android.axolot.blueprint.element.pin.InputPin
 import ru.hits.android.axolot.blueprint.element.pin.OutputPin
 import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.databinding.PinItemBinding
+import ru.hits.android.axolot.exception.AxolotPinException
+import ru.hits.android.axolot.exception.AxolotPinOneAdjacentException
 import ru.hits.android.axolot.util.*
 
 /**
@@ -125,14 +127,44 @@ class PinView @JvmOverloads constructor(
                     edgeView.setEndPoint(center)
                     edgeView.invalidate()
 
-                    parent.edgeViews.add(edgeView)
-                    // TODO соединить пины в промежуточном слое
-                } else {
-                    edgeViews.removeLast()
-                    activity.codeField.removeView(edgeView)
+                    if (connectWith(parent, edgeView)) {
+                        return true
+                    }
                 }
+                edgeViews.removeLast()
+                activity.codeField.removeView(edgeView)
             }
         }
         return true
+    }
+
+    /**
+     * Соединяем этот пин с [pinView] и передаем [edgeView] для отрисовки линии.
+     * Возвращает true, если пины удачно соединились
+     */
+    private fun connectWith(pinView: PinView, edgeView: EdgeView): Boolean {
+        return try {
+            sourceCode.connect(pin, pinView.pin)
+            pinView.edgeViews.add(edgeView)
+            true
+        }
+        // Если попытались соединить PinToOne ко второму пину - убираем первое соединение
+        catch (e: AxolotPinOneAdjacentException) {
+            if (e.pin == pin) {
+                e.pin.adjacent = null
+                activity.codeField.removeView(edgeViews.removeAt(edgeViews.size - 2))
+                return connectWith(pinView, edgeView)
+            }
+            if (e.pin == pinView.pin) {
+                e.pin.adjacent = null
+                activity.codeField.removeView(pinView.edgeViews.removeLast())
+                return connectWith(pinView, edgeView)
+            }
+            false
+        }
+        // Иные
+        catch (e: AxolotPinException) {
+            false
+        }
     }
 }

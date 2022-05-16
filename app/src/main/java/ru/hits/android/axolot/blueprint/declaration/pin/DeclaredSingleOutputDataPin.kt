@@ -9,8 +9,8 @@ import ru.hits.android.axolot.interpreter.type.VariableType
 class DeclaredSingleOutputDataPin @JvmOverloads constructor(
     private val nodeFabric: () -> NodeDependency,
     private val name: String = "",
-    val type: VariableType<*>
-) : DeclaredAutonomicPin {
+    override val type: VariableType<*>
+) : DeclaredAutonomicPin, DeclaredDataPin {
 
     override fun handle(target: Collection<Node>, node: Node) {
         // Должен быть пустым

@@ -13,9 +13,10 @@ import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
+import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
-import ru.hits.android.axolot.util.getLocalizedString
-import ru.hits.android.axolot.util.getThemeColor
+import ru.hits.android.axolot.exception.AxolotException
+import ru.hits.android.axolot.util.*
 import ru.hits.android.axolot.view.BlockView
 import ru.hits.android.axolot.view.CreatorView
 
@@ -30,7 +31,7 @@ class BlueprintActivity : AppCompatActivity() {
 
     private var menuIsVisible = true
 
-    private val program = AxolotProgram.create()
+    val program = AxolotProgram.create()
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,7 +121,11 @@ class BlueprintActivity : AppCompatActivity() {
             binding.listBlocks.addView(textView)
 
             textView.setOnClickListener { _ ->
-                createBlock(BlockView(this), it)
+                try {
+                    createBlock(BlockView(this), it)
+                } catch (e: AxolotException) {
+                    // nothing
+                }
             }
         }
     }
@@ -128,6 +133,7 @@ class BlueprintActivity : AppCompatActivity() {
     /**
      * Метод создания блока на поле
      */
+    @Throws(AxolotException::class)
     @SuppressLint("ClickableViewAccessibility")
     private fun createBlock(
         blockView: BlockView,
@@ -138,8 +144,9 @@ class BlueprintActivity : AppCompatActivity() {
         blockView.block = type.createBlock()
 
         // Координаты
-        blockView.x = binding.codeField.width / 2f
-        blockView.y = binding.codeField.height / 2f
+        val pan = Vec2f(binding.zoomLayout.panX, binding.zoomLayout.panY) * -1
+        val offset = binding.zoomLayout.center / binding.zoomLayout.realZoom
+        blockView.position = pan + offset
 
         // Задаем цвет заголовку
         for (it in blockTitleToColor) {
@@ -157,6 +164,15 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Переименовывем блок
         blockView.title.text = getLocalizedString(type.fullName)
+
+        // Если это главный блок - указываем это в программе.
+        // Если главный блок уже был - кинет ошибку AxolotException
+        if (type == AxolotNativeLibrary.BLOCK_MAIN) {
+            program.mainBlock = blockView.block
+        }
+
+        // Привязываем блок к программе
+        program.addBlock(blockView.block)
 
         // Добавляем готовый блок на поле
         binding.codeField.addView(blockView)

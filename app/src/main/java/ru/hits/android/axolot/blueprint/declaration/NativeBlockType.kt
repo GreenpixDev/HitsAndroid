@@ -22,7 +22,7 @@ open class NativeBlockType(
 
         declaredPins
             .flatMap { it.createPin(block) }
-            .forEach { block.addFixedPin(it) }
+            .forEach { block.contacts.add(it) }
 
         return block
     }

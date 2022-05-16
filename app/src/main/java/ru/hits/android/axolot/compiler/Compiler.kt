@@ -1,18 +1,17 @@
 package ru.hits.android.axolot.compiler
 
-import ru.hits.android.axolot.blueprint.element.AxolotSource
+import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
 
 /**
- * Интерфейс компилятора для преобразования данных,
- * более менее удобных для UI в данные,
- * которые будет кушать интерпретатор
+ * Интерфейс компилятора для преобразования более менее удобных для UI данных
+ * в узлы, которые будет кушать интерпретатор
  */
 interface Compiler {
 
     /**
-     * Компилирует исходный код в интерпретируемые узлы
+     * Компилирует исходный код программы в интерпретируемые узлы
      */
-    fun compile(source: AxolotSource): NodeExecutable?
+    fun compile(program: AxolotProgram): NodeExecutable?
 
 }

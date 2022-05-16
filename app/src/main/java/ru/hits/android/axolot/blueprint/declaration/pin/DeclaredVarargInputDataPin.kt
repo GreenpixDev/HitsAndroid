@@ -12,8 +12,8 @@ class DeclaredVarargInputDataPin @JvmOverloads constructor(
     private val minArgs: Int,
     private val handler: (Collection<Node>, NodeDependency) -> Unit,
     private val namePattern: (Int) -> String = { "$it" },
-    val type: VariableType<*>
-) : DeclaredPin {
+    override val type: VariableType<*>
+) : DeclaredDataPin {
 
     override fun handle(target: Collection<Node>, node: Node) {
         handler.invoke(target, node as NodeDependency)
