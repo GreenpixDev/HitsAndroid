@@ -6,9 +6,9 @@ import ru.hits.android.axolot.interpreter.node.Node
 import ru.hits.android.axolot.interpreter.node.NodeDependency
 import ru.hits.android.axolot.interpreter.type.VariableType
 
-class DeclaredSingleOutputDataPin @JvmOverloads constructor(
+class DeclaredSingleOutputDataPin constructor(
     private val nodeFabric: () -> NodeDependency,
-    private val lazyName: () -> String = { "" },
+    private val lazyName: () -> String,
     override val lazyType: () -> VariableType<*>
 ) : DeclaredAutonomicPin, DeclaredDataPin {
 
@@ -18,11 +18,16 @@ class DeclaredSingleOutputDataPin @JvmOverloads constructor(
         type: VariableType<*>
     ) : this(nodeFabric, { name }, { type })
 
+    constructor(
+        nodeFabric: () -> NodeDependency,
+        type: VariableType<*>
+    ) : this(nodeFabric, { "" }, { type })
+
     override fun handle(target: Collection<Node>, node: Node) {
         // Должен быть пустым
     }
 
-    override fun createPin(owner: AxolotOwner): Collection<OutputDataPin> {
+    override fun createAllPin(owner: AxolotOwner): Collection<OutputDataPin> {
         return listOf(OutputDataPin(owner, this, lazyName.invoke()))
     }
 

@@ -26,21 +26,28 @@ class DeclaredVarargInputDataPin @JvmOverloads constructor(
         handler.invoke(target, node as NodeDependency)
     }
 
-    override fun createPin(owner: AxolotOwner): Collection<InputDataPin> {
-        var firstIndex = 1
-        if (owner is AxolotBlock) {
-            firstIndex += owner.contacts
-                .filterIsInstance<TypedPin>()
-                .filter { it.type == this }
-                .count()
-        }
+    override fun createAllPin(owner: AxolotOwner): Collection<InputDataPin> {
         return Array(minArgs) {
             InputDataPin(
                 owner,
                 this,
-                lazyName.invoke(it + firstIndex)
+                lazyName.invoke(it + 1)
             )
         }.toList()
     }
 
+    fun createOnePin(owner: AxolotOwner): InputDataPin {
+        var index = 1
+        if (owner is AxolotBlock) {
+            index += owner.contacts
+                .filterIsInstance<TypedPin>()
+                .filter { it.type == this }
+                .count()
+        }
+        return InputDataPin(
+            owner,
+            this,
+            lazyName.invoke(index)
+        )
+    }
 }

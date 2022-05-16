@@ -12,13 +12,7 @@ class NodeBooleanService(private val nodeHandlerService: NodeHandlerService) :
     NodeDependencyService {
     override fun invoke(node: Node, context: InterpreterContext): Variable {
         if (node is NodeBooleanAnd) {
-            var result = true
-            for (i in node.dependencies.values.indices) {
-                val input =
-                    nodeHandlerService.invoke(node.dependencies[i]!!, context)[Type.BOOLEAN]!!
-                result = result && input
-            }
-            return Variable(Type.BOOLEAN, result)
+            // TODO (переделать)
         } else if (node is NodeBooleanNand) {
             val first = nodeHandlerService.invoke(
                 node.dependencies[NodeBooleanNand.FIRST]!!,
@@ -49,13 +43,7 @@ class NodeBooleanService(private val nodeHandlerService: NodeHandlerService) :
             return Variable(Type.BOOLEAN, !input)
         }
         else if(node is NodeBooleanOr) {
-            var result = false
-            for (i in node.dependencies.values.indices) {
-                val input =
-                    nodeHandlerService.invoke(node.dependencies[i]!!, context)[Type.BOOLEAN]!!
-                result = result || input
-            }
-            return Variable(Type.BOOLEAN, result)
+            // TODO (переделать)
         }
         else if(node is NodeBooleanXnor) {
             val first = nodeHandlerService.invoke(

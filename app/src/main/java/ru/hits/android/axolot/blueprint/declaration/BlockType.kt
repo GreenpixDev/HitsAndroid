@@ -33,7 +33,7 @@ interface BlockType {
         val block = AxolotBlock(this)
 
         declaredPins
-            .flatMap { it.createPin(block) }
+            .flatMap { it.createAllPin(block) }
             .forEach { block.contacts.add(it) }
 
         return block

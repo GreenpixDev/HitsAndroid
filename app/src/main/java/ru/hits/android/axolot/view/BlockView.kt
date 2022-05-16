@@ -74,7 +74,7 @@ class BlockView @JvmOverloads constructor(
                 val addNodeView = AddNodeView(context)
                 addNodeView.initComponents()
                 addNodeView.setOnClickListener { _ ->
-                    declaredPin.createPin(block).forEach { pin ->
+                    declaredPin.createOnePin(block).let { pin ->
                         block.contacts.add(pin)
                         createPinView(pin) { it - 1 }
                     }
@@ -87,7 +87,7 @@ class BlockView @JvmOverloads constructor(
                 val addNodeView = AddNodeView(context)
                 addNodeView.initComponents()
                 addNodeView.setOnClickListener { _ ->
-                    declaredPin.createPin(block).forEach { pin ->
+                    declaredPin.createOnePin(block).let { pin ->
                         block.contacts.add(pin)
                         createPinView(pin) { it - 1 }
                     }

@@ -49,9 +49,12 @@ class BlueprintActivity : AppCompatActivity() {
         // Палитра цветов
         blockTitleToColor = mapOf(
             Regex("^native\\.main$") to getThemeColor(R.attr.colorBlockHeaderMain),
-            Regex("^native\\.getVariable$") to getThemeColor(R.attr.colorBlockHeaderVariable),
+            Regex("^native\\..+\\.boolean.*") to getThemeColor(R.attr.colorVariableBoolean),
+            Regex("^native\\..+\\.int.*") to getThemeColor(R.attr.colorVariableInt),
+            Regex("^native\\..+\\.float.*") to getThemeColor(R.attr.colorVariableFloat),
+            Regex("^native\\..+\\.string.*") to getThemeColor(R.attr.colorVariableString),
             Regex("^function\\..*") to getThemeColor(R.attr.colorBlockHeaderFunction),
-            Regex("^macros\\..*") to getThemeColor(R.attr.colorBlockHeaderMacros)
+            Regex("^macros\\..*") to getThemeColor(R.attr.colorBlockHeaderMacros),
         )
 
         addEventListeners()
