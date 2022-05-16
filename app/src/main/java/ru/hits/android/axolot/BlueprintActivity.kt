@@ -32,10 +32,6 @@ class BlueprintActivity : AppCompatActivity() {
 
     private val program = AxolotProgram.create()
 
-    private val _blockViews = mutableListOf<BlockView>()
-    val blockViews: List<BlockView>
-        get() = _blockViews
-
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,12 +52,16 @@ class BlueprintActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Задаем зум по-умолчанию.
         // Это самый тупой костыль, но я уже не вывожу (author: Рома)
         Handler(Looper.getMainLooper()).postDelayed({
             binding.zoomLayout.zoomTo(binding.zoomLayout.getMaxZoom() / 2, false)
         }, 0)
     }
 
+    /**
+     * Добавляем все прослушки событий
+     */
     private fun addEventListeners() {
         // Скрывание и показ меню
         binding.showMenu.setOnClickListener {
@@ -136,7 +136,6 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Инициализация
         blockView.block = type.createBlock()
-        _blockViews.add(blockView)
 
         // Координаты
         blockView.x = binding.codeField.width / 2f

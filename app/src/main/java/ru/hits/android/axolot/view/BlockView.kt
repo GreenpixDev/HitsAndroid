@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
+import kotlinx.android.synthetic.main.activity_blueprint.*
 import kotlinx.android.synthetic.main.block_item.view.*
 import kotlinx.android.synthetic.main.pin_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
@@ -15,6 +16,8 @@ import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.databinding.BlockItemBinding
 import ru.hits.android.axolot.util.Vec2f
+import ru.hits.android.axolot.util.findRelativePosition
+import ru.hits.android.axolot.util.position
 
 class BlockView @JvmOverloads constructor(
     context: Context,
@@ -26,10 +29,6 @@ class BlockView @JvmOverloads constructor(
     private val binding = BlockItemBinding.inflate(LayoutInflater.from(context), this)
 
     private var offset = Vec2f.ZERO
-
-    private val _pinViews = mutableListOf<PinView>()
-    val pinViews: List<PinView>
-        get() = _pinViews
 
     lateinit var block: AxolotBlock
 
@@ -44,7 +43,6 @@ class BlockView @JvmOverloads constructor(
         pinView.description.text = pin.name
 
         pinView.addViewTo(this, indexGetter)
-        _pinViews.add(pinView)
         return pinView
     }
 
@@ -53,6 +51,7 @@ class BlockView @JvmOverloads constructor(
      */
     fun createAddPinView(declaredPin: DeclaredPin) {
         when (declaredPin) {
+            // Если это входной пин
             is DeclaredVarargInputDataPin -> {
                 val addNodeView = AddNodeView(context)
                 addNodeView.initComponents()
@@ -64,6 +63,8 @@ class BlockView @JvmOverloads constructor(
                 }
                 binding.body.linearLayoutLeft.addView(addNodeView)
             }
+
+            // Если это выходной пин
             is DeclaredVarargOutputFlowPin -> {
                 val addNodeView = AddNodeView(context)
                 addNodeView.initComponents()
@@ -79,22 +80,21 @@ class BlockView @JvmOverloads constructor(
     }
 
     /**
-     * Метод передвижения вьюшек с учетом зума
+     * Метод передвижения вьюшки относительно поля
      */
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val zoom = zoom.realZoom
-        val pan = Vec2f(this.zoom.panX, this.zoom.panY) * -1
+        val pointer = activity.codeField.findRelativePosition(this) + event.position
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                offset = (Vec2f(x, y) - pan) * zoom - Vec2f(event.rawX, event.rawY)
+                offset = event.position
             }
             MotionEvent.ACTION_MOVE -> {
-
-                x = (event.rawX + offset.x) / zoom + pan.x
-                y = (event.rawY + offset.y) / zoom + pan.y
+                position = pointer - offset
             }
         }
+        println("$pointer $offset")
         return true
     }
 }

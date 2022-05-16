@@ -14,9 +14,7 @@ import ru.hits.android.axolot.blueprint.element.pin.InputPin
 import ru.hits.android.axolot.blueprint.element.pin.OutputPin
 import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.databinding.PinItemBinding
-import ru.hits.android.axolot.util.Vec2f
-import ru.hits.android.axolot.util.findViewAt
-import ru.hits.android.axolot.util.getPositionRelative
+import ru.hits.android.axolot.util.*
 
 @SuppressLint("ClickableViewAccessibility")
 class PinView @JvmOverloads constructor(
@@ -36,6 +34,11 @@ class PinView @JvmOverloads constructor(
         binding.contact.setOnTouchListener(this::onTouchEvent)
     }
 
+    /**
+     * Добавить вьюшку этого пина к [parentView], причем индекс вставки этой вьюшки
+     * задается через функцию высшего порядка [indexGetter].
+     * Таким образом, можно вставлять эту вьюшку в любое место в списке
+     */
     fun addViewTo(parentView: BlockView, indexGetter: (Int) -> Int) {
         val layout = when (pin) {
             is InputPin -> {
@@ -51,46 +54,55 @@ class PinView @JvmOverloads constructor(
         layout.addView(this, indexGetter.invoke(layout.childCount))
     }
 
+    /**
+     * Метод передвижения пинов, которые образают линию, относительно поля.
+     * В результате работы этого метода можно соединить пины линией.
+     */
     private fun onTouchEvent(view: View, event: MotionEvent): Boolean {
-        val zoom = zoom.realZoom
-        val pan = Vec2f(this.zoom.panX, this.zoom.panY) * -1
+        val pointer = activity.codeField.findRelativePosition(view) + event.position
 
         when (event.action) {
+            // Когда зажимаем палец - создаем линию между пинами для отрисовки
             MotionEvent.ACTION_DOWN -> {
-                val position = view.getPositionRelative(activity.zoomLayout)
-                val center = position + Vec2f(view.width, view.height) / 2
+                val position = activity.codeField.findRelativePosition(view)
+                val center = position + view.center
+
                 lineCanvas = LineCanvasView(context)
                 lineCanvas?.inverse = pin is InputPin
-                lineCanvas?.x = center.x
-                lineCanvas?.y = center.y
+                lineCanvas?.position = center
 
                 lineCanvas?.points?.add(Vec2f.ZERO)
                 lineCanvas?.points?.add(Vec2f.ZERO)
 
                 activity.codeField.addView(lineCanvas)
             }
+
+            // Когда двигаем пальцем - отрисовываем каждый кадр
             MotionEvent.ACTION_MOVE -> {
-                val pointer = Vec2f(event.rawX / zoom + pan.x, event.rawY / zoom + pan.y)
                 lineCanvas?.let {
-                    it.points[it.points.size - 1] = pointer - Vec2f(it.x, it.y)
+                    it.points[it.points.size - 1] = pointer - it.position
                     it.invalidate()
                 }
             }
+
+            // Когда отжимаем палец - либо удаляем линию, либо сохраняем её и соединяем пины
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                val pointer = Vec2f(event.rawX / zoom + pan.x, event.rawY / zoom + pan.y)
-                val parent = activity.codeField.findViewAt(pointer)?.parent
+                val parent =
+                    activity.codeField.findViewAt(pointer) { it !is LineCanvasView }?.parent
 
                 if (parent != null && parent is PinView && parent != this) {
-                    val position = parent.contact.getPositionRelative(activity.zoomLayout)
-                    val center = position + Vec2f(view.width, view.height) / 2
+                    val position = activity.codeField.findRelativePosition(parent.contact)
+                    val center = position + view.center
+
                     lineCanvas?.let {
-                        it.points[it.points.size - 1] = center - Vec2f(it.x, it.y)
+                        it.points[it.points.size - 1] = center - it.position
                         it.invalidate()
                     }
+
+                    // TODO соединить пины в промежуточном слое
                 } else {
                     activity.codeField.removeView(lineCanvas)
                 }
-
                 lineCanvas = null
             }
         }
