@@ -19,6 +19,9 @@ import ru.hits.android.axolot.util.Vec2f
 import ru.hits.android.axolot.util.findRelativePosition
 import ru.hits.android.axolot.util.position
 
+/**
+ * Вьюшка для отображения блока на поле
+ */
 class BlockView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

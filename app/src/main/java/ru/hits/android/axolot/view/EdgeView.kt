@@ -13,7 +13,10 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-class LineCanvasView @JvmOverloads constructor(
+/**
+ * Вьюшка для отрисовки линии (ребра), которая будет соединять пины
+ */
+class EdgeView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defstyleAttr: Int = 0,

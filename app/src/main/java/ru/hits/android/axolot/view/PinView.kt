@@ -16,6 +16,9 @@ import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.databinding.PinItemBinding
 import ru.hits.android.axolot.util.*
 
+/**
+ * Вьюшка для отображения пина (или узла/булавочки/круглешочка) у блока
+ */
 @SuppressLint("ClickableViewAccessibility")
 class PinView @JvmOverloads constructor(
     context: Context,
@@ -26,7 +29,7 @@ class PinView @JvmOverloads constructor(
 
     private val binding = PinItemBinding.inflate(LayoutInflater.from(context), this)
 
-    private var lineCanvas: LineCanvasView? = null
+    private var edgeView: EdgeView? = null
 
     lateinit var pin: Pin
 
@@ -67,19 +70,19 @@ class PinView @JvmOverloads constructor(
                 val position = activity.codeField.findRelativePosition(view)
                 val center = position + view.center
 
-                lineCanvas = LineCanvasView(context)
-                lineCanvas?.inverse = pin is InputPin
-                lineCanvas?.position = center
+                edgeView = EdgeView(context)
+                edgeView?.inverse = pin is InputPin
+                edgeView?.position = center
 
-                lineCanvas?.points?.add(Vec2f.ZERO)
-                lineCanvas?.points?.add(Vec2f.ZERO)
+                edgeView?.points?.add(Vec2f.ZERO)
+                edgeView?.points?.add(Vec2f.ZERO)
 
-                activity.codeField.addView(lineCanvas)
+                activity.codeField.addView(edgeView)
             }
 
             // Когда двигаем пальцем - отрисовываем каждый кадр
             MotionEvent.ACTION_MOVE -> {
-                lineCanvas?.let {
+                edgeView?.let {
                     it.points[it.points.size - 1] = pointer - it.position
                     it.invalidate()
                 }
@@ -88,22 +91,22 @@ class PinView @JvmOverloads constructor(
             // Когда отжимаем палец - либо удаляем линию, либо сохраняем её и соединяем пины
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 val parent =
-                    activity.codeField.findViewAt(pointer) { it !is LineCanvasView }?.parent
+                    activity.codeField.findViewAt(pointer) { it !is EdgeView }?.parent
 
                 if (parent != null && parent is PinView && parent != this) {
                     val position = activity.codeField.findRelativePosition(parent.contact)
                     val center = position + view.center
 
-                    lineCanvas?.let {
+                    edgeView?.let {
                         it.points[it.points.size - 1] = center - it.position
                         it.invalidate()
                     }
 
                     // TODO соединить пины в промежуточном слое
                 } else {
-                    activity.codeField.removeView(lineCanvas)
+                    activity.codeField.removeView(edgeView)
                 }
-                lineCanvas = null
+                edgeView = null
             }
         }
         return true
