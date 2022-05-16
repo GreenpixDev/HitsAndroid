@@ -24,7 +24,4 @@ class AxolotBlock(val type: BlockType) : AxolotOwner {
      */
     val contacts = linkedSetOf<Pin>()
 
-    fun addFixedPin(pin: Pin) {
-        contacts.add(pin)
-    }
 }

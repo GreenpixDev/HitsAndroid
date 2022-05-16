@@ -8,5 +8,4 @@ interface PinToOne : Pin {
         adjacent = to
         to.adjacent.add(this)
     }
-
 }

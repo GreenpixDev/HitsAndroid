@@ -9,8 +9,8 @@ import ru.hits.android.axolot.interpreter.type.VariableType
 class DeclaredSingleInputDataPin @JvmOverloads constructor(
     private val handler: (Collection<Node>, NodeDependency) -> Unit,
     private val name: String = "",
-    val type: VariableType<*>
-) : DeclaredPin {
+    override val type: VariableType<*>
+) : DeclaredDataPin {
 
     override fun handle(target: Collection<Node>, node: Node) {
         handler.invoke(target, node as NodeDependency)

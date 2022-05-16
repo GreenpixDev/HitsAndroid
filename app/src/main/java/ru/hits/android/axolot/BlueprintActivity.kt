@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
@@ -17,22 +16,14 @@ import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
 import kotlinx.android.synthetic.main.creator_item.*
 import kotlinx.android.synthetic.main.creator_item.view.*
-import kotlinx.android.synthetic.main.pin_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargInputDataPin
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
-import ru.hits.android.axolot.blueprint.element.AxolotBlock
-import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
+import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
-import ru.hits.android.axolot.util.Vec2f
-import ru.hits.android.axolot.util.getLocalizedString
-import ru.hits.android.axolot.util.getThemeColor
-import ru.hits.android.axolot.view.AddNodeView
+import ru.hits.android.axolot.exception.AxolotException
+import ru.hits.android.axolot.util.*
 import ru.hits.android.axolot.view.BlockView
 import ru.hits.android.axolot.view.CreatorView
-import ru.hits.android.axolot.view.PinView
 import java.util.*
 
 /**
@@ -44,11 +35,9 @@ class BlueprintActivity : AppCompatActivity() {
 
     private lateinit var blockTitleToColor: Map<Regex, Int>
 
-    private var offset = Vec2f.ZERO
-
     private var menuIsVisible = true
 
-    private val program = AxolotProgram.create()
+    val program = AxolotProgram.create()
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,12 +59,16 @@ class BlueprintActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Это самый тупой костыль, но я уже не вывожу (author: Рома)
+
+        // Задаем зум по-умолчанию.
         Handler(Looper.getMainLooper()).postDelayed({
             binding.zoomLayout.zoomTo(binding.zoomLayout.getMaxZoom() / 2, false)
         }, 0)
     }
 
+    /**
+     * Добавляем все прослушки событий
+     */
     private fun addEventListeners() {
         // Скрывание и показ меню
         binding.showMenu.setOnClickListener {
@@ -93,7 +86,7 @@ class BlueprintActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
-        // Создание новой переменной и доавление ее в список в менюшке
+        // Создание новой переменной и добавление ее в список в менюшке
         binding.plusVariable.setOnClickListener {
             createVariableView()
         }
@@ -136,7 +129,11 @@ class BlueprintActivity : AppCompatActivity() {
             binding.listBlocks.addView(textView)
 
             textView.setOnClickListener { _ ->
-                createBlock(BlockView(this), it)
+                try {
+                    createBlock(BlockView(this), it)
+                } catch (e: AxolotException) {
+                    // nothing
+                }
             }
         }
     }
@@ -150,13 +147,13 @@ class BlueprintActivity : AppCompatActivity() {
         type: BlockType
     ) {
 
-        // Объект блока
-        val block = type.createBlock()
+        // Инициализация
+        blockView.block = type.createBlock()
 
         // Координаты
-        blockView.x = binding.codeField.width / 2f
-        blockView.y = binding.codeField.height / 2f
-        blockView.translationZ = 30f
+        val pan = Vec2f(binding.zoomLayout.panX, binding.zoomLayout.panY) * -1
+        val offset = binding.zoomLayout.center / binding.zoomLayout.realZoom
+        blockView.position = pan + offset
 
         // Задаем цвет заголовку
         for (it in blockTitleToColor) {
@@ -167,26 +164,30 @@ class BlueprintActivity : AppCompatActivity() {
         }
 
         // Добавляем все пины
-        block.contacts.forEach { createPinView(it, blockView) }
+        blockView.block.contacts.forEach { blockView.createPinView(it) }
 
         // Добавляем плюсики для всех vararg пинов
-        type.declaredPins.forEach { createAddPinView(it, block, blockView) }
+        type.declaredPins.forEach { blockView.createAddPinView(it) }
 
-        //присваиваем нужный тип блока
-        blockView.typeBlock = type
-
-        //переименовывем блок
+        // Переименовывем блок
         blockView.title.text = getLocalizedString(type.fullName)
 
-        // Обработка событий
-        blockView.setOnTouchListener(this::onTouch)
+        // Если это главный блок - указываем это в программе.
+        // Если главный блок уже был - кинет ошибку AxolotException
+        if (type == AxolotNativeLibrary.BLOCK_MAIN) {
+            program.mainBlock = blockView.block
+        }
 
-        // добавляем готовый блок на поле
+        // Привязываем блок к программе
+        program.addBlock(blockView.block)
+
+        // Добавляем готовый блок на поле
         binding.codeField.addView(blockView)
     }
 
     /**
      * Метод создания новой переменной в меню
+     * TODO Рома из будущего, сделай переменные с привязкой к компилятору
      */
     private fun createVariableView() {
         val view = CreatorView(this)
@@ -201,65 +202,15 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     /**
-     * Метод добавления вьюшки пина (или узла/булавочки/круглешочка)
-     */
-    private fun createPinView(
-        pin: Pin,
-        blockView: BlockView,
-        indexGetter: (Int) -> Int = { it }
-    ): PinView {
-        val rowView = PinView(pin, this)
-        rowView.description.text = pin.name
-        rowView.addViewTo(blockView, indexGetter)
-        return rowView
-    }
-
-    /**
-     * Метод добавление вьюшки кнопочки "Add Pin"
-     */
-    private fun createAddPinView(
-        declaredPin: DeclaredPin,
-        block: AxolotBlock,
-        blockView: BlockView
-    ) {
-        when (declaredPin) {
-            is DeclaredVarargInputDataPin -> {
-                val view = AddNodeView(this)
-                view.initComponents()
-                view.setOnClickListener { _ ->
-                    declaredPin.createPin(block).forEach { pin ->
-                        block.contacts.add(pin)
-                        createPinView(pin, blockView) { it - 1 }
-                    }
-                }
-                blockView.body.linearLayoutLeft.addView(view)
-            }
-            is DeclaredVarargOutputFlowPin -> {
-                val view = AddNodeView(this)
-                view.initComponents()
-                view.setOnClickListener { _ ->
-                    declaredPin.createPin(block).forEach { pin ->
-                        block.contacts.add(pin)
-                        createPinView(pin, blockView) { it - 1 }
-                    }
-                }
-                blockView.body.linearLayoutRight.addView(view)
-            }
-        }
-    }
-
-    /**
      * Метод создания блока-переменной на поле
+     * TODO Рома из будущего, сделай переменные с привязкой к компилятору
      */
     private fun createVariableOnField(view: CreatorView, blockView: BlockView) {
         // инициализация координатов блока
         initCoordinatesBlock(blockView)
 
         //имя переменной по дефолту
-        blockView.title.text = view.name.getText().toString()
-
-        // Обработка передвигания блока
-        blockView.setOnTouchListener(this::onTouch)
+        blockView.title.text = view.name.text.toString()
 
         //прослушка изменений имени переменной
         view.name.addTextChangedListener(object : TextWatcher {
@@ -292,7 +243,7 @@ class BlueprintActivity : AppCompatActivity() {
             ) {
                 program.variableTypes[type.selectedItem.toString()
                     .lowercase(Locale.getDefault())]
-                    ?.let { blockView.typeVar = it }
+                //?.let { blockView.typeVar = it } TODO ДОДЕЛАТЬ
             }
         }
 
@@ -300,31 +251,12 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     /**
-     * Метод передвижения вьюшек с учетом зума
-     */
-    private fun onTouch(view: View, event: MotionEvent): Boolean {
-        val zoom = binding.zoomLayout.realZoom
-        val pan = Vec2f(binding.zoomLayout.panX, binding.zoomLayout.panY) * -1
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                offset = (Vec2f(view.x, view.y) - pan) * zoom - Vec2f(event.rawX, event.rawY)
-            }
-            MotionEvent.ACTION_MOVE -> {
-                view.x = (event.rawX + offset.x) / zoom + pan.x
-                view.y = (event.rawY + offset.y) / zoom + pan.y
-            }
-        }
-        return true
-    }
-
-    /**
      * Метод инициализации координатов блока
+     * TODO Рома из будущего, сделай переменные с привязкой к компилятору
      */
     private fun initCoordinatesBlock(block: BlockView) {
         block.x = binding.codeField.width / 2f
         block.y = binding.codeField.height / 2f
         block.translationZ = 30f
-
     }
 }

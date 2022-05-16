@@ -12,5 +12,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="colorBlockHeaderDefault">#7E7E7E</item>
+        <item name="colorBlockHeaderMain">#F44336</item>
+        <item name="colorBlockHeaderFunction">#9C27B0</item>
+        <item name="colorBlockHeaderMacros">#2196F3</item>
+        <item name="colorBlockHeaderVariable">#FF9800</item>
+
+        <item name="colorLine">#BEFF9800</item>
     </style>
 </resources>

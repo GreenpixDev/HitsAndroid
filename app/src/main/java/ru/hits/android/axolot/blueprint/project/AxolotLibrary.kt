@@ -1,6 +1,7 @@
 package ru.hits.android.axolot.blueprint.project
 
 import ru.hits.android.axolot.blueprint.declaration.BlockType
+import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
 import ru.hits.android.axolot.blueprint.project.libs.AxolotDefaultLibrary
 import ru.hits.android.axolot.interpreter.type.VariableType
 
@@ -8,7 +9,7 @@ import ru.hits.android.axolot.interpreter.type.VariableType
  * Класс библиотеки для языка Axolot.
  * Можно подключать к другим библиотекам или программам.
  */
-open class AxolotLibrary protected constructor() : AxolotProject {
+open class AxolotLibrary protected constructor() : AxolotBaseSource(), AxolotProject {
 
     override val variableTypes = mutableMapOf<String, VariableType<*>>()
 

@@ -2,11 +2,10 @@ package ru.hits.android.axolot.compiler
 
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredAutonomicPin
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
-import ru.hits.android.axolot.blueprint.element.AxolotSource
 import ru.hits.android.axolot.blueprint.element.pin.PinToOne
 import ru.hits.android.axolot.blueprint.element.pin.TypedPin
 import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
-import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
+import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.interpreter.node.Node
 import ru.hits.android.axolot.interpreter.node.NodeConstant
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
@@ -16,12 +15,12 @@ import ru.hits.android.axolot.util.putMap
 
 class BlueprintCompiler : Compiler {
 
-    override fun compile(source: AxolotSource): NodeExecutable? {
+    override fun compile(program: AxolotProgram): NodeExecutable? {
         // У каждого блока есть пины, которые требуют зависимости (автономный пин).
         // Пробегаемся по всем блокам, находим такие пины и создаём для них узлы.
         // Этот словарь содержит следующие данные:
         // Map<"Блок", Map<"Автономный пин", "Узел интерпретатора">>
-        val nodes: Map<AxolotBlock, Map<DeclaredAutonomicPin, Node>> = source.blocks
+        val nodes: Map<AxolotBlock, Map<DeclaredAutonomicPin, Node>> = program.blocks
             .associateWith { block ->
                 block.type.declaredPins
                     .filterIsInstance<DeclaredAutonomicPin>()
@@ -36,7 +35,7 @@ class BlueprintCompiler : Compiler {
         // Помимо этого нам нужно получить сами зависимости для узлов.
         // Пробегаемся по всем блокам, находим смежные пины и узлы для них,
         // найденные на первом этапе.
-        source.blocks
+        program.blocks
             .associateWith { block ->
                 block.contacts
                     .filterIsInstance<PinToOne>()
@@ -52,7 +51,7 @@ class BlueprintCompiler : Compiler {
         // Также пин может не ссылаться на другой пин, но при этом иметь значение (константное).
         // Этот вариант мы обрабатываем иначе.
         // Пробегаемся по всем блокам, находим смежные пины-константы и создаем узел константы.
-        source.blocks
+        program.blocks
             .associateWith { block ->
                 block.contacts
                     .filterIsInstance<PinToOne>()
@@ -78,8 +77,8 @@ class BlueprintCompiler : Compiler {
         // После предыдущего этапа мы получаем полноценный граф узлов, который можно
         // использовать в интерпретаторе. Для этого нужно найти входный узел нашей программы.
 
-        // Находим входной блок нашей программы
-        val main = source.blocks.find { it.type == AxolotNativeLibrary.BLOCK_MAIN }
+        // Получаем входной блок нашей программы
+        val main = program.mainBlock
         requireNotNull(main) { "cannot find main block of program" }
 
         // Получаем из блока входной узел для интерпретатора

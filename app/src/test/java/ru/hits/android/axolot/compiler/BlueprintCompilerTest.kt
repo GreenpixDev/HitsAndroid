@@ -33,6 +33,8 @@ class BlueprintCompilerTest {
             printBlock.contacts.find { it is InputPin && it.name == "text" }!! as InputDataPin
         program.setValue(textPin, Type.STRING, "Hello World")
 
+        program.mainBlock = mainBlock
+
         val node = compiler.compile(program)
         val scope = GlobalScope()
         val interpreter = BlueprintInterpreter(scope)
