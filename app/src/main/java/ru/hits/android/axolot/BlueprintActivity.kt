@@ -6,12 +6,17 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
+import android.widget.AdapterView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
+import kotlinx.android.synthetic.main.creator_item.*
+import kotlinx.android.synthetic.main.creator_item.view.*
 import kotlinx.android.synthetic.main.pin_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
@@ -28,6 +33,7 @@ import ru.hits.android.axolot.view.AddNodeView
 import ru.hits.android.axolot.view.BlockView
 import ru.hits.android.axolot.view.CreatorView
 import ru.hits.android.axolot.view.PinView
+import java.util.*
 
 /**
  * Активити создания и редактирования кода нашего языка
@@ -97,6 +103,7 @@ class BlueprintActivity : AppCompatActivity() {
             val view = CreatorView(this)
 
             view.typeExpression = false
+            view.initComponents()
 
             binding.listFunction.addView(view)
         }
@@ -106,6 +113,7 @@ class BlueprintActivity : AppCompatActivity() {
             val view = CreatorView(this)
 
             view.typeExpression = false
+            view.initComponents()
 
             binding.listMacros.addView(view)
         }
@@ -178,6 +186,21 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     /**
+     * Метод создания новой переменной в меню
+     */
+    private fun createVariableView() {
+        val view = CreatorView(this)
+
+        view.edit = false
+        view.initComponents()
+
+        binding.listVariables.addView(view)
+        view.btnAdd.setOnClickListener {
+            createVariableOnField(view, BlockView(this))
+        }
+    }
+
+    /**
      * Метод добавления вьюшки пина (или узла/булавочки/круглешочка)
      */
     private fun createPinView(
@@ -226,15 +249,54 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     /**
-     * Метод создания новой переменной в меню
+     * Метод создания блока-переменной на поле
      */
-    private fun createVariableView() {
-        val view = CreatorView(this)
+    private fun createVariableOnField(view: CreatorView, blockView: BlockView) {
+        // инициализация координатов блока
+        initCoordinatesBlock(blockView)
 
-        view.edit = false
-        view.initComponents()
+        //имя переменной по дефолту
+        blockView.title.text = view.name.getText().toString()
 
-        binding.listVariables.addView(view)
+        // Обработка передвигания блока
+        blockView.setOnTouchListener(this::onTouch)
+
+        //прослушка изменений имени переменной
+        view.name.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(title: Editable) {}
+
+            override fun beforeTextChanged(
+                title: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(title: CharSequence, start: Int, before: Int, count: Int) {
+                blockView.title.setText(title)
+            }
+        })
+
+        //прослушка изменений типа переменной
+        view.type?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                return
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                program.variableTypes[type.selectedItem.toString()
+                    .lowercase(Locale.getDefault())]
+                    ?.let { blockView.typeVar = it }
+            }
+        }
+
+        binding.codeField.addView(blockView)
     }
 
     /**
@@ -254,5 +316,15 @@ class BlueprintActivity : AppCompatActivity() {
             }
         }
         return true
+    }
+
+    /**
+     * Метод инициализации координатов блока
+     */
+    private fun initCoordinatesBlock(block: BlockView) {
+        block.x = binding.codeField.width / 2f
+        block.y = binding.codeField.height / 2f
+        block.translationZ = 30f
+
     }
 }
