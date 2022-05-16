@@ -103,6 +103,7 @@ class BlueprintActivity : AppCompatActivity() {
             val view = CreatorView(this)
 
             view.typeExpression = false
+            view.initComponents()
 
             binding.listFunction.addView(view)
         }
@@ -112,6 +113,7 @@ class BlueprintActivity : AppCompatActivity() {
             val view = CreatorView(this)
 
             view.typeExpression = false
+            view.initComponents()
 
             binding.listMacros.addView(view)
         }
