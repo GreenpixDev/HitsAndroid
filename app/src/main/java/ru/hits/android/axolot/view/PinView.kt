@@ -96,40 +96,52 @@ class PinView @JvmOverloads constructor(
             else -> throw IllegalArgumentException("Pin must be InputPin or OutputPin")
         }
         layout.addView(this, indexGetter.invoke(layout.childCount))
-        someFun()
+        processInputField()
     }
 
-    fun someFun() {
+    /**
+     * В разметке указано, что все поля ввода и картинки для bool имеют тип gone.
+     * То есть они свернуты, не занимают места в разметке.
+     * Для пина конкретного типа мы сделаем видимым нужное поле, а после того, как
+     * это поле станет ненужным (произойдет соединение этого пина), мы сделаем его
+     * invisible (он станет невидимым, но продолжит занимать место)
+     */
+    private fun processInputField() {
         var currentPin = pin
         if (currentPin is DataPin && currentPin is InputPin) {
-            //тип данных и тип входной (который слева)
             if (currentPin is TypedPin) {
+                when ((currentPin.type as DeclaredDataPin).type) {
+                    Type.INT -> {
+                        binding.inputFieldInt.visibility = View.VISIBLE
+                        binding.inputFieldInt.setText("0")
+                    }
 
-                if ((currentPin.type as DeclaredDataPin).type == Type.INT) {
-                    binding.inputFieldInt.visibility = View.VISIBLE
-                    binding.inputFieldInt.setText("0")
-                } else if ((currentPin.type as DeclaredDataPin).type == Type.FLOAT) {
-                    binding.inputFieldFloat.visibility = View.VISIBLE
-                    binding.inputFieldFloat.setText("0.0")
-                } else if ((currentPin.type as DeclaredDataPin).type == Type.BOOLEAN) {
-                    binding.crossIcon.visibility = View.VISIBLE
+                    Type.FLOAT -> {
+                        binding.inputFieldFloat.visibility = View.VISIBLE
+                        binding.inputFieldFloat.setText("0.0")
+                    }
 
-                    binding.crossIcon.setOnClickListener {
-                        if (binding.crossIcon.visibility == View.VISIBLE) {
-                            binding.crossIcon.visibility = View.GONE
-                            binding.tickIcon.visibility = View.VISIBLE
+                    Type.BOOLEAN -> {
+                        binding.crossIcon.visibility = View.VISIBLE
+
+                        binding.crossIcon.setOnClickListener {
+                            if (binding.crossIcon.visibility == View.VISIBLE) {
+                                binding.crossIcon.visibility = View.GONE
+                                binding.tickIcon.visibility = View.VISIBLE
+                            }
+                        }
+
+                        binding.tickIcon.setOnClickListener {
+                            if (binding.tickIcon.visibility == View.VISIBLE) {
+                                binding.tickIcon.visibility = View.GONE
+                                binding.crossIcon.visibility = View.VISIBLE
+                            }
                         }
                     }
 
-                    binding.tickIcon.setOnClickListener {
-                        if (binding.tickIcon.visibility == View.VISIBLE) {
-                            binding.tickIcon.visibility = View.GONE
-                            binding.crossIcon.visibility = View.VISIBLE
-                        }
+                    Type.STRING -> {
+                        binding.inputFieldString.visibility = View.VISIBLE
                     }
-
-                } else if ((currentPin.type as DeclaredDataPin).type == Type.STRING) {
-                    binding.inputFieldString.visibility = View.VISIBLE
                 }
 
             }
@@ -224,73 +236,8 @@ class PinView @JvmOverloads constructor(
         return try {
             sourceCode.connect(pin, pinView.pin)
             pinView.edgeViews.add(edgeView)
-
-            //тут дальше логика какая-то логика должна быть
-//            pinView.fieldInput.visibility = INVISIBLE
-            var toPin = pinView.pin
-            var fromPin = pin
-
-            if (toPin is DataPin && toPin is InputPin) {
-                if (toPin is TypedPin) {
-                    val type = (toPin.type as DeclaredDataPin).type
-                    when (type) {
-                        Type.INT -> {
-
-                            pinView.inputFieldInt.visibility = INVISIBLE
-                        }
-                        Type.FLOAT -> {
-                            pinView.inputFieldFloat.visibility = INVISIBLE
-                        }
-                        Type.BOOLEAN -> {
-                            when {
-                                pinView.tickIcon.visibility == VISIBLE -> {
-                                    pinView.tickIcon.visibility = INVISIBLE
-                                }
-                                pinView.crossIcon.visibility == VISIBLE -> {
-                                    pinView.crossIcon.visibility = INVISIBLE
-                                }
-                                else -> {
-                                    //если произошел такой кейс, то я что-то не учел(   P.S. Костя
-                                }
-                            }
-                        }
-                        Type.STRING -> {
-                            pinView.inputFieldString.visibility = INVISIBLE
-                        }
-                    }
-                }
-            }
-            if (fromPin is DataPin && fromPin is InputPin) {
-                if (fromPin is TypedPin) {
-                    val type = (fromPin.type as DeclaredDataPin).type
-                    when (type) {
-                        Type.INT -> {
-                            binding.inputFieldInt.visibility = INVISIBLE
-                        }
-                        Type.FLOAT -> {
-                            binding.inputFieldFloat.visibility = INVISIBLE
-                        }
-                        Type.BOOLEAN -> {
-                            when {
-                                binding.tickIcon.visibility == VISIBLE -> {
-                                    binding.tickIcon.visibility = INVISIBLE
-                                }
-                                binding.crossIcon.visibility == VISIBLE -> {
-                                    binding.crossIcon.visibility = INVISIBLE
-                                }
-                                else -> {
-                                    //если произошел такой кейс, то я что-то не учел(   P.S. Костя
-                                }
-                            }
-                        }
-                        Type.STRING -> {
-                            pinView.inputFieldString.visibility = INVISIBLE
-                        }
-                    }
-                }
-            }
-
-
+            //после соединения нужно спрятать поля, если мы соединили константы
+            hideField(pinView)
 
             true
         }
@@ -311,6 +258,75 @@ class PinView @JvmOverloads constructor(
         // Иные
         catch (e: AxolotPinException) {
             false
+        }
+    }
+
+    /**
+     * Прячем все поля для соединенных пинов.
+     * Если это был пин типа Boolean, то картинка становится невидимой.
+     */
+    private fun hideField(pinView: PinView) {
+        val toPin = pinView.pin
+        val fromPin = pin
+
+        //пока оставил некрасиво с повторяющимся кодом
+        if (toPin is DataPin && toPin is InputPin) {
+            if (toPin is TypedPin) {
+                when ((toPin.type as DeclaredDataPin).type) {
+                    Type.INT -> {
+
+                        pinView.inputFieldInt.visibility = INVISIBLE
+                    }
+                    Type.FLOAT -> {
+                        pinView.inputFieldFloat.visibility = INVISIBLE
+                    }
+                    Type.BOOLEAN -> {
+                        when {
+                            pinView.tickIcon.visibility == VISIBLE -> {
+                                pinView.tickIcon.visibility = INVISIBLE
+                            }
+                            pinView.crossIcon.visibility == VISIBLE -> {
+                                pinView.crossIcon.visibility = INVISIBLE
+                            }
+                            else -> {
+                                //если произошел такой кейс, то я что-то не учел(   P.S. Костя
+                            }
+                        }
+                    }
+                    Type.STRING -> {
+                        pinView.inputFieldString.visibility = INVISIBLE
+                    }
+                }
+            }
+        }
+
+        if (fromPin is DataPin && fromPin is InputPin) {
+            if (fromPin is TypedPin) {
+                when ((fromPin.type as DeclaredDataPin).type) {
+                    Type.INT -> {
+                        binding.inputFieldInt.visibility = INVISIBLE
+                    }
+                    Type.FLOAT -> {
+                        binding.inputFieldFloat.visibility = INVISIBLE
+                    }
+                    Type.BOOLEAN -> {
+                        when {
+                            binding.tickIcon.visibility == VISIBLE -> {
+                                binding.tickIcon.visibility = INVISIBLE
+                            }
+                            binding.crossIcon.visibility == VISIBLE -> {
+                                binding.crossIcon.visibility = INVISIBLE
+                            }
+                            else -> {
+                                //если произошел такой кейс, то я что-то не учел(   P.S. Костя
+                            }
+                        }
+                    }
+                    Type.STRING -> {
+                        pinView.inputFieldString.visibility = INVISIBLE
+                    }
+                }
+            }
         }
     }
 }

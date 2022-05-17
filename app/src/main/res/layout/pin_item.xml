@@ -31,7 +31,6 @@
         android:id="@+id/inputFieldFloat"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:background="#7EFFEB3B"
         android:inputType="numberDecimal"
         android:visibility="gone" />
 
@@ -39,7 +38,6 @@
         android:id="@+id/inputFieldInt"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:background="#7E2FD693"
         android:inputType="number"
         android:visibility="gone" />
 
@@ -47,7 +45,6 @@
         android:id="@+id/inputFieldString"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:background="#7E2F67D6"
         android:inputType="text"
         android:visibility="gone" />
 
