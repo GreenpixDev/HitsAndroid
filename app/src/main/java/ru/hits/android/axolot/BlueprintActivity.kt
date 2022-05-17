@@ -35,7 +35,9 @@ class BlueprintActivity : AppCompatActivity() {
 
     private lateinit var blockTitleToColor: Map<Regex, Int>
 
-    private var menuIsVisible = true
+    var menuIsVisible = true
+    var consoleIsVisible = true
+    var consoleLines: MutableList<TextView> = mutableListOf()
 
     val program = AxolotProgram.create()
 
@@ -55,6 +57,8 @@ class BlueprintActivity : AppCompatActivity() {
 
         addEventListeners()
         createBlockTypeViews()
+
+        openMenu()
     }
 
     override fun onResume() {
@@ -73,11 +77,18 @@ class BlueprintActivity : AppCompatActivity() {
         // Скрывание и показ меню
         binding.showMenu.setOnClickListener {
             if (menuIsVisible) {
-                binding.menu.visibility = View.GONE
-                menuIsVisible = false
+                closeMenu()
             } else {
-                binding.menu.visibility = View.VISIBLE
-                menuIsVisible = true
+                openMenu()
+            }
+        }
+
+        //открыть/закрыть консоль
+        binding.showConsole.setOnClickListener {
+            if (consoleIsVisible) {
+                binding.consoleView.closeConsole()
+            } else {
+                binding.consoleView.openConsole()
             }
         }
 
@@ -259,4 +270,20 @@ class BlueprintActivity : AppCompatActivity() {
         block.y = binding.codeField.height / 2f
         block.translationZ = 30f
     }
+
+    //показывает боковое меню
+    private fun openMenu() {
+        binding.consoleView.closeConsole()
+        binding.menu.visibility = View.VISIBLE
+//        binding.menuScrollView.visibility = View.VISIBLE
+        menuIsVisible = true
+    }
+
+    //скрывает боковое меню
+    fun closeMenu() {
+        binding.menu.visibility = View.GONE
+//        binding.menuScrollView.visibility = View.GONE
+        menuIsVisible = false
+    }
+
 }
