@@ -28,12 +28,46 @@
         android:textColor="@color/white" />
 
     <EditText
-        android:id="@+id/fieldInput"
-        android:background="@color/black"
+        android:id="@+id/inputFieldFloat"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
+        android:background="#7EFFEB3B"
+        android:inputType="numberDecimal"
+        android:visibility="gone" />
 
-        />
+    <EditText
+        android:id="@+id/inputFieldInt"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:background="#7E2FD693"
+        android:inputType="number"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/inputFieldString"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:background="#7E2F67D6"
+        android:inputType="text"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/tickIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_tick"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/crossIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_cross"
+        android:visibility="gone" />
 
 
 </merge>

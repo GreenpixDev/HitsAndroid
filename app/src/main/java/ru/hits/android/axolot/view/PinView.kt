@@ -83,6 +83,7 @@ class PinView @JvmOverloads constructor(
      * Таким образом, можно вставлять эту вьюшку в любое место в списке
      */
     fun addViewTo(parentView: BlockView, indexGetter: (Int) -> Int) {
+        var counter = 0
         val layout = when (pin) {
             is InputPin -> {
                 layoutDirection = LAYOUT_DIRECTION_LTR
@@ -95,6 +96,44 @@ class PinView @JvmOverloads constructor(
             else -> throw IllegalArgumentException("Pin must be InputPin or OutputPin")
         }
         layout.addView(this, indexGetter.invoke(layout.childCount))
+        someFun()
+    }
+
+    fun someFun() {
+        var currentPin = pin
+        if (currentPin is DataPin && currentPin is InputPin) {
+            //тип данных и тип входной (который слева)
+            if (currentPin is TypedPin) {
+
+                if ((currentPin.type as DeclaredDataPin).type == Type.INT) {
+                    binding.inputFieldInt.visibility = View.VISIBLE
+                    binding.inputFieldInt.setText("0")
+                } else if ((currentPin.type as DeclaredDataPin).type == Type.FLOAT) {
+                    binding.inputFieldFloat.visibility = View.VISIBLE
+                    binding.inputFieldFloat.setText("0.0")
+                } else if ((currentPin.type as DeclaredDataPin).type == Type.BOOLEAN) {
+                    binding.crossIcon.visibility = View.VISIBLE
+
+                    binding.crossIcon.setOnClickListener {
+                        if (binding.crossIcon.visibility == View.VISIBLE) {
+                            binding.crossIcon.visibility = View.GONE
+                            binding.tickIcon.visibility = View.VISIBLE
+                        }
+                    }
+
+                    binding.tickIcon.setOnClickListener {
+                        if (binding.tickIcon.visibility == View.VISIBLE) {
+                            binding.tickIcon.visibility = View.GONE
+                            binding.crossIcon.visibility = View.VISIBLE
+                        }
+                    }
+
+                } else if ((currentPin.type as DeclaredDataPin).type == Type.STRING) {
+                    binding.inputFieldString.visibility = View.VISIBLE
+                }
+
+            }
+        }
     }
 
     /**
@@ -183,21 +222,75 @@ class PinView @JvmOverloads constructor(
      */
     private fun connectWith(pinView: PinView, edgeView: EdgeView): Boolean {
         return try {
-            sourceCode.connect(pin, pinView.pin)        //здесь выкидывает все возможные ошибки
+            sourceCode.connect(pin, pinView.pin)
             pinView.edgeViews.add(edgeView)
 
             //тут дальше логика какая-то логика должна быть
+//            pinView.fieldInput.visibility = INVISIBLE
+            var toPin = pinView.pin
+            var fromPin = pin
 
-            var someVar = pinView.pin
-            if (someVar is DataPin && someVar is InputPin) {
-                //тип данных и тип входной (который слева)
-                if (someVar is TypedPin) {
-                    //пин с типом
-                    if ((someVar.type as DeclaredDataPin).type == Type.INT) {
+            if (toPin is DataPin && toPin is InputPin) {
+                if (toPin is TypedPin) {
+                    val type = (toPin.type as DeclaredDataPin).type
+                    when (type) {
+                        Type.INT -> {
 
+                            pinView.inputFieldInt.visibility = INVISIBLE
+                        }
+                        Type.FLOAT -> {
+                            pinView.inputFieldFloat.visibility = INVISIBLE
+                        }
+                        Type.BOOLEAN -> {
+                            when {
+                                pinView.tickIcon.visibility == VISIBLE -> {
+                                    pinView.tickIcon.visibility = INVISIBLE
+                                }
+                                pinView.crossIcon.visibility == VISIBLE -> {
+                                    pinView.crossIcon.visibility = INVISIBLE
+                                }
+                                else -> {
+                                    //если произошел такой кейс, то я что-то не учел(   P.S. Костя
+                                }
+                            }
+                        }
+                        Type.STRING -> {
+                            pinView.inputFieldString.visibility = INVISIBLE
+                        }
                     }
                 }
             }
+            if (fromPin is DataPin && fromPin is InputPin) {
+                if (fromPin is TypedPin) {
+                    val type = (fromPin.type as DeclaredDataPin).type
+                    when (type) {
+                        Type.INT -> {
+                            binding.inputFieldInt.visibility = INVISIBLE
+                        }
+                        Type.FLOAT -> {
+                            binding.inputFieldFloat.visibility = INVISIBLE
+                        }
+                        Type.BOOLEAN -> {
+                            when {
+                                binding.tickIcon.visibility == VISIBLE -> {
+                                    binding.tickIcon.visibility = INVISIBLE
+                                }
+                                binding.crossIcon.visibility == VISIBLE -> {
+                                    binding.crossIcon.visibility = INVISIBLE
+                                }
+                                else -> {
+                                    //если произошел такой кейс, то я что-то не учел(   P.S. Костя
+                                }
+                            }
+                        }
+                        Type.STRING -> {
+                            pinView.inputFieldString.visibility = INVISIBLE
+                        }
+                    }
+                }
+            }
+
+
 
             true
         }
