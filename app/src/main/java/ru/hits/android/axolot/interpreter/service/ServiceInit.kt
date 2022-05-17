@@ -1,5 +1,6 @@
 package ru.hits.android.axolot.interpreter.service
 
+import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.interpreter.node.NodeConstant
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
 import ru.hits.android.axolot.interpreter.node.executable.NodeSetVariable
@@ -45,7 +46,7 @@ import ru.hits.android.axolot.interpreter.service.impl.function.math.NodeTrigSer
 import ru.hits.android.axolot.interpreter.service.impl.macros.*
 import kotlin.reflect.KClass
 
-class ServiceInit(private val nodeHandlerService: NodeHandlerService) {
+class ServiceInit(private val nodeHandlerService: NodeHandlerService, val console: Console) {
 
     fun intiHandler(): Map<KClass<*>, NodeService<*>> {
         val map = hashMapOf<KClass<*>, NodeService<*>>()

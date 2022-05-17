@@ -23,11 +23,11 @@ class Console {
         return toUser.remove()
     }
 
-    fun sendStringToApp(str:String){
+    fun sendStringToApp(str:String?){
         toApp.add(str)
     }
 
-    fun sendStringToUser(str:String){
+    fun sendStringToUser(str:String?){
         toUser.add(str)
     }
 
