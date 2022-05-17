@@ -10,9 +10,9 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginVertical="2dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="2dp"
-        android:layout_marginVertical="2dp"
         android:background="@drawable/button_shape_circle_stroke"
         android:buttonTint="@color/toolBar_color" />
 
@@ -21,9 +21,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginVertical="2dp"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginVertical="2dp"
-        android:textColor="@color/white"
-        android:text="description" />
+        android:text="description"
+        android:textColor="@color/white" />
+
+    <EditText
+        android:id="@+id/fieldInput"
+        android:background="@color/black"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+
+        />
+
+
 </merge>

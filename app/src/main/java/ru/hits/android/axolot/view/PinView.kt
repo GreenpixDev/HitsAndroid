@@ -17,6 +17,7 @@ import ru.hits.android.axolot.blueprint.element.pin.*
 import ru.hits.android.axolot.databinding.PinItemBinding
 import ru.hits.android.axolot.exception.AxolotPinException
 import ru.hits.android.axolot.exception.AxolotPinOneAdjacentException
+import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.util.*
 
 /**
@@ -71,6 +72,7 @@ class PinView @JvmOverloads constructor(
      * Обновить пин (если изменился цвет)
      */
     fun update() {
+        //
         //binding.contact.setColorFilter(color)
         // TODO
     }
@@ -181,8 +183,22 @@ class PinView @JvmOverloads constructor(
      */
     private fun connectWith(pinView: PinView, edgeView: EdgeView): Boolean {
         return try {
-            sourceCode.connect(pin, pinView.pin)
+            sourceCode.connect(pin, pinView.pin)        //здесь выкидывает все возможные ошибки
             pinView.edgeViews.add(edgeView)
+
+            //тут дальше логика какая-то логика должна быть
+
+            var someVar = pinView.pin
+            if (someVar is DataPin && someVar is InputPin) {
+                //тип данных и тип входной (который слева)
+                if (someVar is TypedPin) {
+                    //пин с типом
+                    if ((someVar.type as DeclaredDataPin).type == Type.INT) {
+
+                    }
+                }
+            }
+
             true
         }
         // Если попытались соединить PinToOne ко второму пину - убираем первое соединение
