@@ -15,5 +15,15 @@
     <color name="toolBar_color">#C4D8DC</color>
     <color name="circle_button">#83AFC0</color>
 
+    <color name="colorBlockHeaderDefault">#7E7E7E</color>
+    <color name="colorBlockHeaderMain">#F44336</color>
+    <color name="colorBlockHeaderFunction">#9C27B0</color>
+    <color name="colorBlockHeaderMacros">#2196F3</color>
+    <color name="colorBlockHeaderVariable">#FF9800</color>
 
+    <color name="colorFlowControl">@color/white</color>
+    <color name="colorVariableBoolean">#D85E54</color>
+    <color name="colorVariableInt">#5BDDD0</color>
+    <color name="colorVariableFloat">#9CD55B</color>
+    <color name="colorVariableString">#CF5BD8</color>
 </resources>

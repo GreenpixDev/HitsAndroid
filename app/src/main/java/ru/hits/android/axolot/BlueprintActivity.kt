@@ -10,6 +10,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import kotlinx.android.synthetic.main.block_item.view.*
+import kotlinx.android.synthetic.main.creator_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
@@ -35,7 +37,7 @@ class BlueprintActivity : AppCompatActivity() {
     private val blockViews = mutableListOf<BlockView>()
     private var consoleLines: MutableList<TextView> = mutableListOf()
 
-    private var menuIsVisible = false
+    private var menuIsVisible = true
     private var consoleIsVisible = false
 
     val program = AxolotProgram.create()
@@ -85,7 +87,7 @@ class BlueprintActivity : AppCompatActivity() {
         }
 
         //перейти в сохранение кода
-        blueprintBinding.imageViewSave.setOnClickListener() {
+        blueprintBinding.toSave.setOnClickListener() {
             val intent = Intent(this, SaveActivity::class.java)
             startActivity(intent)
         }
@@ -98,7 +100,7 @@ class BlueprintActivity : AppCompatActivity() {
         // Скрыть и показать меню
         blueprintBinding.showMenu.setOnClickListener {
             if (menuIsVisible) {
-                closeConsole()
+                closeMenu()
             } else {
                 closeConsole()
                 openMenu()
@@ -107,7 +109,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Создание новой переменной и добавление ее в список в менюшке
         blueprintBinding.plusVariable.setOnClickListener {
-            //createVariableView()
+            createVariableView()
         }
 
         // Создание новой функции
@@ -136,7 +138,7 @@ class BlueprintActivity : AppCompatActivity() {
      */
     private fun addEventListenerConsole() {
         //скрыть/показать консоль, по нажатию на иконки консоли в правом нижнем углу
-        blueprintBinding.imageViewConsole.setOnClickListener() {
+        blueprintBinding.toShowConsole.setOnClickListener() {
             if (consoleIsVisible) {
                 closeConsole()
             } else {
@@ -146,7 +148,7 @@ class BlueprintActivity : AppCompatActivity() {
         }
 
         //вывод текста в консоль
-        blueprintBinding.imageViewSend.setOnClickListener() {
+        blueprintBinding.toSend.setOnClickListener() {
             val textView = TextView(this)
 
             textView.text = blueprintBinding.consoleInput.text
@@ -179,18 +181,18 @@ class BlueprintActivity : AppCompatActivity() {
     //показывает консоль
     private fun openConsole() {
         blueprintBinding.consoleView.visibility = View.VISIBLE
-//        bluePrintBinding.consoleScrollView.visibility = View.VISIBLE
-//        bluePrintBinding.consoleInput.visibility = View.VISIBLE
-//        bluePrintBinding.imageViewSend.visibility = View.VISIBLE
+        blueprintBinding.consoleScrollView.visibility = View.VISIBLE
+        blueprintBinding.consoleInput.visibility = View.VISIBLE
+        blueprintBinding.toSend.visibility = View.VISIBLE
         consoleIsVisible = true
     }
 
     //скрывает консоль
     private fun closeConsole() {
         blueprintBinding.consoleView.visibility = View.GONE
-//        bluePrintBinding.consoleScrollView.visibility = View.GONE
-//        bluePrintBinding.consoleInput.visibility = View.GONE
-//        bluePrintBinding.imageViewSend.visibility = View.GONE
+        blueprintBinding.consoleScrollView.visibility = View.GONE
+        blueprintBinding.consoleInput.visibility = View.GONE
+        blueprintBinding.toSend.visibility = View.GONE
         consoleIsVisible = false
     }
 
@@ -290,7 +292,7 @@ class BlueprintActivity : AppCompatActivity() {
         }
 
         // Прослушка изменений типа переменной
-        variableView.type.addItemSelectedListener { parent, _, _, _ ->
+        variableView.typeVariable.addItemSelectedListener { parent, _, _, _ ->
             program.variableTypes[parent.selectedItem.toString()
                 .lowercase(Locale.getDefault())]
                 ?.let { type ->

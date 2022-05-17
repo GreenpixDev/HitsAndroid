@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
+import kotlinx.android.synthetic.main.activity_blueprint.*
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargInputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
@@ -13,6 +14,7 @@ import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.databinding.BlockItemBinding
 import ru.hits.android.axolot.util.Vec2f
+import ru.hits.android.axolot.util.findRelativePosition
 import ru.hits.android.axolot.util.position
 
 /**

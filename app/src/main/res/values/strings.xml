@@ -39,9 +39,9 @@
     <string name="outputTrue">True</string>
     <string name="outputFalse">False</string>
 
-    <string-array name="TypeBlock">
+    <string-array name="typeBlock">
         <item>Boolean</item>
-        <item>Int</item>
+        <item>Integer</item>
         <item>Float</item>
         <item>String</item>
     </string-array>
