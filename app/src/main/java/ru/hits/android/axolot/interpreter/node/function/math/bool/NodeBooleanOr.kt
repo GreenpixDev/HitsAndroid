@@ -3,23 +3,25 @@ package ru.hits.android.axolot.interpreter.node.function.math.bool
 import ru.hits.android.axolot.interpreter.InterpreterContext
 import ru.hits.android.axolot.interpreter.node.NodeDependency
 import ru.hits.android.axolot.interpreter.node.NodeFunction
+import ru.hits.android.axolot.interpreter.node.function.math.real.NodeFloatSub
 import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.interpreter.variable.Variable
 
 class NodeBooleanOr : NodeFunction() {
 
-    fun init(vararg input: NodeDependency) {
-        for (i in input.indices) {
-            dependencies[i] = input[i]
-        }
+    companion object {
+        const val FIRST = 0
+        const val SECOND = 1
+    }
+
+    fun init(first: NodeDependency, second: NodeDependency) {
+        dependencies[NodeFloatSub.FIRST] = first
+        dependencies[NodeFloatSub.SECOND] = second
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        var result = false
-        for (i in dependencies.values.indices) {
-            val input = dependencies[i]!!.invoke(context)[Type.BOOLEAN]!!
-            result = result || input
-        }
-        return Variable(Type.BOOLEAN, result)
+        val first = dependencies[NodeBooleanNor.FIRST]!!.invoke(context)[Type.BOOLEAN]!!
+        val second = dependencies[NodeBooleanNor.SECOND]!!.invoke(context)[Type.BOOLEAN]!!
+        return Variable(Type.BOOLEAN, first || second)
     }
 }

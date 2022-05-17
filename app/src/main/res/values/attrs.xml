@@ -19,5 +19,9 @@
     <attr name="colorBlockHeaderMacros" format="color" />
     <attr name="colorBlockHeaderVariable" format="color" />
 
-    <attr name="colorLine" format="color" />
+    <attr name="colorFlowControl" format="color" />
+    <attr name="colorVariableBoolean" format="color" />
+    <attr name="colorVariableInt" format="color" />
+    <attr name="colorVariableFloat" format="color" />
+    <attr name="colorVariableString" format="color" />
 </resources>

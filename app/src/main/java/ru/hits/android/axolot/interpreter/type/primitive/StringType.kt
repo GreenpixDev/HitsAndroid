@@ -4,6 +4,9 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 
 class StringType : PrimitiveType<String> {
 
+    override val defaultValue: String
+        get() = ""
+
     override fun cast(variable: Variable): String {
         return variable.value.toString()
     }

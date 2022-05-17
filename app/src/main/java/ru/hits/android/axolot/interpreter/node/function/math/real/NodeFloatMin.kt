@@ -15,6 +15,10 @@ class NodeFloatMin : NodeFunction() {
         }
     }
 
+    fun add(input: NodeDependency) {
+        dependencies[dependencies.size] = input
+    }
+
     override operator fun invoke(context: InterpreterContext): Variable {
         var min = Double.POSITIVE_INFINITY
         for (i in dependencies.values.indices) {

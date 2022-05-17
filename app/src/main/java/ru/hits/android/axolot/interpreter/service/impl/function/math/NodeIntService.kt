@@ -20,12 +20,7 @@ class NodeIntService(private val nodeHandlerService: NodeHandlerService) : NodeD
             val result = input?.let { abs(it) }
             return Variable(Type.FLOAT, result)
         } else if (node is NodeIntDiv) {
-            var sum = 0
-            for (i in node.dependencies.values.indices) {
-                val input = nodeHandlerService.invoke(node.dependencies[i]!!, context)[Type.INT]
-                input?.let { sum /= input }
-            }
-            return Variable(Type.INT, sum)
+            // TODO (переделать)
         }
 
         else if(node is NodeIntEqual) {
@@ -83,12 +78,7 @@ class NodeIntService(private val nodeHandlerService: NodeHandlerService) : NodeD
         }
 
         else if(node is NodeIntMod) {
-            var sum = 0
-            for (i in node.dependencies.values.indices) {
-                val input = nodeHandlerService.invoke(node.dependencies[i]!!, context)[Type.INT]
-                input?.let { sum %= input }
-            }
-            return Variable(Type.INT, sum)
+            // TODO (переделать)
         }
 
         else if(node is NodeIntMore) {

@@ -11,29 +11,43 @@ import ru.hits.android.axolot.interpreter.type.VariableType
 class DeclaredVarargInputDataPin @JvmOverloads constructor(
     private val minArgs: Int,
     private val handler: (Collection<Node>, NodeDependency) -> Unit,
-    private val namePattern: (Int) -> String = { "$it" },
-    override val type: VariableType<*>
+    private val lazyName: (Int) -> String = { "$it" },
+    override val lazyType: () -> VariableType<*>
 ) : DeclaredDataPin {
+
+    constructor(
+        minArgs: Int,
+        handler: (Collection<Node>, NodeDependency) -> Unit,
+        lazyName: (Int) -> String = { "$it" },
+        type: VariableType<*>
+    ) : this(minArgs, handler, lazyName, { type })
 
     override fun handle(target: Collection<Node>, node: Node) {
         handler.invoke(target, node as NodeDependency)
     }
 
-    override fun createPin(owner: AxolotOwner): Collection<InputDataPin> {
-        var firstIndex = 1
-        if (owner is AxolotBlock) {
-            firstIndex += owner.contacts
-                .filterIsInstance<TypedPin>()
-                .filter { it.type == this }
-                .count()
-        }
+    override fun createAllPin(owner: AxolotOwner): Collection<InputDataPin> {
         return Array(minArgs) {
             InputDataPin(
                 owner,
                 this,
-                namePattern.invoke(it + firstIndex)
+                lazyName.invoke(it + 1)
             )
         }.toList()
     }
 
+    fun createOnePin(owner: AxolotOwner): InputDataPin {
+        var index = 1
+        if (owner is AxolotBlock) {
+            index += owner.contacts
+                .filterIsInstance<TypedPin>()
+                .filter { it.type == this }
+                .count()
+        }
+        return InputDataPin(
+            owner,
+            this,
+            lazyName.invoke(index)
+        )
+    }
 }

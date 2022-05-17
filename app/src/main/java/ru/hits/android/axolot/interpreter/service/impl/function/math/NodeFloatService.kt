@@ -23,12 +23,7 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
             val result = input?.let { abs(it) }
             return Variable(Type.FLOAT, result)
         } else if (node is NodeFloatDiv) {
-            var sum = 0.0
-            for (i in node.dependencies.values.indices) {
-                val input = nodeHandlerService.invoke(node.dependencies[i]!!, context)[Type.FLOAT]
-                input?.let { sum /= input }
-            }
-            return Variable(Type.FLOAT, sum)
+            // TODO (переделать)
         }
         else if(node is NodeFloatEqual) {
             val first = nodeHandlerService.invoke(
@@ -80,12 +75,7 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
             return Variable(Type.FLOAT, min)
         }
         else if(node is NodeFloatMod) {
-            var sum = 0.0
-            for (i in node.dependencies.values.indices) {
-                val input = nodeHandlerService.invoke(node.dependencies[i]!!, context)[Type.FLOAT]
-                input?.let { sum %= input }
-            }
-            return Variable(Type.FLOAT, sum)
+            // TODO (переделать)
         }
         else if(node is NodeFloatMore) {
             val first = nodeHandlerService.invoke(
