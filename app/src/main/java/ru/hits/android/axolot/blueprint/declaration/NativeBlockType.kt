@@ -2,6 +2,7 @@ package ru.hits.android.axolot.blueprint.declaration
 
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
+import java.io.Serializable
 
 /**
  * Нативная декларация блока
@@ -9,7 +10,7 @@ import ru.hits.android.axolot.blueprint.element.AxolotBlock
 open class NativeBlockType(
     override val simpleName: String,
     override val declaredPins: List<DeclaredPin>
-) : BlockType {
+) : BlockType, Serializable {
 
     constructor(simpleName: String, vararg pins: DeclaredPin)
             : this(simpleName, pins.toList())

@@ -1,9 +1,18 @@
 package ru.hits.android.axolot.interpreter.variable
 
 import ru.hits.android.axolot.interpreter.type.VariableType
+import ru.hits.android.axolot.interpreter.type.primitive.BooleanType
+import ru.hits.android.axolot.interpreter.type.primitive.FloatType
+import ru.hits.android.axolot.interpreter.type.primitive.IntType
+import ru.hits.android.axolot.interpreter.type.primitive.StringType
 import ru.hits.android.axolot.interpreter.type.structure.ArrayType
+import java.io.Externalizable
+import java.io.ObjectInput
+import java.io.ObjectOutput
+import java.io.Serializable
 
-class Variable(val type: VariableType<*>, var value: Any?) {
+class Variable(var type: VariableType<*>, var value: Any?) : Serializable {
+
 
     @Suppress("unchecked_cast")
     operator fun <T> get(type: VariableType<T>): T? {

@@ -3,11 +3,12 @@ package ru.hits.android.axolot.blueprint.declaration.pin
 import ru.hits.android.axolot.blueprint.element.AxolotOwner
 import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.interpreter.node.Node
+import java.io.Serializable
 
 /**
  * Интерфейс, описывающий декларацию пина у блока
  */
-interface DeclaredPin {
+interface DeclaredPin: Serializable {
 
     /**
      * Создать пин для блока
