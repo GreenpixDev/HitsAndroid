@@ -10,8 +10,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import kotlinx.android.synthetic.main.block_item.view.*
-import kotlinx.android.synthetic.main.creator_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
@@ -30,21 +28,23 @@ import java.util.*
  */
 class BlueprintActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityBlueprintBinding
+    private lateinit var blueprintBinding: ActivityBlueprintBinding
 
     private lateinit var blockTitleToColor: Map<Regex, Int>
 
     private val blockViews = mutableListOf<BlockView>()
+    private var consoleLines: MutableList<TextView> = mutableListOf()
 
-    private var menuIsVisible = true
+    private var menuIsVisible = false
+    private var consoleIsVisible = false
 
     val program = AxolotProgram.create()
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityBlueprintBinding.inflate(layoutInflater)
-        setContentView(binding.blueprintLayout)
+        blueprintBinding = ActivityBlueprintBinding.inflate(layoutInflater)
+        setContentView(blueprintBinding.blueprintLayout)
 
         // Палитра цветов
         blockTitleToColor = mapOf(
@@ -57,7 +57,9 @@ class BlueprintActivity : AppCompatActivity() {
             Regex("^macros\\..*") to getThemeColor(R.attr.colorBlockHeaderMacros),
         )
 
-        addEventListeners()
+        addEventListenersButtons()
+        addEventListenerMenu()
+        addEventListenerConsole()
         createBlockTypeViews()
     }
 
@@ -66,61 +68,134 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Задаем зум по-умолчанию.
         Handler(Looper.getMainLooper()).postDelayed({
-            binding.zoomLayout.zoomTo(binding.zoomLayout.getMaxZoom() / 2, false)
+            blueprintBinding.zoomLayout.zoomTo(blueprintBinding.zoomLayout.getMaxZoom() / 2, false)
         }, 0)
     }
 
     /**
-     * Добавляем все прослушки событий
+     * Метод прослушок событий перехода на другое активити или открытие какого-то окна
      */
-    private fun addEventListeners() {
-        // Скрывание и показ меню
-        binding.showMenu.setOnClickListener {
-            if (menuIsVisible) {
-                binding.menu.visibility = View.GONE
-                menuIsVisible = false
-            } else {
-                binding.menu.visibility = View.VISIBLE
-                menuIsVisible = true
-            }
-        }
-
+    private fun addEventListenersButtons() {
         // Запуск программы
-        binding.ToStartCode.setOnClickListener { startProgram() }
+        blueprintBinding.ToStartCode.setOnClickListener { startProgram() }
 
         // Переключение на страницу с настройками
-        binding.ToPageSettings.setOnClickListener {
+        blueprintBinding.ToPageSettings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
-        // Создание новой переменной и добавление ее в список в менюшке
-        binding.plusVariable.setOnClickListener {
-            createVariableView()
-        }
-
-        // Создание новой функции
-        binding.plusFunction.setOnClickListener {
-            val view = CreatorView(this)
-
-            view.typeExpression = false
-            view.initComponents()
-
-            binding.listFunction.addView(view)
-        }
-
-        // Создание нового макроса
-        binding.plusMacros.setOnClickListener {
-            val view = CreatorView(this)
-
-            view.typeExpression = false
-            view.initComponents()
-
-            binding.listMacros.addView(view)
+        //перейти в сохранение кода
+        blueprintBinding.imageViewSave.setOnClickListener() {
+            val intent = Intent(this, SaveActivity::class.java)
+            startActivity(intent)
         }
     }
 
     /**
-     * Метод создания всех вьюшек  нативных типов блоков
+     * Метод прослушки менюшки
+     */
+    private fun addEventListenerMenu() {
+        // Скрыть и показать меню
+        blueprintBinding.showMenu.setOnClickListener {
+            if (menuIsVisible) {
+                closeConsole()
+            } else {
+                closeConsole()
+                openMenu()
+            }
+        }
+
+        // Создание новой переменной и добавление ее в список в менюшке
+        blueprintBinding.plusVariable.setOnClickListener {
+            //createVariableView()
+        }
+
+        // Создание новой функции
+        blueprintBinding.plusFunction.setOnClickListener {
+            val view = CreatorView(this)
+
+            view.typeExpression = false
+            view.initComponents()
+
+            blueprintBinding.listFunction.addView(view)
+        }
+
+        // Создание нового макроса
+        blueprintBinding.plusMacros.setOnClickListener {
+            val view = CreatorView(this)
+
+            view.typeExpression = false
+            view.initComponents()
+
+            blueprintBinding.listMacros.addView(view)
+        }
+    }
+
+    /**
+     * Метод прослушки консоли
+     */
+    private fun addEventListenerConsole() {
+        //скрыть/показать консоль, по нажатию на иконки консоли в правом нижнем углу
+        blueprintBinding.imageViewConsole.setOnClickListener() {
+            if (consoleIsVisible) {
+                closeConsole()
+            } else {
+                closeMenu()
+                openConsole()
+            }
+        }
+
+        //вывод текста в консоль
+        blueprintBinding.imageViewSend.setOnClickListener() {
+            val textView = TextView(this)
+
+            textView.text = blueprintBinding.consoleInput.text
+
+            //костыльное задание стилей, пока не разобрался как их подключить из styles.xml
+            textView.textSize = 18f
+            textView.setTypeface(ResourcesCompat.getFont(this, R.font.montserrat_regular))
+            textView.setTextColor(Color.BLACK)
+            blueprintBinding.linearLayoutConsole.addView(textView)
+
+            //насколько я понимаю, нам будет полезно хранить эти TextView в списке
+            consoleLines.add(textView)
+        }
+    }
+
+    //показывает боковое меню
+    private fun openMenu() {
+        blueprintBinding.menu.visibility = View.VISIBLE
+        blueprintBinding.scrollViewMenu.visibility = View.VISIBLE
+        menuIsVisible = true
+    }
+
+    //скрывает боковое меню
+    private fun closeMenu() {
+        blueprintBinding.menu.visibility = View.GONE
+        blueprintBinding.scrollViewMenu.visibility = View.GONE
+        menuIsVisible = false
+    }
+
+    //показывает консоль
+    private fun openConsole() {
+        blueprintBinding.consoleView.visibility = View.VISIBLE
+//        bluePrintBinding.consoleScrollView.visibility = View.VISIBLE
+//        bluePrintBinding.consoleInput.visibility = View.VISIBLE
+//        bluePrintBinding.imageViewSend.visibility = View.VISIBLE
+        consoleIsVisible = true
+    }
+
+    //скрывает консоль
+    private fun closeConsole() {
+        blueprintBinding.consoleView.visibility = View.GONE
+//        bluePrintBinding.consoleScrollView.visibility = View.GONE
+//        bluePrintBinding.consoleInput.visibility = View.GONE
+//        bluePrintBinding.imageViewSend.visibility = View.GONE
+        consoleIsVisible = false
+    }
+
+    /**
+     * Метод создания всех вьюшек нативных типов блоков
      */
     private fun createBlockTypeViews() {
         program.blockTypes.values.forEach {
@@ -133,7 +208,7 @@ class BlueprintActivity : AppCompatActivity() {
             textView.textSize = 20f
             textView.typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
-            binding.listBlocks.addView(textView)
+            blueprintBinding.listBlocks.addView(textView)
 
             textView.setOnClickListener { _ ->
                 try {
@@ -159,8 +234,8 @@ class BlueprintActivity : AppCompatActivity() {
         blockView.block = type.createBlock()
 
         // Координаты
-        val pan = Vec2f(binding.zoomLayout.panX, binding.zoomLayout.panY) * -1
-        val offset = binding.zoomLayout.center / binding.zoomLayout.realZoom
+        val pan = Vec2f(blueprintBinding.zoomLayout.panX, blueprintBinding.zoomLayout.panY) * -1
+        val offset = blueprintBinding.zoomLayout.center / blueprintBinding.zoomLayout.realZoom
         blockView.position = pan + offset
 
         // Задаем цвет заголовку
@@ -190,7 +265,7 @@ class BlueprintActivity : AppCompatActivity() {
         program.addBlock(blockView.block)
 
         // Добавляем готовый блок на поле
-        binding.codeField.addView(blockView)
+        blueprintBinding.codeField.addView(blockView)
         blockViews.add(blockView)
     }
 
@@ -206,7 +281,7 @@ class BlueprintActivity : AppCompatActivity() {
         variableView.variableName = "variable"
 
         program.createVariable(variableView.variableName)
-        binding.listVariables.addView(variableView)
+        blueprintBinding.listVariables.addView(variableView)
 
         // Прослушка изменений имени переменной
         variableView.name.addTextChangedListener { title, _, _, _ ->
@@ -234,7 +309,7 @@ class BlueprintActivity : AppCompatActivity() {
                 }
         }
 
-        // Прослушка кнопка добавления блока
+        // Прослушка кнопки добавления блока
         variableView.btnAdd.setOnClickListener {
             val variableGetter = program.getVariableGetter(variableView.variableName)
             val blockView = BlockView(this)

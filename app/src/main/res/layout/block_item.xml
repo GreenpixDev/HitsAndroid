@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:background="@color/bgBlock">
 
-        <!-- Header (тут название) -->
+        <!-- Header (тут название и pin, если этот блок - переменная) -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/header"
             android:layout_width="match_parent"

@@ -9,6 +9,7 @@
     <string name="play_icon_description">Это кнопка, запускающая сформированный вами код</string>
     <string name="show_and_not_show_toolbar">Это кнопка, закрывающая и открывающая тулбар</string>
     <string name="menu_description">Это меню, где можно выбрать блок для визуального программирования</string>
+    <string name="console_icon_description">Кнопка, открывающая и закрывающая консоль</string>
 
     <string name="Konstantin">Константин</string>
     <string name="Elena">Елена</string>
@@ -25,6 +26,8 @@
     <string name="right_arrow_description">imageView, ведущая на страницу, где можно начать работать</string>
     <string name="back_to_game">Вернуться к игре</string>
     <string name="exit">Выход</string>
+
+    <string name="console">Это консоль</string>
 
     <string name="variable">variable</string>
 
@@ -56,7 +59,6 @@
         <item>for</item>
         <item>forEach</item>
         <item>if else</item>
-        <!--        это branch-->
         <item>main</item>
         <item>print string</item>
         <item>сложение</item>

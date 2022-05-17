@@ -1,8 +1,8 @@
 package ru.hits.android.axolot
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import ru.hits.android.axolot.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -13,6 +13,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        addEventListeners()
+    }
+
+    private fun addEventListeners() {
+        binding.toMainPage.setOnClickListener() {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
 
         binding.startBtn.setOnClickListener {
             startActivity(Intent(this, BlueprintActivity::class.java))
@@ -26,14 +34,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
-        binding.toMainPage.setOnClickListener() {
-            startActivity(Intent(this, MainActivity::class.java))
-        }
-
         binding.toAboutUsPage.setOnClickListener() {
             startActivity(Intent(this, AboutUsActivity::class.java))
         }
     }
-
 
 }
