@@ -75,6 +75,23 @@ class EdgeView @JvmOverloads constructor(
         for (i in 0 until points.size) {
             canvas?.drawCircle(points[i].x, points[i].y, circleRadius, paintBrush)
         }
+
+        canvas?.drawLine(
+            points.first().x,
+            points.first().y,
+            drawPoints.first().x,
+            drawPoints.first().y,
+            paintBrush
+        )
+
+        canvas?.drawLine(
+            points.last().x,
+            points.last().y,
+            drawPoints.last().x,
+            drawPoints.last().y,
+            paintBrush
+        )
+
     }
 
     private fun generateDrawPoints(): MutableList<Vec2f> {
@@ -91,12 +108,26 @@ class EdgeView @JvmOverloads constructor(
                 )
             )
             sourcePoints.add(
+                1, Vec2f(
+                    x = (sourcePoints[1].x + points[0].x)/2,
+                    y = (sourcePoints[1].y + points[0].y)/2
+                )
+            )
+            sourcePoints.add(
                 index = sourcePoints.size - 1,
                 element = Vec2f(
                     x = sourcePoints[sourcePoints.size - 1].x - distance,
                     y = sourcePoints[sourcePoints.size - 1].y
                 )
             )
+            sourcePoints.add(
+                index = sourcePoints.size - 1, Vec2f(
+                    x = (sourcePoints[sourcePoints.size - 2].x + points.last().x)/2,
+                    y = (sourcePoints[sourcePoints.size - 2].y + points.last().y)/2
+                )
+            )
+            sourcePoints.removeFirst()
+            sourcePoints.removeLast()
         }
 
         val drawPoints = mutableListOf<Vec2f>()
