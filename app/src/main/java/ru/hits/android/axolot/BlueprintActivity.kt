@@ -275,14 +275,12 @@ class BlueprintActivity : AppCompatActivity() {
     private fun openMenu() {
         binding.consoleView.closeConsole()
         binding.menu.visibility = View.VISIBLE
-//        binding.menuScrollView.visibility = View.VISIBLE
         menuIsVisible = true
     }
 
     //скрывает боковое меню
     fun closeMenu() {
         binding.menu.visibility = View.GONE
-//        binding.menuScrollView.visibility = View.GONE
         menuIsVisible = false
     }
 
