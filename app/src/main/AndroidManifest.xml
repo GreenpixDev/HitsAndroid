@@ -28,7 +28,7 @@
             android:exported="false"
             android:screenOrientation="fullUser" />
         <activity
-            android:name=".BluePrintActivity"
+            android:name=".BlueprintActivity"
             android:exported="false"
             android:screenOrientation="userLandscape" />
         <activity

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_main"
     android:visibility="visible"
-    tools:context=".BluePrintActivity">
+    tools:context=".BlueprintActivity">
 
     <ImageView
         android:id="@+id/imageViewSettings"

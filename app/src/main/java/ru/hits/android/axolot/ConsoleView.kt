@@ -19,7 +19,7 @@ class ConsoleView @JvmOverloads constructor(
 
     private val binding: ConsoleViewBinding
 
-    private var activity: BluePrintActivity = context as BluePrintActivity
+    private var activity: BlueprintActivity = context as BlueprintActivity
 
     init {
         val inflater = LayoutInflater.from(context)

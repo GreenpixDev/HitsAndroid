@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import ru.hits.android.axolot.databinding.ActivityBluePrintBinding
 
-class BluePrintActivity : AppCompatActivity() {
+class BlueprintActivity : AppCompatActivity() {
     public lateinit var bluePrintBinding: ActivityBluePrintBinding
     public var menuIsVisible = true
     public var consoleIsVisible = false

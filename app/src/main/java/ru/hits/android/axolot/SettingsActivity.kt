@@ -1,9 +1,8 @@
 package ru.hits.android.axolot
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import ru.hits.android.axolot.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
@@ -23,7 +22,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         settingsBinding.start.setOnClickListener(){
-            val intent = Intent(this, BluePrintActivity::class.java)
+            val intent = Intent(this, BlueprintActivity::class.java)
             startActivity(intent)
         }
     }
