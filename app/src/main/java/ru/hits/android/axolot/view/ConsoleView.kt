@@ -6,11 +6,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import ru.hits.android.axolot.BlueprintActivity
 import ru.hits.android.axolot.R
+import ru.hits.android.axolot.blueprint.FrontendConsole
 import ru.hits.android.axolot.databinding.ConsoleViewBinding
 
 class ConsoleView @JvmOverloads constructor(
@@ -21,10 +21,9 @@ class ConsoleView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     private val binding: ConsoleViewBinding
-
     private var activity: BlueprintActivity = context as BlueprintActivity
 
-
+    private lateinit var console: FrontendConsole
 
     init {
         val inflater = LayoutInflater.from(context)
@@ -34,15 +33,21 @@ class ConsoleView @JvmOverloads constructor(
         addEvents()
     }
 
+    fun initConsole(console: FrontendConsole) {
+        this.console = console
+        this.console.setOnReceive {
+            addTextViewToConsole(it)
+        }
+    }
+
     private fun addEvents() {
         //добавление TextView в консоль
         binding.imageViewSend.setOnClickListener() {
-            //TODO: inputString - данные, которые нужно положить в консоль
             val inputString = binding.consoleInput.text.toString()
             binding.consoleInput.setText("")
 
             addTextViewToConsole(inputString)
-
+            console.send(inputString)
         }
     }
 
@@ -66,8 +71,7 @@ class ConsoleView @JvmOverloads constructor(
     }
 
     //создает TextView и добавляяет в консоль
-    fun addTextViewToConsole(inputString: String) {
-        //TODO: вызвать этот метод, чтобы положить этот текст в консоль
+    private fun addTextViewToConsole(inputString: String) {
         val textView = TextView(activity)
         textView.text = inputString
 

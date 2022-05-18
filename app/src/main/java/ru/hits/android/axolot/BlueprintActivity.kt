@@ -16,6 +16,7 @@ import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
 import kotlinx.android.synthetic.main.creator_item.*
 import kotlinx.android.synthetic.main.creator_item.view.*
+import ru.hits.android.axolot.blueprint.FrontendConsoleMock
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
@@ -59,6 +60,7 @@ class BlueprintActivity : AppCompatActivity() {
         createBlockTypeViews()
 
         openMenu()
+        binding.consoleView.initConsole(FrontendConsoleMock())
     }
 
     override fun onResume() {
