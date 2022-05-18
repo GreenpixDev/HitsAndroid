@@ -12,12 +12,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
 import kotlinx.android.synthetic.main.creator_item.view.*
-import ru.hits.android.axolot.blueprint.FrontendConsoleMock
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.compiler.BlueprintCompiler
+import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
 import ru.hits.android.axolot.exception.AxolotException
 import ru.hits.android.axolot.util.*
@@ -41,6 +41,7 @@ class BlueprintActivity : AppCompatActivity() {
     var consoleIsVisible = true
 
     val program = AxolotProgram.create()
+    val console = Console()
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +64,7 @@ class BlueprintActivity : AppCompatActivity() {
         createBlockTypeViews()
 
         openMenu()
-        binding.consoleView.initConsole(FrontendConsoleMock())
+        binding.consoleView.initConsole(console)
     }
 
     override fun onResume() {
@@ -265,7 +266,7 @@ class BlueprintActivity : AppCompatActivity() {
 
     private fun startProgram() {
         val compiler = BlueprintCompiler()
-        val interpreter = compiler.prepareInterpreter(program)
+        val interpreter = compiler.prepareInterpreter(program, console)
         val node = compiler.compile(program)
 
         try {
