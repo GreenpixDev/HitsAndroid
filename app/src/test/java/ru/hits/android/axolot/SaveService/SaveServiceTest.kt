@@ -36,8 +36,8 @@ class SaveServiceTest {
         program.mainBlock = mainBlock
 
         val saveService = SaveService()
-        saveService.saveProject(program, "/home/cyberian/save")
-        val newProgram = saveService.loadProject("/home/cyberian/save")
+        saveService.saveProject(program, "save")
+        val newProgram = saveService.loadProject("save")
 
         val node = compiler.compile(newProgram)
         val scope = GlobalScope()
