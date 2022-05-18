@@ -6,6 +6,7 @@ import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
 import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.project.libs.AxolotDefaultLibrary
+import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.exception.AxolotException
 import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.interpreter.type.VariableType
@@ -73,10 +74,12 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
      */
     fun createFunction(name: String): FunctionType {
         require("${FunctionType.PREFIX_NAME}.$name" !in blockTypes) {
-            "variable with name $name already exists"
+            "function with name $name already exists"
         }
         val functionType = FunctionType(name)
-        registerBlock(functionType);
+        functionType.createBlock(functionType.beginType)
+
+        registerBlock(functionType)
         return functionType
     }
 
@@ -85,6 +88,7 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
         fun create(): AxolotProgram {
             val program = AxolotProgram()
             program.addLibrary(AxolotDefaultLibrary())
+            program.mainBlock = program.createBlock(AxolotNativeLibrary.BLOCK_MAIN)
             return program
         }
 

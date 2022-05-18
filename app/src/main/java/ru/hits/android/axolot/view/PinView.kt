@@ -204,4 +204,28 @@ class PinView @JvmOverloads constructor(
             false
         }
     }
+
+    fun restoreEdge(withPinView: PinView): EdgeView {
+        val view = binding.contact
+        val position = activity.codeField.findRelativePosition(view)
+        val center = position + view.center
+        val edgeView = EdgeView(context)
+
+        edgeView.position = center
+        edgeView.paintBrush.color = color
+
+        edgeView.points.add(Vec2f.ZERO)
+        edgeView.points.add(Vec2f.ZERO)
+
+        val withPinViewPosition = activity.codeField.findRelativePosition(withPinView.contact)
+        val withPinViewCenter = withPinViewPosition + withPinView.center
+
+        edgeView.setEndPoint(withPinViewCenter)
+
+        edgeViews.add(edgeView)
+        withPinView.edgeViews.add(edgeView)
+
+        activity.codeField.addView(edgeView)
+        return edgeView
+    }
 }

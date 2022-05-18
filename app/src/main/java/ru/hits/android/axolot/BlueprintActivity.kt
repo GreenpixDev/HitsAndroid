@@ -14,6 +14,9 @@ import kotlinx.android.synthetic.main.block_item.view.*
 import kotlinx.android.synthetic.main.creator_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
+import ru.hits.android.axolot.blueprint.element.AxolotBlock
+import ru.hits.android.axolot.blueprint.element.AxolotSource
+import ru.hits.android.axolot.blueprint.element.pin.PinToOne
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.compiler.BlueprintCompiler
@@ -41,10 +44,10 @@ class BlueprintActivity : AppCompatActivity() {
     private var menuIsVisible = true
     var consoleIsVisible = true
 
-    val program = AxolotProgram.create()
+    private val program = AxolotProgram.create()
     val console = Console()
 
-    val currentSource = AxolotProgram.create()
+    var currentSource: AxolotSource = program
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,9 +77,10 @@ class BlueprintActivity : AppCompatActivity() {
         super.onResume()
 
         // Задаем зум по-умолчанию.
-        Handler(Looper.getMainLooper()).postDelayed({
+        Handler(Looper.getMainLooper()).post {
             binding.zoomLayout.zoomTo(binding.zoomLayout.getMaxZoom() / 2, false)
-        }, 0)
+            restoreSource(program)
+        }
     }
 
     /**
@@ -124,13 +128,41 @@ class BlueprintActivity : AppCompatActivity() {
 
             binding.listMacros.addView(view)
         }
+
+        // Обратно в Main программы
+        binding.goToMain.setOnClickListener { restoreSource(program) }
+    }
+
+    /**
+     * Восстановить блоки на экран телефона из объекта [source]
+     */
+    private fun restoreSource(source: AxolotSource) {
+        binding.codeField.removeViews(0, binding.codeField.childCount)
+
+        val blockViews = source.blocks
+            .map { addBlock(it, it.type.fullName) }
+
+        val pinViews = blockViews
+            .flatMap { it.pinViews }
+            .associateBy { it.pin }
+
+        pinViews.keys
+            .filterIsInstance<PinToOne>()
+            .filter { it.adjacent != null }
+            .forEach {
+                Handler(Looper.getMainLooper()).post {
+                    pinViews[it]!!.restoreEdge(pinViews[it.adjacent!!]!!)
+                }
+            }
+
+        currentSource = source
     }
 
     /**
      * Метод создания всех вьюшек  нативных типов блоков
      */
     private fun createBlockTypeViews() {
-        currentSource.blockTypes.values.forEach {
+        program.blockTypes.values.forEach {
             val nameBlock = getLocalizedString(it.fullName)
             val textView = TextView(this)
 
@@ -161,14 +193,37 @@ class BlueprintActivity : AppCompatActivity() {
         type: BlockType,
         name: String
     ) {
-
         // Инициализация
         blockView.block = type.createBlock()
 
-        // Координаты
-        val pan = Vec2f(binding.zoomLayout.panX, binding.zoomLayout.panY) * -1
-        val offset = binding.zoomLayout.center / binding.zoomLayout.realZoom
-        blockView.position = pan + offset
+        // Если это главный блок - указываем это в программе.
+        // Если главный блок уже был - кинет ошибку AxolotException
+        if (blockView.block.type == AxolotNativeLibrary.BLOCK_MAIN) {
+            program.mainBlock = blockView.block
+        }
+
+        // Привязываем блок к программе
+        currentSource.addBlock(blockView.block)
+
+        // Добавляем на поле
+        addBlock(blockView.block, name)
+    }
+
+    /**
+     * Добавить блок на поле
+     */
+    private fun addBlock(block: AxolotBlock, name: String): BlockView {
+        val blockView = BlockView(this)
+        blockView.block = block
+
+        if (block.position == null) {
+            // Координаты
+            val pan = Vec2f(binding.zoomLayout.panX, binding.zoomLayout.panY) * -1
+            val offset = binding.zoomLayout.center / binding.zoomLayout.realZoom
+            blockView.position = pan + offset
+        } else {
+            blockView.position = block.position!!
+        }
 
         // Задаем цвет заголовку
         for (it in blockTitleToColor) {
@@ -178,27 +233,19 @@ class BlueprintActivity : AppCompatActivity() {
             }
         }
 
+        // Переименовываем блок
+        blockView.displayName = getLocalizedString(name)
+
         // Добавляем все пины
         blockView.block.contacts.forEach { blockView.createPinView(it) }
 
         // Добавляем плюсики для всех vararg пинов
-        type.declaredPins.forEach { blockView.createAddPinView(it) }
-
-        // Переименовываем блок
-        blockView.displayName = getLocalizedString(name)
-
-        // Если это главный блок - указываем это в программе.
-        // Если главный блок уже был - кинет ошибку AxolotException
-        if (type == AxolotNativeLibrary.BLOCK_MAIN) {
-            currentSource.mainBlock = blockView.block
-        }
-
-        // Привязываем блок к программе
-        currentSource.addBlock(blockView.block)
+        blockView.block.type.declaredPins.forEach { blockView.createAddPinView(it) }
 
         // Добавляем готовый блок на поле
         binding.codeField.addView(blockView)
         blockViews.add(blockView)
+        return blockView
     }
 
     /**
@@ -212,21 +259,21 @@ class BlueprintActivity : AppCompatActivity() {
         variableView.initComponents()
         variableView.variableName = "variable"
 
-        currentSource.createVariable(variableView.variableName)
+        program.createVariable(variableView.variableName)
         binding.listVariables.addView(variableView)
 
         // Прослушка изменений имени переменной
         variableView.name.addTextChangedListener { title, _, _, _ ->
-            currentSource.renameVariable(variableView.variableName, title.toString())
+            program.renameVariable(variableView.variableName, title.toString())
             variableView.variableName = title.toString()
         }
 
         // Прослушка изменений типа переменной
         variableView.type.addItemSelectedListener { parent, _, _, _ ->
-            currentSource.variableTypes[parent.selectedItem.toString()
+            program.variableTypes[parent.selectedItem.toString()
                 .lowercase(Locale.getDefault())]
                 ?.let { type ->
-                    currentSource.retypeVariable(variableView.variableName, type)
+                    program.retypeVariable(variableView.variableName, type)
                     val newColorName = "colorVariable${type}"
 
                     blockViews.filter { it.block.type is VariableGetterBlockType }
@@ -243,7 +290,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Прослушка кнопка добавления блока
         variableView.btnAdd.setOnClickListener {
-            val variableGetter = currentSource.getVariableGetter(variableView.variableName)
+            val variableGetter = program.getVariableGetter(variableView.variableName)
             val blockView = BlockView(this)
             createBlock(blockView, variableGetter, VariableGetterBlockType.PREFIX_NAME)
 
@@ -259,17 +306,23 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     private fun createFunctionView() {
+        val functionName = "function"
+        val functionType = program.createFunction(functionName)
         val functionView = FunctionView(this)
 
-        functionView.functionName = "function"
-
+        functionView.functionName = functionName
         binding.listFunction.addView(functionView)
+
+        // Прослушка изменений типа переменной
+        functionView.btnEdit.setOnClickListener {
+            restoreSource(functionType)
+        }
     }
 
     private fun startProgram() {
         val compiler = BlueprintCompiler()
-        val interpreter = compiler.prepareInterpreter(currentSource, console)
-        val node = compiler.compile(currentSource)
+        val interpreter = compiler.prepareInterpreter(program, console)
+        val node = compiler.compile(program)
 
         try {
             interpreter.execute(node)

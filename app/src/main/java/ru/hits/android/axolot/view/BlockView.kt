@@ -39,6 +39,14 @@ class BlockView @JvmOverloads constructor(
     val pinViews: List<PinView>
         get() = _pinViews
 
+    var position: Vec2f
+        get() = Vec2f(x, y)
+        set(value) {
+            x = value.x
+            y = value.y
+            block.position = value
+        }
+
     /**
      * Отображаемое название блока в заголовке
      */
