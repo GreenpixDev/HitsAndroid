@@ -21,7 +21,7 @@
         android:id="@+id/consoleScrollView"
         android:layout_width="350dp"
         android:layout_height="250dp"
-        android:contentDescription="@string/console"
+        android:contentDescription="@string/console_scroll_view_description"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewConsole"
         app:layout_constraintEnd_toEndOf="@+id/consoleView"
         app:layout_constraintStart_toStartOf="@+id/consoleView"
