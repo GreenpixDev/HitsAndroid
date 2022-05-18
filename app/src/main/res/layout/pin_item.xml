@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:textSize="8sp"
         android:visibility="gone"
+        android:textAlignment="center"
         tools:ignore="SmallSp" />
 
     <ImageView
