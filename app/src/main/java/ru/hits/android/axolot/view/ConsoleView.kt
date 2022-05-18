@@ -40,6 +40,9 @@ class ConsoleView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Добавляем листенер (пока что только на кнопку отправки)
+     */
     private fun addEvents() {
         //добавление TextView в консоль
         binding.imageViewSend.setOnClickListener() {
@@ -51,7 +54,9 @@ class ConsoleView @JvmOverloads constructor(
         }
     }
 
-    //показывает консоль
+    /**
+     * Метод, который открывает консоль, при этом скрывая боковое меню
+     */
     fun openConsole() {
         activity.closeMenu()
         binding.consoleView.visibility = View.VISIBLE
@@ -61,7 +66,9 @@ class ConsoleView @JvmOverloads constructor(
         activity.consoleIsVisible = true
     }
 
-    //скрывает консоль
+    /**
+     * Скрывает консоль, не трогая боковое меню
+     */
     fun closeConsole() {
         binding.consoleView.visibility = View.GONE
         binding.consoleScrollView.visibility = View.GONE
@@ -70,7 +77,11 @@ class ConsoleView @JvmOverloads constructor(
         activity.consoleIsVisible = false
     }
 
-    //создает TextView и добавляяет в консоль
+    /**
+     * Создание TextView, добавление к нему значение [inputString],
+     * добавление этого TextView в консоль, сохранение этого TextView в массив
+     * (мало ли нам с ним придется еще работать, так что оставим способ с ним взаимодействовать)
+     */
     private fun addTextViewToConsole(inputString: String) {
         val textView = TextView(activity)
         textView.text = inputString

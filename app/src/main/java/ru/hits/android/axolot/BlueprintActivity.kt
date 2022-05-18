@@ -273,14 +273,18 @@ class BlueprintActivity : AppCompatActivity() {
         block.translationZ = 30f
     }
 
-    //показывает боковое меню
+    /**
+     * Показывает боковое меню, при этом скрывает консоль.
+     */
     private fun openMenu() {
         binding.consoleView.closeConsole()
         binding.menu.visibility = View.VISIBLE
         menuIsVisible = true
     }
 
-    //скрывает боковое меню
+    /**
+     * Сокрытие бокового меню
+     */
     fun closeMenu() {
         binding.menu.visibility = View.GONE
         menuIsVisible = false
