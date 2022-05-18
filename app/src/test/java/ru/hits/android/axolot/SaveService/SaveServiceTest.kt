@@ -35,7 +35,6 @@ class SaveServiceTest {
 
         program.mainBlock = mainBlock
 
-
         val saveService = SaveService()
         saveService.saveProject(program, "/home/cyberian/save")
         val newProgram = saveService.loadProject("/home/cyberian/save")
@@ -43,8 +42,6 @@ class SaveServiceTest {
         val node = compiler.compile(newProgram)
         val scope = GlobalScope()
         val interpreter = BlueprintInterpreter(scope)
-
-
 
         interpreter.execute(node)
     }
