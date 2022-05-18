@@ -3,6 +3,7 @@ package ru.hits.android.axolot.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.text.InputType.*
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -83,7 +84,6 @@ class PinView @JvmOverloads constructor(
      * Таким образом, можно вставлять эту вьюшку в любое место в списке
      */
     fun addViewTo(parentView: BlockView, indexGetter: (Int) -> Int) {
-        var counter = 0
         val layout = when (pin) {
             is InputPin -> {
                 layoutDirection = LAYOUT_DIRECTION_LTR
@@ -107,40 +107,43 @@ class PinView @JvmOverloads constructor(
      * invisible (он станет невидимым, но продолжит занимать место)
      */
     private fun processInputField() {
-        var currentPin = pin
+        val currentPin = pin
         if (currentPin is DataPin && currentPin is InputPin) {
             if (currentPin is TypedPin) {
                 when ((currentPin.type as DeclaredDataPin).type) {
                     Type.INT -> {
-                        binding.inputFieldInt.visibility = View.VISIBLE
-                        binding.inputFieldInt.setText("0")
+                        binding.inputField.visibility = View.VISIBLE
+                        binding.inputField.inputType = TYPE_NUMBER_FLAG_SIGNED
+                        binding.inputField.setText("0")
                     }
 
                     Type.FLOAT -> {
-                        binding.inputFieldFloat.visibility = View.VISIBLE
-                        binding.inputFieldFloat.setText("0.0")
+                        binding.inputField.visibility = View.VISIBLE
+                        binding.inputField.inputType = TYPE_NUMBER_FLAG_DECIMAL
+                        binding.inputField.setText("0.0")
                     }
 
                     Type.BOOLEAN -> {
-                        binding.crossIcon.visibility = View.VISIBLE
+                        binding.crossIcon.visibility = VISIBLE
 
                         binding.crossIcon.setOnClickListener {
                             if (binding.crossIcon.visibility == View.VISIBLE) {
-                                binding.crossIcon.visibility = View.GONE
-                                binding.tickIcon.visibility = View.VISIBLE
+                                binding.crossIcon.visibility = GONE
+                                binding.tickIcon.visibility = VISIBLE
                             }
                         }
 
                         binding.tickIcon.setOnClickListener {
                             if (binding.tickIcon.visibility == View.VISIBLE) {
-                                binding.tickIcon.visibility = View.GONE
-                                binding.crossIcon.visibility = View.VISIBLE
+                                binding.tickIcon.visibility = GONE
+                                binding.crossIcon.visibility = VISIBLE
                             }
                         }
                     }
 
                     Type.STRING -> {
-                        binding.inputFieldString.visibility = View.VISIBLE
+                        binding.inputField.inputType = TYPE_CLASS_TEXT
+                        binding.inputField.visibility = VISIBLE
                     }
                 }
 
@@ -275,10 +278,10 @@ class PinView @JvmOverloads constructor(
                 when ((toPin.type as DeclaredDataPin).type) {
                     Type.INT -> {
 
-                        pinView.inputFieldInt.visibility = INVISIBLE
+                        pinView.inputField.visibility = INVISIBLE
                     }
                     Type.FLOAT -> {
-                        pinView.inputFieldFloat.visibility = INVISIBLE
+                        pinView.inputField.visibility = INVISIBLE
                     }
                     Type.BOOLEAN -> {
                         when {
@@ -294,7 +297,7 @@ class PinView @JvmOverloads constructor(
                         }
                     }
                     Type.STRING -> {
-                        pinView.inputFieldString.visibility = INVISIBLE
+                        pinView.inputField.visibility = INVISIBLE
                     }
                 }
             }
@@ -304,10 +307,10 @@ class PinView @JvmOverloads constructor(
             if (fromPin is TypedPin) {
                 when ((fromPin.type as DeclaredDataPin).type) {
                     Type.INT -> {
-                        binding.inputFieldInt.visibility = INVISIBLE
+                        binding.inputField.visibility = INVISIBLE
                     }
                     Type.FLOAT -> {
-                        binding.inputFieldFloat.visibility = INVISIBLE
+                        binding.inputField.visibility = INVISIBLE
                     }
                     Type.BOOLEAN -> {
                         when {
@@ -323,7 +326,7 @@ class PinView @JvmOverloads constructor(
                         }
                     }
                     Type.STRING -> {
-                        pinView.inputFieldString.visibility = INVISIBLE
+                        pinView.inputField.visibility = INVISIBLE
                     }
                 }
             }

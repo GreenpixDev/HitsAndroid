@@ -28,24 +28,9 @@
         android:textColor="@color/white" />
 
     <EditText
-        android:id="@+id/inputFieldFloat"
-        android:layout_width="50dp"
+        android:id="@+id/inputField"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:visibility="gone" />
-
-    <EditText
-        android:id="@+id/inputFieldInt"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:visibility="gone" />
-
-    <EditText
-        android:id="@+id/inputFieldString"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:inputType="text"
         android:visibility="gone" />
 
     <ImageView
