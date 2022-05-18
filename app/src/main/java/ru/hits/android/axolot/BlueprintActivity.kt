@@ -264,16 +264,21 @@ class BlueprintActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Запуск нашей БОМБЕЗНОЙ программы
+     */
     private fun startProgram() {
-        val compiler = BlueprintCompiler()
-        val interpreter = compiler.prepareInterpreter(program, console)
-        val node = compiler.compile(program)
+        Thread {
+            val compiler = BlueprintCompiler()
+            val interpreter = compiler.prepareInterpreter(program, console)
+            val node = compiler.compile(program)
 
-        try {
-            interpreter.execute(node)
-        } catch (e: Throwable) {
-            e.printStackTrace()
-        }
+            try {
+                interpreter.execute(node)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }.start()
     }
 
     /**

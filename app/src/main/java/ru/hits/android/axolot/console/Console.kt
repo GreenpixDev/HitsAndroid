@@ -1,5 +1,7 @@
 package ru.hits.android.axolot.console
 
+import android.os.Handler
+import android.os.Looper
 import ru.hits.android.axolot.blueprint.FrontendConsole
 import java.util.*
 
@@ -14,7 +16,11 @@ class Console : FrontendConsole {
     }
 
     fun sendStringToUser(str: String?) {
-        str?.let { listener.invoke(it) }
+        str?.let {
+            Handler(Looper.getMainLooper()).post {
+                listener.invoke(it)
+            }
+        }
     }
 
     override fun send(inputString: String) {

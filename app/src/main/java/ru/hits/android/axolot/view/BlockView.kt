@@ -12,6 +12,7 @@ import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargInputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
+import ru.hits.android.axolot.blueprint.element.pin.OutputPin
 import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.databinding.BlockItemBinding
 import ru.hits.android.axolot.util.Vec2f
@@ -62,6 +63,12 @@ class BlockView @JvmOverloads constructor(
         _pinViews.add(pinView)
         pinView.addViewTo(this, indexGetter)
         return pinView
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        pinViews
+            .filter { it.pin is OutputPin }
+            .forEach { it.move(Vec2f(w - oldw, h - oldh)) }
     }
 
     /**
