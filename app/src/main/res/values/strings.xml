@@ -74,5 +74,6 @@
 
     <string name="titleFunctions">Функции</string>
     <string name="newFunction">Добавить новую функцию</string>
+    <string name="console_scroll_view_description">Здесь будут находится ваши запросы, ответы на ваши запросы, результаты работы программы</string>
 
 </resources>
