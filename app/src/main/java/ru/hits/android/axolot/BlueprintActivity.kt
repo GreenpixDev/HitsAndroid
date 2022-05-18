@@ -16,6 +16,7 @@ import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
 import kotlinx.android.synthetic.main.creator_item.*
 import kotlinx.android.synthetic.main.creator_item.view.*
+import ru.hits.android.axolot.blueprint.FrontendConsoleMock
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
@@ -35,7 +36,9 @@ class BlueprintActivity : AppCompatActivity() {
 
     private lateinit var blockTitleToColor: Map<Regex, Int>
 
-    private var menuIsVisible = true
+    var menuIsVisible = true
+    var consoleIsVisible = true
+    var consoleLines: MutableList<TextView> = mutableListOf()
 
     val program = AxolotProgram.create()
 
@@ -55,6 +58,9 @@ class BlueprintActivity : AppCompatActivity() {
 
         addEventListeners()
         createBlockTypeViews()
+
+        openMenu()
+        binding.consoleView.initConsole(FrontendConsoleMock())
     }
 
     override fun onResume() {
@@ -73,11 +79,18 @@ class BlueprintActivity : AppCompatActivity() {
         // Скрывание и показ меню
         binding.showMenu.setOnClickListener {
             if (menuIsVisible) {
-                binding.menu.visibility = View.GONE
-                menuIsVisible = false
+                closeMenu()
             } else {
-                binding.menu.visibility = View.VISIBLE
-                menuIsVisible = true
+                openMenu()
+            }
+        }
+
+        //открыть/закрыть консоль
+        binding.showConsole.setOnClickListener {
+            if (consoleIsVisible) {
+                binding.consoleView.closeConsole()
+            } else {
+                binding.consoleView.openConsole()
             }
         }
 
@@ -259,4 +272,22 @@ class BlueprintActivity : AppCompatActivity() {
         block.y = binding.codeField.height / 2f
         block.translationZ = 30f
     }
+
+    /**
+     * Показывает боковое меню, при этом скрывает консоль.
+     */
+    private fun openMenu() {
+        binding.consoleView.closeConsole()
+        binding.menu.visibility = View.VISIBLE
+        menuIsVisible = true
+    }
+
+    /**
+     * Сокрытие бокового меню
+     */
+    fun closeMenu() {
+        binding.menu.visibility = View.GONE
+        menuIsVisible = false
+    }
+
 }

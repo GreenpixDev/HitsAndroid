@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/blueprintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_main"
-    android:id="@+id/blueprintLayout"
     android:visibility="visible"
-    tools:openDrawer="start"
-    tools:context=".BlueprintActivity">
+    tools:context=".BlueprintActivity"
+    tools:openDrawer="start">
 
     <com.otaliastudios.zoom.ZoomLayout
         android:id="@+id/zoomLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
-        app:transformation="centerInside"
-        app:transformationGravity="auto"
         app:alignment="center"
-        app:overScrollHorizontal="true"
-        app:overScrollVertical="true"
-        app:overPinchable="true"
-        app:horizontalPanEnabled="true"
-        app:verticalPanEnabled="true"
-        app:zoomEnabled="true"
+        app:animationDuration="280"
         app:flingEnabled="true"
-        app:scrollEnabled="true"
-        app:oneFingerScrollEnabled="true"
-        app:twoFingersScrollEnabled="true"
-        app:threeFingersScrollEnabled="true"
-        app:minZoom="10"
-        app:minZoomType="zoom"
+        app:hasClickableChildren="true"
+        app:horizontalPanEnabled="true"
         app:maxZoom="750"
         app:maxZoomType="zoom"
-        app:animationDuration="280"
-        app:hasClickableChildren="true"
+        app:minZoom="10"
+        app:minZoomType="zoom"
+        app:oneFingerScrollEnabled="true"
+        app:overPinchable="true"
+        app:overScrollHorizontal="true"
+        app:overScrollVertical="true"
+        app:scrollEnabled="true"
+        app:threeFingersScrollEnabled="true"
+        app:transformation="centerInside"
+        app:transformationGravity="auto"
+        app:twoFingersScrollEnabled="true"
+        app:verticalPanEnabled="true"
+        app:zoomEnabled="true"
         tools:ignore="MissingClass,MissingConstraints">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/codeField"
-            android:background="@drawable/ic_launcher_background"
-            android:clipChildren="false"
             android:layout_width="100000dp"
-            android:layout_height="100000dp"/>
+            android:layout_height="100000dp"
+            android:background="@drawable/ic_launcher_background"
+            android:clipChildren="false">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.otaliastudios.zoom.ZoomLayout>
 
@@ -59,8 +60,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" >
-    </View>
+        app:layout_constraintVertical_bias="0.0"></View>
 
     <ScrollView
         android:id="@+id/scrollViewMenu"
@@ -106,19 +106,19 @@
                 android:orientation="vertical">
 
                 <TableRow
-                    tools:ignore="ExtraText"
                     android:id="@+id/tableRowFunction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="ExtraText">
 
                     <TextView
                         android:id="@+id/titleFunction"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="@string/titleFunctions"
-                        android:layout_weight="1"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
@@ -149,9 +149,9 @@
                         android:id="@+id/titleMacros"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="Макросы"
-                        android:layout_weight="1"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
@@ -183,9 +183,9 @@
                         android:id="@+id/titleVariables"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:fontFamily="@font/montserrat_medium"
                         android:text="@string/titleVariable"
-                        android:layout_weight="1"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
@@ -223,28 +223,63 @@
         android:id="@+id/ToPageSettings"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:contentDescription="@string/settings_icon_description"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.956"
+        app:layout_constraintVertical_bias="1"
         app:srcCompat="@drawable/ic_settings_icon" />
 
     <ImageView
         android:id="@+id/ToStartCode"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="18dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:contentDescription="@string/play_icon_description"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.043"
+        app:layout_constraintVertical_bias="0"
         app:srcCompat="@drawable/ic_play_icon" />
+
+    <ImageView
+        android:id="@+id/openSaveView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="20dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/ToPageSettings"
+        app:layout_constraintEnd_toStartOf="@+id/ToPageSettings"
+        app:layout_constraintTop_toTopOf="@+id/ToPageSettings"
+        app:srcCompat="@drawable/ic_save_icon" />
+
+    <ImageView
+        android:id="@+id/showConsole"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="20dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/openSaveView"
+        app:layout_constraintEnd_toStartOf="@+id/openSaveView"
+        app:layout_constraintTop_toTopOf="@+id/openSaveView"
+        app:srcCompat="@drawable/ic_console_icon" />
+
+    <ru.hits.android.axolot.view.ConsoleView
+        android:id="@+id/consoleView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/menu"
+        app:layout_constraintEnd_toStartOf="@id/showConsole"
+        app:layout_constraintBottom_toBottomOf="@id/showConsole"
+        ></ru.hits.android.axolot.view.ConsoleView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

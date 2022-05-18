@@ -74,5 +74,6 @@
 
     <string name="titleFunctions">Функции</string>
     <string name="newFunction">Добавить новую функцию</string>
+    <string name="console">Это консоль</string>
 
 </resources>
