@@ -121,7 +121,7 @@ class PinView @JvmOverloads constructor(
 
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
                         val inputData = (inputDataBlock.toString()).toInt()
-
+                        //пустая строка?
                         activity.program.setValue(currentPin, Type.INT, inputData)
                     }
                 }
