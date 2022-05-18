@@ -120,9 +120,14 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.setText("0")
 
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
-                        val inputData = (inputDataBlock.toString()).toInt()
+                        var inputData = inputDataBlock.toString()
 
-                        activity.program.setValue(currentPin, Type.INT, inputData)
+                        //Если поле ввода пустое, то будем отправлять значения по умолчанию
+                        if (inputData != "") {
+                            activity.program.setValue(currentPin, Type.INT, inputData.toInt())
+                        } else {
+                            activity.program.setValue(currentPin, Type.INT, 0)
+                        }
                     }
                 }
 
@@ -133,9 +138,15 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.setText("0.0")
 
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
-                        val inputData = (inputDataBlock.toString()).toDouble()
+                        val inputData = inputDataBlock.toString()
 
-                        activity.program.setValue(currentPin, Type.FLOAT, inputData)
+                        //Если поле ввода пустое, то будем отправлять значения по умолчанию
+                        if (inputData != "") {
+                            activity.program.setValue(currentPin, Type.FLOAT, inputData.toDouble())
+                        } else {
+                            activity.program.setValue(currentPin, Type.FLOAT, 0.0)
+                        }
+
                     }
                 }
 
@@ -168,7 +179,12 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
                         val inputData = inputDataBlock.toString()
 
-                        activity.program.setValue(currentPin, Type.STRING, inputData)
+                        //Если поле ввода пустое, то будем отправлять значения по умолчанию
+                        if (inputData != "") {
+                            activity.program.setValue(currentPin, Type.STRING, inputData)
+                        } else {
+                            activity.program.setValue(currentPin, Type.STRING, "Строка по умолчанию")
+                        }
                     }
                 }
 
