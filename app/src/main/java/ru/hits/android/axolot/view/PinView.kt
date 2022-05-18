@@ -179,12 +179,7 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
                         val inputData = inputDataBlock.toString()
 
-                        //Если поле ввода пустое, то будем отправлять значения по умолчанию
-                        if (inputData != "") {
-                            activity.program.setValue(currentPin, Type.STRING, inputData)
-                        } else {
-                            activity.program.setValue(currentPin, Type.STRING, "Строка по умолчанию")
-                        }
+                        activity.program.setValue(currentPin, Type.STRING, inputData)
                     }
                 }
 
