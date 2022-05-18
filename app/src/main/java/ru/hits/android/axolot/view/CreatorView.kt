@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import androidx.appcompat.widget.LinearLayoutCompat
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import ru.hits.android.axolot.custom_spinner.SpinnerCustomAdapter
 import ru.hits.android.axolot.custom_spinner.Types
@@ -22,71 +22,38 @@ open class CreatorView @JvmOverloads constructor(
     var nameDescription = true
     var typeExpression = true
     var edit = true
-
-    companion object {
-        @JvmStatic
-        val KEY_TITLE = "title"
-    }
+    var inputRow = true
+    var outputRow = true
+    var isVar = false
+    var btnAddDel = false
 
     private fun initLayoutParams() {
-        val params = LinearLayoutCompat.LayoutParams(
-            LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
-            LinearLayoutCompat.LayoutParams.WRAP_CONTENT
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
             gravity = Gravity.CENTER
+            marginStart = 10
+            marginEnd = 10
         }
 
         binding.rowForMenu.layoutParams = params
     }
 
     fun initComponents() {
-        if (!nameDescription) binding.rowForMenu.removeView(binding.name)
-        if (!typeExpression) binding.rowForMenu.removeView(binding.typeVariable)
-        if (!edit) binding.rowForMenu.removeView(binding.btnEdit)
+        if (!nameDescription) binding.name.visibility = GONE
+        if (!typeExpression) binding.typeVariable.visibility = GONE
+        if (!edit) binding.btnEdit.visibility = GONE
+        if (!inputRow) binding.inputRow.visibility = GONE
+        if (!outputRow) binding.outputRow.visibility = GONE
+        if (btnAddDel) binding.btnAdd.visibility = GONE
+        if (isVar) binding.creator.background = null
     }
 
     private fun setCustomSpinner() {
         val adapter = SpinnerCustomAdapter(context, Types.list!!)
         binding.typeVariable.adapter = adapter
     }
-
-//    private fun setupListSimple() {
-//        val imageType = ImageView(this)
-//
-//        val data  = listOf() {
-//            mapOf(
-//                BlueprintActivity.KEY_TITLE to "First title 111"
-//            )
-//
-//            mapOf(
-//                BlueprintActivity.KEY_TITLE to "First title 222"
-//            )
-//
-//            mapOf(
-//                BlueprintActivity.KEY_TITLE to "First title 333"
-//            )
-//        }
-//
-//        val adapter = SimpleAdapter(
-//            this,
-//            data,
-//            R.layout.simple_spinner_item,
-//            arrayOf(BlueprintActivity.KEY_TITLE),
-//            intArrayOf(R.id.text1)
-//        )
-//        binding.type.adapter = adapter
-//
-//        binding.type.onItemSelectedListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-//            val selectedItemTitle = data[position]
-//
-//            val dialog = AlertDialog.Builder(this)
-//                .setTitle(selectesItemTitle)
-//                .setMessage(getString(R.array.typeBlock, selectedItemDescription))
-//                .setPositiveButton("Ok") { dialog, which -> }
-//                .create()
-//            dialog.show()
-//        }
-//    }
 
     init {
         initLayoutParams()

@@ -42,6 +42,11 @@ class BlueprintActivity : AppCompatActivity() {
 
     val program = AxolotProgram.create()
 
+    enum class VariablePlaces {
+        INPUT_PARAMETERS,
+        OUTPUT_VARIABLES
+    }
+
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,6 +125,14 @@ class BlueprintActivity : AppCompatActivity() {
             view.initComponents()
 
             blueprintBinding.listFunction.addView(view)
+
+            view.plusInputParam.setOnClickListener {
+                createVariableView(view, VariablePlaces.INPUT_PARAMETERS)
+            }
+
+            view.plusOutputVar.setOnClickListener {
+                createVariableView(view, VariablePlaces.OUTPUT_VARIABLES)
+            }
         }
 
         // Создание нового макроса
@@ -130,6 +143,14 @@ class BlueprintActivity : AppCompatActivity() {
             view.initComponents()
 
             blueprintBinding.listMacros.addView(view)
+
+            view.plusInputParam.setOnClickListener {
+                createVariableView(view, VariablePlaces.INPUT_PARAMETERS)
+            }
+
+            view.plusOutputVar.setOnClickListener {
+                createVariableView(view, VariablePlaces.OUTPUT_VARIABLES)
+            }
         }
     }
 
@@ -275,15 +296,43 @@ class BlueprintActivity : AppCompatActivity() {
      * Метод создания новой переменной в меню
      * TODO Рома из будущего, сделай переменные с привязкой к компилятору
      */
-    private fun createVariableView() {
+    private fun createVariableView(
+        creatorView: CreatorView? = null,
+        place: VariablePlaces? = null
+    ) {
+
         val variableView = VariableView(this)
 
+        //инициализация creatorView
         variableView.edit = false
-        variableView.initComponents()
+        variableView.inputRow = false
+        variableView.outputRow = false
+        variableView.isVar = true
+
         variableView.variableName = "variable"
 
         program.createVariable(variableView.variableName)
-        blueprintBinding.listVariables.addView(variableView)
+
+        //проверка куда добавлять
+        if (creatorView == null) {
+            blueprintBinding.listVariables.addView(variableView)
+        } else {
+            variableView.btnAddDel = true
+
+            when (place) {
+                VariablePlaces.INPUT_PARAMETERS -> {
+                    creatorView.listParameters.addView(variableView)
+                }
+
+                VariablePlaces.OUTPUT_VARIABLES -> {
+                    creatorView.listOutputVar.addView(variableView)
+                }
+
+                else -> throw IllegalStateException("Ошибка")
+            }
+        }
+
+        variableView.initComponents()
 
         // Прослушка изменений имени переменной
         variableView.name.addTextChangedListener { title, _, _, _ ->

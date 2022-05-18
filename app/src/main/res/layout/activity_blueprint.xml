@@ -148,6 +148,7 @@
                     android:id="@+id/titleBlocks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingBottom="5dp"
                     android:text="@string/listBlocks"
                     android:textSize="25dp"
                     style="@style/textViewStyle" />
@@ -171,6 +172,8 @@
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:text="@string/titleFunctions"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
                         android:layout_weight="1"
                         android:textSize="25sp"
                         style="@style/textViewStyle" />
@@ -178,6 +181,7 @@
                     <ImageButton
                         android:id="@+id/plusFunction"
                         android:background="@drawable/ic_plus"
+                        android:layout_gravity="center_vertical"
                         style="@style/btnPlusForMenu" />
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -199,6 +203,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Макросы"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
                         android:layout_weight="1"
                         android:textSize="25sp"
                         style="@style/textViewStyle" />
@@ -206,6 +212,7 @@
                     <ImageButton
                         android:id="@+id/plusMacros"
                         android:background="@drawable/ic_plus"
+                        android:layout_gravity="center_vertical"
                         style="@style/btnPlusForMenu" />
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -228,6 +235,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/titleVariable"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
                         android:layout_weight="1"
                         android:textSize="25sp"
                         style="@style/textViewStyle" />
@@ -235,6 +244,7 @@
                     <ImageButton
                         android:id="@+id/plusVariable"
                         android:background="@drawable/ic_plus"
+                        android:layout_gravity="center_vertical"
                         style="@style/btnPlusForMenu" />
 
                 </TableRow>
