@@ -1,5 +1,6 @@
 package ru.hits.android.axolot.interpreter.node.executable
 
+import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.interpreter.InterpreterContext
 import ru.hits.android.axolot.interpreter.node.NodeDependency
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
@@ -11,6 +12,7 @@ class NodePrintString : NodeExecutable() {
 
     companion object {
         const val STRING = 0
+        var console: Console? = null
     }
 
     fun init(string: NodeDependency) {
