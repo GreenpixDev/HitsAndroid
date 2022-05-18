@@ -5,7 +5,13 @@ import ru.hits.android.axolot.interpreter.element.InterpretedFunction
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
 import ru.hits.android.axolot.interpreter.stack.StackFrame
 
-class NodeFunctionInvoke(val function: InterpretedFunction) : NodeExecutable() {
+class NodeFunctionInvoke() : NodeExecutable() {
+
+    constructor(function: InterpretedFunction) : this() {
+        this.function = function
+    }
+
+    lateinit var function: InterpretedFunction
 
     var nextNode: NodeExecutable? = null
 

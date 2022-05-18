@@ -43,4 +43,68 @@ class BlueprintCompilerTest {
         interpreter.execute(node)
     }
 
+    @Test
+    fun functionTest() {
+        val compiler = BlueprintCompiler()
+        val program = AxolotProgram.create()
+
+        val function = program.createFunction("test")
+        val startFunction = function.createBlock(function.beginType)
+        val printBlock = function.createBlock(program.blockTypes["native.print"]!!)
+
+        val mainBlock = program.createBlock(program.blockTypes["native.main"]!!)
+        val invokeBlock = program.createBlock(function)
+
+        mainBlock.contacts.find { it is OutputPin && it.name == "" }!! as PinToOne connect
+                invokeBlock.contacts.find { it is InputPin && it.name == "" }!! as PinToMany
+
+        startFunction.contacts.find { it is OutputPin && it.name == "" }!! as PinToOne connect
+                printBlock.contacts.find { it is InputPin && it.name == "" }!! as PinToMany
+
+        val textPin =
+            printBlock.contacts.find { it is InputPin && it.name == "text" }!! as InputDataPin
+        program.setValue(textPin, Type.STRING, "Hello World")
+
+        program.mainBlock = mainBlock
+
+        val node = compiler.compile(program)
+        val scope = GlobalScope()
+        val interpreter = BlueprintInterpreter(scope, Console())
+
+        interpreter.execute(node)
+    }
+
+    /*@Test
+    fun fibonacciTest() {
+        val compiler = BlueprintCompiler()
+        val program = AxolotProgram.create()
+
+        val function = program.createFunction("fibonacci")
+        val startFunction = function.createBlock(function.beginType)
+
+        val mainBlock = program.createBlock(program.blockTypes["native.main"]!!)
+        val invokeBlock = program.createBlock(function)
+        val printBlock = function.createBlock(program.blockTypes["native.print"]!!)
+
+        startFunction.contacts.find { it is OutputPin && it.name == "" }!! as PinToOne connect
+                printBlock.contacts.find { it is InputPin && it.name == "" }!! as PinToMany
+
+        mainBlock.contacts.find { it is OutputFlowPin }!! as PinToOne connect
+                invokeBlock.contacts.find { it is InputFlowPin }!! as PinToMany
+        invokeBlock.contacts.find { it is OutputFlowPin }!! as PinToOne connect
+                printBlock.contacts.find { it is InputFlowPin }!! as PinToMany
+
+        val textPin =
+            printBlock.contacts.find { it is InputPin && it.name == "text" }!! as InputDataPin
+        program.setValue(textPin, Type.STRING, "Hello World")
+
+        program.mainBlock = mainBlock
+
+        val node = compiler.compile(program)
+        val scope = GlobalScope()
+        val interpreter = BlueprintInterpreter(scope, Console())
+
+        interpreter.execute(node)
+    }*/
+
 }

@@ -1,6 +1,7 @@
 package ru.hits.android.axolot.blueprint.project
 
 import ru.hits.android.axolot.blueprint.declaration.BlockType
+import ru.hits.android.axolot.blueprint.declaration.FunctionType
 import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
 import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
@@ -31,6 +32,9 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
      * Регистрация новой переменной
      */
     fun createVariable(name: String) {
+        require("${VariableGetterBlockType.PREFIX_NAME}.$name" !in blockTypes) {
+            "variable with name $name already exists"
+        }
         registerBlock(VariableGetterBlockType(name, Type.BOOLEAN))
     }
 
@@ -62,6 +66,18 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
      */
     fun retypeVariable(variableName: String, newType: VariableType<*>) {
         getVariableGetter(variableName).variableType = newType
+    }
+
+    /**
+     * Создать функцию
+     */
+    fun createFunction(name: String): FunctionType {
+        require("${FunctionType.PREFIX_NAME}.$name" !in blockTypes) {
+            "variable with name $name already exists"
+        }
+        val functionType = FunctionType(name)
+        registerBlock(functionType);
+        return functionType
     }
 
     companion object {

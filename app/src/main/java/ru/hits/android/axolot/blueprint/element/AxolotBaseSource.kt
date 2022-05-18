@@ -1,5 +1,6 @@
 package ru.hits.android.axolot.blueprint.element
 
+import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredDataPin
 import ru.hits.android.axolot.blueprint.element.pin.*
 import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
@@ -15,6 +16,13 @@ open class AxolotBaseSource : AxolotSource {
 
     override fun addBlock(block: AxolotBlock) {
         blocks.add(block)
+    }
+
+    override fun createBlock(blockType: BlockType): AxolotBlock {
+        return blockType.createBlock().let {
+            addBlock(it)
+            it
+        }
     }
 
     override fun <T> setValue(pin: InputDataPin, type: VariableType<T>, value: T) {

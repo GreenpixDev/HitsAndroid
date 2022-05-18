@@ -23,6 +23,7 @@ import ru.hits.android.axolot.exception.AxolotException
 import ru.hits.android.axolot.util.*
 import ru.hits.android.axolot.view.BlockView
 import ru.hits.android.axolot.view.CreatorView
+import ru.hits.android.axolot.view.FunctionView
 import ru.hits.android.axolot.view.VariableView
 import java.util.*
 
@@ -107,19 +108,10 @@ class BlueprintActivity : AppCompatActivity() {
         }
 
         // Создание новой переменной и добавление ее в список в менюшке
-        binding.plusVariable.setOnClickListener {
-            createVariableView()
-        }
+        binding.plusVariable.setOnClickListener { createVariableView() }
 
         // Создание новой функции
-        binding.plusFunction.setOnClickListener {
-            val view = CreatorView(this)
-
-            view.typeExpression = false
-            view.initComponents()
-
-            binding.listFunction.addView(view)
-        }
+        binding.plusFunction.setOnClickListener { createFunctionView() }
 
         // Создание нового макроса
         binding.plusMacros.setOnClickListener {
@@ -262,6 +254,14 @@ class BlueprintActivity : AppCompatActivity() {
                 blockView.pinViews.forEach { it.displayName = title.toString() }
             }
         }
+    }
+
+    private fun createFunctionView() {
+        val functionView = FunctionView(this)
+
+        functionView.functionName = "function"
+
+        binding.listFunction.addView(functionView)
     }
 
     private fun startProgram() {

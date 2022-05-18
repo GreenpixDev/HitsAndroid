@@ -1,5 +1,6 @@
 package ru.hits.android.axolot.blueprint.element
 
+import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.blueprint.element.pin.impl.InputDataPin
 import ru.hits.android.axolot.exception.AxolotPinException
@@ -18,6 +19,11 @@ interface AxolotSource {
      * Добавить новый блок на плоскость
      */
     fun addBlock(block: AxolotBlock)
+
+    /**
+     * Создать новый блок и добавить его на плоскость
+     */
+    fun createBlock(blockType: BlockType): AxolotBlock
 
     /**
      * Задать значение булавке (если она не соединена с другими)

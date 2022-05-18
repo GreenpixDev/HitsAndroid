@@ -404,9 +404,9 @@ class BlueprintInterpreterTest {
         val equals1 = NodeIntEqual()
         val equals2 = NodeIntEqual()
 
-        val function = InterpretedFunction(branch)
+        val function = InterpretedFunction()
+        function.inputExecutable = branch
         function.input["number"] = NodeFunctionParameter()
-        function.output["return"] = Type.INT
 
         val return1 = NodeFunctionEnd(function)
         val return2 = NodeFunctionEnd(function)
