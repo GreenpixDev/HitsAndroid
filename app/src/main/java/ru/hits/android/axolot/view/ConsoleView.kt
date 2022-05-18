@@ -20,16 +20,14 @@ class ConsoleView @JvmOverloads constructor(
     defStyleRes: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val binding: ConsoleViewBinding
-    private var activity: BlueprintActivity = context as BlueprintActivity
+    private var consoleLines: MutableList<TextView> = mutableListOf()
+    private val binding = ConsoleViewBinding.inflate(LayoutInflater.from(context), this)
+    private val activity: BlueprintActivity
+        get() = context as BlueprintActivity
 
     private lateinit var console: FrontendConsole
 
     init {
-        val inflater = LayoutInflater.from(context)
-        inflater.inflate(R.layout.console_view, this, true)
-        binding = ConsoleViewBinding.bind(this)
-
         addEvents()
     }
 
@@ -45,7 +43,7 @@ class ConsoleView @JvmOverloads constructor(
      */
     private fun addEvents() {
         //добавление TextView в консоль
-        binding.imageViewSend.setOnClickListener() {
+        binding.imageViewSend.setOnClickListener {
             val inputString = binding.consoleInput.text.toString()
             binding.consoleInput.setText("")
 
@@ -59,10 +57,7 @@ class ConsoleView @JvmOverloads constructor(
      */
     fun openConsole() {
         activity.closeMenu()
-        binding.consoleView.visibility = View.VISIBLE
-        binding.consoleScrollView.visibility = View.VISIBLE
-        binding.consoleInput.visibility = View.VISIBLE
-        binding.imageViewSend.visibility = View.VISIBLE
+        visibility = View.VISIBLE
         activity.consoleIsVisible = true
     }
 
@@ -70,10 +65,7 @@ class ConsoleView @JvmOverloads constructor(
      * Скрывает консоль, не трогая боковое меню
      */
     fun closeConsole() {
-        binding.consoleView.visibility = View.GONE
-        binding.consoleScrollView.visibility = View.GONE
-        binding.consoleInput.visibility = View.GONE
-        binding.imageViewSend.visibility = View.GONE
+        visibility = View.GONE
         activity.consoleIsVisible = false
     }
 
@@ -91,6 +83,6 @@ class ConsoleView @JvmOverloads constructor(
         textView.setTextColor(Color.BLACK)
 
         binding.linearLayoutConsole.addView(textView)   //добавили TextView
-        activity.consoleLines.add(textView)             //добавили в массив со всеми TextView
+        consoleLines.add(textView)                      //добавили в массив со всеми TextView
     }
 }

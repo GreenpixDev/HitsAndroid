@@ -268,6 +268,7 @@
         android:layout_height="30dp"
         android:layout_marginEnd="20dp"
         android:scaleType="fitXY"
+        android:contentDescription="@string/console_description"
         app:layout_constraintBottom_toBottomOf="@+id/openSaveView"
         app:layout_constraintEnd_toStartOf="@+id/openSaveView"
         app:layout_constraintTop_toTopOf="@+id/openSaveView"
@@ -277,9 +278,8 @@
         android:id="@+id/consoleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/menu"
-        app:layout_constraintEnd_toStartOf="@id/showConsole"
         app:layout_constraintBottom_toBottomOf="@id/showConsole"
-        ></ru.hits.android.axolot.view.ConsoleView>
+        app:layout_constraintEnd_toStartOf="@id/showConsole"
+        app:layout_constraintStart_toStartOf="@id/menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

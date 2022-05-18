@@ -36,9 +36,8 @@ class BlueprintActivity : AppCompatActivity() {
 
     private lateinit var blockTitleToColor: Map<Regex, Int>
 
-    var menuIsVisible = true
+    private var menuIsVisible = true
     var consoleIsVisible = true
-    var consoleLines: MutableList<TextView> = mutableListOf()
 
     val program = AxolotProgram.create()
 
