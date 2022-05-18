@@ -10,9 +10,9 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginVertical="2dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="2dp"
-        android:layout_marginVertical="2dp"
         android:background="@drawable/button_shape_circle_stroke"
         android:buttonTint="@color/toolBar_color" />
 
@@ -21,9 +21,47 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginVertical="2dp"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginVertical="2dp"
-        android:textColor="@color/white"
-        android:text="description" />
+        android:text="description"
+        android:textColor="@color/white" />
+
+    <EditText
+        android:id="@+id/inputField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="4dp"
+        android:textSize="8sp"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:imeOptions="actionDone"
+        android:cursorVisible="false"
+        android:background="@drawable/edit_text_style"
+        tools:ignore="SmallSp" />
+
+    <ImageView
+        android:id="@+id/tickIcon"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_margin="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_tick"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/crossIcon"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_margin="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_cross"
+        android:visibility="gone" />
+
+
 </merge>

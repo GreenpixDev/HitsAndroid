@@ -79,7 +79,16 @@ class BlockView @JvmOverloads constructor(
         when (declaredPin) {
             // Если это входной пин
             is DeclaredVarargInputDataPin -> {
+                //параметры для add pin
+                val params = LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT
+                ).apply {
+                    marginStart = 15
+                }
+
                 val addNodeView = AddNodeView(context)
+                addNodeView.layoutParams = params
                 addNodeView.initComponents()
                 addNodeView.setOnClickListener { _ ->
                     declaredPin.createOnePin(block).let { pin ->
