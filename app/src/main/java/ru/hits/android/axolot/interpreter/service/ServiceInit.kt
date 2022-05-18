@@ -16,13 +16,7 @@ import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionEnd
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionInvoke
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionParameter
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionReturned
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNand
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNor
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNot
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanOr
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanXnor
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanXor
+import ru.hits.android.axolot.interpreter.node.function.math.bool.*
 import ru.hits.android.axolot.interpreter.node.function.math.integer.*
 import ru.hits.android.axolot.interpreter.node.function.math.real.*
 import ru.hits.android.axolot.interpreter.node.function.math.trig.*
@@ -141,7 +135,7 @@ class ServiceInit(private val nodeHandlerService: NodeHandlerService, val consol
         map[NodeArrayAssignElement::class] = NodeArrayAssignElementService(nodeHandlerService)
         map[NodeSetVariable::class] = NodeSetVariableService(nodeHandlerService)
         map[NodeArrayResize::class] = NodeArrayResizeService(nodeHandlerService)
-        map[NodePrintString::class] = NodePrintStringService(nodeHandlerService)
+        map[NodePrintString::class] = NodePrintStringService(nodeHandlerService, console)
         return map
     }
 
