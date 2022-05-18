@@ -120,7 +120,7 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     /**
-     * Метод создания всех вьюшек  нативных типов блоков
+     * Метод создания всех вьюшек нативных типов блоков
      */
     private fun createBlockTypeViews() {
         program.blockTypes.values.forEach {

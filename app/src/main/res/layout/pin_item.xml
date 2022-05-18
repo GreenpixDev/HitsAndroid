@@ -31,9 +31,18 @@
         android:id="@+id/inputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="4dp"
         android:textSize="8sp"
         android:visibility="gone"
         android:textAlignment="center"
+        android:imeOptions="actionDone"
+        android:cursorVisible="false"
+        android:background="@drawable/edit_text_style"
         tools:ignore="SmallSp" />
 
     <ImageView
