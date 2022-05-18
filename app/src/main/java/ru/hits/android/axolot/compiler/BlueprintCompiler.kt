@@ -1,19 +1,36 @@
 package ru.hits.android.axolot.compiler
 
+import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredAutonomicPin
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.element.pin.PinToOne
 import ru.hits.android.axolot.blueprint.element.pin.TypedPin
 import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
+import ru.hits.android.axolot.interpreter.BlueprintInterpreter
+import ru.hits.android.axolot.interpreter.Interpreter
 import ru.hits.android.axolot.interpreter.node.Node
 import ru.hits.android.axolot.interpreter.node.NodeConstant
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
+import ru.hits.android.axolot.interpreter.scope.GlobalScope
 import ru.hits.android.axolot.util.filterIsInstance
 import ru.hits.android.axolot.util.filterValuesNotNull
 import ru.hits.android.axolot.util.putMap
 
 class BlueprintCompiler : Compiler {
+
+    override fun prepareInterpreter(program: AxolotProgram): Interpreter {
+        val scope = GlobalScope()
+        val interpreter = BlueprintInterpreter(scope)
+
+        program.blockTypes.values
+            .filterIsInstance<VariableGetterBlockType>()
+            .forEach {
+                scope.declareVariable(it.variableName, it.variableType)
+            }
+
+        return interpreter
+    }
 
     override fun compile(program: AxolotProgram): NodeExecutable? {
         // У каждого блока есть пины, которые требуют зависимости (автономный пин).

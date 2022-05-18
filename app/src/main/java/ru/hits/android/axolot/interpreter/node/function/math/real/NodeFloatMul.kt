@@ -14,6 +14,10 @@ class NodeFloatMul : NodeFunction() {
         }
     }
 
+    fun add(input: NodeDependency) {
+        dependencies[dependencies.size] = input
+    }
+
     override operator fun invoke(context: InterpreterContext): Variable {
         var mul = 0.0
         for (i in dependencies.values.indices) {

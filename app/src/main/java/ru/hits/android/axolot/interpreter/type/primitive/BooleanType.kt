@@ -4,6 +4,9 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 
 class BooleanType : PrimitiveType<Boolean> {
 
+    override val defaultValue: Boolean
+        get() = false
+
     override fun cast(variable: Variable): Boolean {
         throw TypeCastException("cannot cast type ${variable.type} to ${toString()}")
     }

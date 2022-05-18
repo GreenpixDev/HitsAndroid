@@ -1,6 +1,7 @@
 package ru.hits.android.axolot.compiler
 
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
+import ru.hits.android.axolot.interpreter.Interpreter
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
 
 /**
@@ -8,6 +9,11 @@ import ru.hits.android.axolot.interpreter.node.NodeExecutable
  * в узлы, которые будет кушать интерпретатор
  */
 interface Compiler {
+
+    /**
+     * Подготавливает интерпретатор для программы
+     */
+    fun prepareInterpreter(program: AxolotProgram): Interpreter
 
     /**
      * Компилирует исходный код программы в интерпретируемые узлы

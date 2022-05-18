@@ -6,25 +6,24 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
-import android.widget.AdapterView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
-import kotlinx.android.synthetic.main.creator_item.*
 import kotlinx.android.synthetic.main.creator_item.view.*
 import ru.hits.android.axolot.blueprint.FrontendConsoleMock
 import ru.hits.android.axolot.blueprint.declaration.BlockType
+import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
+import ru.hits.android.axolot.compiler.BlueprintCompiler
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
 import ru.hits.android.axolot.exception.AxolotException
 import ru.hits.android.axolot.util.*
 import ru.hits.android.axolot.view.BlockView
 import ru.hits.android.axolot.view.CreatorView
+import ru.hits.android.axolot.view.VariableView
 import java.util.*
 
 /**
@@ -35,6 +34,8 @@ class BlueprintActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBlueprintBinding
 
     private lateinit var blockTitleToColor: Map<Regex, Int>
+
+    private val blockViews = mutableListOf<BlockView>()
 
     private var menuIsVisible = true
     var consoleIsVisible = true
@@ -50,9 +51,12 @@ class BlueprintActivity : AppCompatActivity() {
         // Палитра цветов
         blockTitleToColor = mapOf(
             Regex("^native\\.main$") to getThemeColor(R.attr.colorBlockHeaderMain),
-            Regex("^native\\.getVariable$") to getThemeColor(R.attr.colorBlockHeaderVariable),
+            Regex("^native\\..+\\.boolean.*") to getThemeColor(R.attr.colorVariableBoolean),
+            Regex("^native\\..+\\.int.*") to getThemeColor(R.attr.colorVariableInt),
+            Regex("^native\\..+\\.float.*") to getThemeColor(R.attr.colorVariableFloat),
+            Regex("^native\\..+\\.string.*") to getThemeColor(R.attr.colorVariableString),
             Regex("^function\\..*") to getThemeColor(R.attr.colorBlockHeaderFunction),
-            Regex("^macros\\..*") to getThemeColor(R.attr.colorBlockHeaderMacros)
+            Regex("^macros\\..*") to getThemeColor(R.attr.colorBlockHeaderMacros),
         )
 
         addEventListeners()
@@ -92,6 +96,9 @@ class BlueprintActivity : AppCompatActivity() {
                 binding.consoleView.openConsole()
             }
         }
+
+        // Запуск программы
+        binding.ToStartCode.setOnClickListener { startProgram() }
 
         // Переключение на страницу с настройками
         binding.ToPageSettings.setOnClickListener {
@@ -142,7 +149,7 @@ class BlueprintActivity : AppCompatActivity() {
 
             textView.setOnClickListener { _ ->
                 try {
-                    createBlock(BlockView(this), it)
+                    createBlock(BlockView(this), it, it.fullName)
                 } catch (e: AxolotException) {
                     // nothing
                 }
@@ -156,7 +163,8 @@ class BlueprintActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     private fun createBlock(
         blockView: BlockView,
-        type: BlockType
+        type: BlockType,
+        name: String
     ) {
 
         // Инициализация
@@ -169,7 +177,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Задаем цвет заголовку
         for (it in blockTitleToColor) {
-            if (it.key matches type.fullName) {
+            if (it.key matches name) {
                 blockView.header.setBackgroundColor(it.value)
                 break
             }
@@ -181,8 +189,8 @@ class BlueprintActivity : AppCompatActivity() {
         // Добавляем плюсики для всех vararg пинов
         type.declaredPins.forEach { blockView.createAddPinView(it) }
 
-        // Переименовывем блок
-        blockView.title.text = getLocalizedString(type.fullName)
+        // Переименовываем блок
+        blockView.displayName = getLocalizedString(name)
 
         // Если это главный блок - указываем это в программе.
         // Если главный блок уже был - кинет ошибку AxolotException
@@ -195,6 +203,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Добавляем готовый блок на поле
         binding.codeField.addView(blockView)
+        blockViews.add(blockView)
     }
 
     /**
@@ -202,74 +211,68 @@ class BlueprintActivity : AppCompatActivity() {
      * TODO Рома из будущего, сделай переменные с привязкой к компилятору
      */
     private fun createVariableView() {
-        val view = CreatorView(this)
+        val variableView = VariableView(this)
 
-        view.edit = false
-        view.initComponents()
+        variableView.edit = false
+        variableView.initComponents()
+        variableView.variableName = "variable"
 
-        binding.listVariables.addView(view)
-        view.btnAdd.setOnClickListener {
-            createVariableOnField(view, BlockView(this))
+        program.createVariable(variableView.variableName)
+        binding.listVariables.addView(variableView)
+
+        // Прослушка изменений имени переменной
+        variableView.name.addTextChangedListener { title, _, _, _ ->
+            program.renameVariable(variableView.variableName, title.toString())
+            variableView.variableName = title.toString()
+        }
+
+        // Прослушка изменений типа переменной
+        variableView.type.addItemSelectedListener { parent, _, _, _ ->
+            program.variableTypes[parent.selectedItem.toString()
+                .lowercase(Locale.getDefault())]
+                ?.let { type ->
+                    program.retypeVariable(variableView.variableName, type)
+                    val newColorName = "colorVariable${type}"
+
+                    blockViews.filter { it.block.type is VariableGetterBlockType }
+                        .filter {
+                            (it.block.type as VariableGetterBlockType).variableName ==
+                                    variableView.variableName
+                        }
+                        .forEach { blockView ->
+                            blockView.header.setBackgroundColor(getThemeColor(newColorName))
+                            blockView.pinViews.forEach { it.update() }
+                        }
+                }
+        }
+
+        // Прослушка кнопка добавления блока
+        variableView.btnAdd.setOnClickListener {
+            val variableGetter = program.getVariableGetter(variableView.variableName)
+            val blockView = BlockView(this)
+            createBlock(blockView, variableGetter, VariableGetterBlockType.PREFIX_NAME)
+
+            // Цвет заголовка
+            val colorName = "colorVariable${variableGetter.variableType}"
+            blockView.header.setBackgroundColor(getThemeColor(colorName))
+
+            // Прослушка изменений имени переменной
+            variableView.name.addTextChangedListener { title, _, _, _ ->
+                blockView.pinViews.forEach { it.displayName = title.toString() }
+            }
         }
     }
 
-    /**
-     * Метод создания блока-переменной на поле
-     * TODO Рома из будущего, сделай переменные с привязкой к компилятору
-     */
-    private fun createVariableOnField(view: CreatorView, blockView: BlockView) {
-        // инициализация координатов блока
-        initCoordinatesBlock(blockView)
+    private fun startProgram() {
+        val compiler = BlueprintCompiler()
+        val interpreter = compiler.prepareInterpreter(program)
+        val node = compiler.compile(program)
 
-        //имя переменной по дефолту
-        blockView.title.text = view.name.text.toString()
-
-        //прослушка изменений имени переменной
-        view.name.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(title: Editable) {}
-
-            override fun beforeTextChanged(
-                title: CharSequence,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-            }
-
-            override fun onTextChanged(title: CharSequence, start: Int, before: Int, count: Int) {
-                blockView.title.setText(title)
-            }
-        })
-
-        //прослушка изменений типа переменной
-        view.type?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                return
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                program.variableTypes[type.selectedItem.toString()
-                    .lowercase(Locale.getDefault())]
-                //?.let { blockView.typeVar = it } TODO ДОДЕЛАТЬ
-            }
+        try {
+            interpreter.execute(node)
+        } catch (e: Throwable) {
+            e.printStackTrace()
         }
-
-        binding.codeField.addView(blockView)
-    }
-
-    /**
-     * Метод инициализации координатов блока
-     * TODO Рома из будущего, сделай переменные с привязкой к компилятору
-     */
-    private fun initCoordinatesBlock(block: BlockView) {
-        block.x = binding.codeField.width / 2f
-        block.y = binding.codeField.height / 2f
-        block.translationZ = 30f
     }
 
     /**

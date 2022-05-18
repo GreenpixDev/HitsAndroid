@@ -10,9 +10,9 @@ import ru.hits.android.axolot.interpreter.node.Node
 interface DeclaredPin {
 
     /**
-     * Создать пин для блока
+     * Создать все пины для блока
      */
-    fun createPin(owner: AxolotOwner): Collection<Pin>
+    fun createAllPin(owner: AxolotOwner): Collection<Pin>
 
     /**
      * Проинициализировать пин (на этапе компиляции)

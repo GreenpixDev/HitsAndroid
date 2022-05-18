@@ -10,7 +10,7 @@ import ru.hits.android.axolot.interpreter.node.NodeExecutable
 class DeclaredVarargOutputFlowPin @JvmOverloads constructor(
     private val minArgs: Int,
     private val handler: (Collection<Node>, NodeExecutable) -> Unit,
-    private val namePattern: (Int) -> String = { "$it" },
+    private val lazyName: (Int) -> String = { "$it" },
 ) : DeclaredPin {
 
     @Suppress("unchecked_cast")
@@ -18,21 +18,28 @@ class DeclaredVarargOutputFlowPin @JvmOverloads constructor(
         handler.invoke(target, node as NodeExecutable)
     }
 
-    override fun createPin(owner: AxolotOwner): Collection<OutputFlowPin> {
-        var firstIndex = 1
-        if (owner is AxolotBlock) {
-            firstIndex += owner.contacts
-                .filterIsInstance<TypedPin>()
-                .filter { it.type == this }
-                .count()
-        }
+    override fun createAllPin(owner: AxolotOwner): Collection<OutputFlowPin> {
         return Array(minArgs) {
             OutputFlowPin(
                 owner,
                 this,
-                namePattern.invoke(it + firstIndex)
+                lazyName.invoke(it + 1)
             )
         }.toList()
     }
 
+    fun createOnePin(owner: AxolotOwner): OutputFlowPin {
+        var index = 1
+        if (owner is AxolotBlock) {
+            index += owner.contacts
+                .filterIsInstance<TypedPin>()
+                .filter { it.type == this }
+                .count()
+        }
+        return OutputFlowPin(
+            owner,
+            this,
+            lazyName.invoke(index)
+        )
+    }
 }

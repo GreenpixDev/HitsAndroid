@@ -29,6 +29,14 @@ interface BlockType {
     /**
      * Создать блок на основе этого типа блока
      */
-    fun createBlock(): AxolotBlock
+    fun createBlock(): AxolotBlock {
+        val block = AxolotBlock(this)
+
+        declaredPins
+            .flatMap { it.createAllPin(block) }
+            .forEach { block.contacts.add(it) }
+
+        return block
+    }
 
 }

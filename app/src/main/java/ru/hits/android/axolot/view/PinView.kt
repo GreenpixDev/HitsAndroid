@@ -2,6 +2,7 @@ package ru.hits.android.axolot.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -10,9 +11,9 @@ import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_blueprint.*
 import kotlinx.android.synthetic.main.block_item.view.*
 import kotlinx.android.synthetic.main.pin_item.view.*
-import ru.hits.android.axolot.blueprint.element.pin.InputPin
-import ru.hits.android.axolot.blueprint.element.pin.OutputPin
-import ru.hits.android.axolot.blueprint.element.pin.Pin
+import ru.hits.android.axolot.R
+import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredDataPin
+import ru.hits.android.axolot.blueprint.element.pin.*
 import ru.hits.android.axolot.databinding.PinItemBinding
 import ru.hits.android.axolot.exception.AxolotPinException
 import ru.hits.android.axolot.exception.AxolotPinOneAdjacentException
@@ -37,6 +38,41 @@ class PinView @JvmOverloads constructor(
 
     init {
         binding.contact.setOnTouchListener(this::onTouchEvent)
+    }
+
+    /**
+     * Получить цвет узла
+     */
+    private val color: Int
+        get() {
+            if (pin is FlowPin) {
+                return context.getThemeColor(R.attr.colorFlowControl)
+            }
+            if (pin is TypedPin) {
+                val pinType = (pin as TypedPin).type
+                if (pinType is DeclaredDataPin) {
+                    val colorName = "colorVariable${pinType.type}"
+                    return context.getThemeColor(colorName)
+                }
+            }
+            return Color.WHITE
+        }
+
+    /**
+     * Отображаемое название пина
+     */
+    var displayName: String
+        get() = binding.description.text.toString()
+        set(value) {
+            binding.description.text = value
+        }
+
+    /**
+     * Обновить пин (если изменился цвет)
+     */
+    fun update() {
+        //binding.contact.setColorFilter(color)
+        // TODO
     }
 
     /**
@@ -99,6 +135,7 @@ class PinView @JvmOverloads constructor(
                 val edgeView = EdgeView(context)
 
                 edgeView.position = center
+                edgeView.paintBrush.color = color
 
                 edgeView.points.add(Vec2f.ZERO)
                 edgeView.points.add(Vec2f.ZERO)
