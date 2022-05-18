@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">HitsAndroid</string>
-    <string name="welcome">Добро пожаловать</string>
+    <string name="nameProgram">AXOLOT</string>
     <string name="begin">Начать</string>
     <string name="aboutUs">О нас</string>
     <string name="main">Главная</string>
@@ -26,6 +26,10 @@
     <string name="right_arrow_description">imageView, ведущая на страницу, где можно начать работать</string>
     <string name="back_to_game">Вернуться к игре</string>
     <string name="exit">Выход</string>
+
+    <string name="modeDelete">Режим удаления</string>
+
+    <string name="listBlocks">Блоки</string>
 
     <string name="console">Это консоль</string>
 

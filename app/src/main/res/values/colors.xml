@@ -8,12 +8,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="bg_main">#86919A</color>
+    <color name="bg_main">#052530</color>
     <color name="bg_main_start">#1C0539</color>
-    <color name="bg_main_end">#DACCEC</color>
-
+    <color name="bg_main_end">#2B5B65</color>
+    <color name="bg_icon">#002B5B65</color>
+    <color name="bg_btn_for_fragments">#791E2D32</color>
     <color name="bg_header">#E90B0A0A</color>
+    <color name="bg_menu">#E41C0539</color>
+    <color name="bg_view_info">#720B0A0A</color>
     <color name="button_start">#CD131313</color>
+
+    <color name="bg_btn_menu_close">#CE1E5467</color>
+    <color name="bg_btn_menu_open">#D72B1D3C</color>
 
     <color name="buttons">#C4D8DC</color>
     <color name="toolBar_color">#C4D8DC</color>
@@ -32,4 +38,5 @@
     <color name="colorVariableInt">#5BDDD0</color>
     <color name="colorVariableFloat">#9CD55B</color>
     <color name="colorVariableString">#CF5BD8</color>
+
 </resources>

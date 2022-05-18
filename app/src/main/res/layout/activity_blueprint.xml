@@ -40,7 +40,6 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/codeField"
-            android:background="@color/bg_main"
             android:clipChildren="false"
             android:layout_width="100000dp"
             android:layout_height="100000dp">
@@ -52,18 +51,18 @@
         android:id="@+id/ToPageSettings"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="536dp"
+        android:layout_marginStart="5dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/settings_icon_description"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_settings_icon" />
+        app:layout_constraintVertical_bias="1"
+        app:srcCompat="@drawable/ic_setting_icon" />
 
     <ImageView
         android:id="@+id/ToStartCode"
@@ -83,16 +82,12 @@
         android:id="@+id/toShowConsole"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="536dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="560dp"
+        android:layout_marginEnd="10dp"
         android:contentDescription="@string/console_icon_description"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/toSave"
         app:layout_constraintEnd_toStartOf="@+id/toSave"
-        app:layout_constraintHorizontal_bias="0.875"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintTop_toTopOf="@+id/toSave"
         app:srcCompat="@drawable/ic_console_icon"
         tools:ignore="MissingConstraints" />
 
@@ -100,16 +95,12 @@
         android:id="@+id/toSave"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="536dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="10dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/ToPageSettings"
         app:layout_constraintEnd_toStartOf="@+id/ToPageSettings"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintTop_toTopOf="@+id/ToPageSettings"
         app:srcCompat="@drawable/ic_save_icon"
         tools:ignore="MissingConstraints" />
 
@@ -117,7 +108,7 @@
         android:id="@+id/menu"
         android:layout_width="255dp"
         android:layout_height="0dp"
-        android:background="@color/buttons"
+        android:background="@color/bg_view_info"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -157,11 +148,9 @@
                     android:id="@+id/titleBlocks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:text="Blocks"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:text="@string/listBlocks"
+                    android:textSize="25dp"
+                    style="@style/textViewStyle" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -181,20 +170,15 @@
                         android:id="@+id/titleFunction"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
                         android:text="@string/titleFunctions"
                         android:layout_weight="1"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:textSize="25sp"
+                        style="@style/textViewStyle" />
 
                     <ImageButton
                         android:id="@+id/plusFunction"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="3dp"
-                        android:background="@drawable/ic_plus" />
+                        android:background="@drawable/ic_plus"
+                        style="@style/btnPlusForMenu" />
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -214,20 +198,15 @@
                         android:id="@+id/titleMacros"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
                         android:text="Макросы"
                         android:layout_weight="1"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:textSize="25sp"
+                        style="@style/textViewStyle" />
 
                     <ImageButton
                         android:id="@+id/plusMacros"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="3dp"
-                        android:background="@drawable/ic_plus" />
+                        android:background="@drawable/ic_plus"
+                        style="@style/btnPlusForMenu" />
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -248,20 +227,15 @@
                         android:id="@+id/titleVariables"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
                         android:text="@string/titleVariable"
                         android:layout_weight="1"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:textSize="25sp"
+                        style="@style/textViewStyle" />
 
                     <ImageButton
                         android:id="@+id/plusVariable"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="3dp"
-                        android:background="@drawable/ic_plus" />
+                        android:background="@drawable/ic_plus"
+                        style="@style/btnPlusForMenu" />
 
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -288,8 +262,8 @@
         android:layout_width="400dp"
         android:layout_height="300dp"
         android:background="@drawable/round_rectangle"
-        app:layout_constraintBottom_toBottomOf="@+id/toShowConsole"
-        app:layout_constraintEnd_toStartOf="@+id/toShowConsole"
+        app:layout_constraintBottom_toBottomOf="@id/toShowConsole"
+        app:layout_constraintEnd_toStartOf="@id/toShowConsole"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
@@ -325,6 +299,17 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/consoleScrollView"
         app:layout_constraintTop_toBottomOf="@id/consoleScrollView" />
+
+    <Switch
+        android:id="@+id/modeDelete"
+        android:layout_width="114dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/modeDelete"
+        app:layout_constraintBottom_toBottomOf="@+id/ToStartCode"
+        app:layout_constraintEnd_toStartOf="@+id/ToStartCode"
+        app:layout_constraintTop_toTopOf="@id/ToStartCode"
+        tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
 
     <ImageView
         android:id="@+id/toSend"

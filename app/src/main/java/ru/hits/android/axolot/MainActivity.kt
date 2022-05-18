@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
 
-        binding.startBtn.setOnClickListener {
+        binding.btnStart.setOnClickListener {
             startActivity(Intent(this, BlueprintActivity::class.java))
         }
 

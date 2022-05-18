@@ -18,7 +18,7 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?colorBlockHeaderDefault">
+            android:background="@color/colorBlockHeaderDefault">
 
             <TextView
                 android:id="@+id/title"

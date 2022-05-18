@@ -18,9 +18,8 @@ class SaveActivity : AppCompatActivity() {
 
     //функция, которая добавит события к кнопкам
     private fun addEventListeners() {
-        saveBinding.goBack.setOnClickListener {
-            val intent = Intent(this, BlueprintActivity::class.java)
-            startActivity(intent)
+        saveBinding.goBackToGame.setOnClickListener {
+            startActivity(Intent(this, BlueprintActivity::class.java))
         }
     }
 }

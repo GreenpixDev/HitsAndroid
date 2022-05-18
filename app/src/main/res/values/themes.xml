@@ -15,16 +15,16 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
 
-        <item name="colorBlockHeaderDefault">#7E7E7E</item>
-        <item name="colorBlockHeaderMain">#F44336</item>
-        <item name="colorBlockHeaderFunction">#9C27B0</item>
-        <item name="colorBlockHeaderMacros">#2196F3</item>
-        <item name="colorBlockHeaderVariable">#FF9800</item>
+        <!--        <item name="colorBlockHeaderDefault">#7E7E7E</item>-->
+        <!--        <item name="colorBlockHeaderMain">#F44336</item>-->
+        <!--        <item name="colorBlockHeaderFunction">#9C27B0</item>-->
+        <!--        <item name="colorBlockHeaderMacros">#2196F3</item>-->
+        <!--        <item name="colorBlockHeaderVariable">#FF9800</item>-->
 
-        <item name="colorFlowControl">@color/white</item>
-        <item name="colorVariableBoolean">#D85E54</item>
-        <item name="colorVariableInt">#5BDDD0</item>
-        <item name="colorVariableFloat">#9CD55B</item>
-        <item name="colorVariableString">#CF5BD8</item>
+        <!--        <item name="colorFlowControl">@color/white</item>-->
+        <!--        <item name="colorVariableBoolean">#D85E54</item>-->
+        <!--        <item name="colorVariableInt">#5BDDD0</item>-->
+        <!--        <item name="colorVariableFloat">#9CD55B</item>-->
+        <!--        <item name="colorVariableString">#CF5BD8</item>-->
     </style>
 </resources>

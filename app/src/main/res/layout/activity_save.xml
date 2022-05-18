@@ -4,25 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_main"
+    android:background="@drawable/background_gradient"
     tools:context=".SaveActivity">
 
     <View
         android:id="@+id/roundRectangle"
         android:layout_width="600dp"
-        android:layout_height="300dp"
+        android:layout_height="280dp"
         android:background="@drawable/round_rectangle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
         app:layout_constraintVertical_bias="0.725" />
 
     <LinearLayout
         android:layout_width="500dp"
-        android:layout_height="300dp"
+        android:layout_height="280dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/roundRectangle"
@@ -32,79 +31,46 @@
         app:layout_constraintVertical_bias="1.0">
 
         <Button
+            android:id="@+id/goBackToGame"
+            android:text="@string/back_to_game"
+            style="@style/btnForFragmentSave" />
+
+        <Button
             android:id="@+id/button1"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/buttons"
-            android:fontFamily="@font/montserrat_regular"
             android:text="текст"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:cornerRadius="100dp" />
+            style="@style/btnForFragmentSave" />
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/buttons"
-            android:fontFamily="@font/montserrat_regular"
             android:text="текст"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:cornerRadius="100dp" />
+            style="@style/btnForFragmentSave" />
 
         <Button
             android:id="@+id/button3"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/buttons"
-            android:fontFamily="@font/montserrat_regular"
             android:text="текст"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:cornerRadius="100dp" />
+            style="@style/btnForFragmentSave" />
 
         <Button
             android:id="@+id/button4"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/buttons"
-            android:fontFamily="@font/montserrat_regular"
             android:text="текст"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:cornerRadius="100dp" />
+            style="@style/btnForFragmentSave" />
 
-        <Button
-            android:id="@+id/goBack"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/buttons"
-            android:fontFamily="@font/montserrat_regular"
-            android:text="@string/back_to_game"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:cornerRadius="100dp" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textViewTitle"
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat_regular"
-        android:text="Тут будет умный текст, который будет нести в себе смысл"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="Smart text"
         android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="24sp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/roundRectangle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.326" />
+        app:layout_constraintVertical_bias="0.326"
+        style="@style/textViewStyle" />
 </androidx.constraintlayout.widget.ConstraintLayout>

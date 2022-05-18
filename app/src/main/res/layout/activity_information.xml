@@ -5,7 +5,7 @@
     android:id="@+id/informationLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_main"
+    android:background="@drawable/background_gradient"
     tools:context=".InformationActivity">
 
     <TextView
@@ -16,7 +16,7 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="@string/title_information_activity"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,14 +33,14 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="@string/back_to_main"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/title"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        style="@style/textViewStyle" />
 
     <TextView
         android:id="@+id/start"
@@ -51,14 +51,14 @@
         android:fontFamily="@font/montserrat_regular"
         android:text="@string/go_to_the_game"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/title"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        style="@style/textViewStyle" />
 
     <ImageView
         android:id="@+id/left_arrow"
@@ -90,14 +90,14 @@
         app:srcCompat="@drawable/ic_right_arrow"
         tools:ignore="TouchTargetSizeCheck" />
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="100dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="25dp"
-        app:cardBackgroundColor="@color/bg_header"
+        android:background="@drawable/round_rectangle"
         app:cardCornerRadius="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,8 +109,10 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp">
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -118,20 +120,19 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="473dp"
+                    android:id="@+id/information"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/montserrat_regular"
+                    android:fontFamily="@font/montserrat_extralight"
                     android:text="@string/lorem"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    style="@style/textViewStyle" />
             </LinearLayout>
 
         </ScrollView>
 
-    </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
