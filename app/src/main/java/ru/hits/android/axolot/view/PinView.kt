@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.pin_item.view.*
 import ru.hits.android.axolot.R
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredDataPin
 import ru.hits.android.axolot.blueprint.element.pin.*
+import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
 import ru.hits.android.axolot.blueprint.element.pin.impl.InputDataPin
 import ru.hits.android.axolot.databinding.PinItemBinding
 import ru.hits.android.axolot.exception.AxolotPinException
@@ -119,13 +120,13 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.setText("0")
 
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
-                        var inputData = inputDataBlock.toString()
+                        val inputData = inputDataBlock.toString()
 
                         //Если поле ввода пустое, то будем отправлять значения по умолчанию
                         if (inputData != "") {
-                            activity.program.setValue(currentPin, Type.INT, inputData.toInt())
+                            activity.currentSource.setValue(currentPin, Type.INT, inputData.toInt())
                         } else {
-                            activity.program.setValue(currentPin, Type.INT, 0)
+                            activity.currentSource.setValue(currentPin, Type.INT, 0)
                         }
                     }
                 }
@@ -141,9 +142,13 @@ class PinView @JvmOverloads constructor(
 
                         //Если поле ввода пустое, то будем отправлять значения по умолчанию
                         if (inputData != "") {
-                            activity.program.setValue(currentPin, Type.FLOAT, inputData.toDouble())
+                            activity.currentSource.setValue(
+                                currentPin,
+                                Type.FLOAT,
+                                inputData.toDouble()
+                            )
                         } else {
-                            activity.program.setValue(currentPin, Type.FLOAT, 0.0)
+                            activity.currentSource.setValue(currentPin, Type.FLOAT, 0.0)
                         }
 
                     }
@@ -158,7 +163,7 @@ class PinView @JvmOverloads constructor(
                             binding.tickIcon.visibility = VISIBLE
                         }
 
-                        activity.program.setValue(currentPin, Type.BOOLEAN, value = true)
+                        activity.currentSource.setValue(currentPin, Type.BOOLEAN, true)
                     }
 
                     binding.tickIcon.setOnClickListener {
@@ -166,7 +171,7 @@ class PinView @JvmOverloads constructor(
                             binding.tickIcon.visibility = GONE
                             binding.crossIcon.visibility = VISIBLE
 
-                            activity.program.setValue(currentPin, Type.BOOLEAN, value = false)
+                            activity.currentSource.setValue(currentPin, Type.BOOLEAN, false)
                         }
                     }
                 }
@@ -178,7 +183,7 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
                         val inputData = inputDataBlock.toString()
 
-                        activity.program.setValue(currentPin, Type.STRING, inputData)
+                        activity.currentSource.setValue(currentPin, Type.STRING, inputData)
                     }
                 }
 
@@ -347,6 +352,9 @@ class PinView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Восстановить линию между пинами
+     */
     fun restoreEdge(withPinView: PinView): EdgeView {
         val view = binding.contact
         val position = activity.codeField.findRelativePosition(view)
@@ -360,14 +368,39 @@ class PinView @JvmOverloads constructor(
         edgeView.points.add(Vec2f.ZERO)
 
         val withPinViewPosition = activity.codeField.findRelativePosition(withPinView.contact)
-        val withPinViewCenter = withPinViewPosition + withPinView.center
+        val withPinViewCenter = withPinViewPosition + withPinView.contact.center
 
         edgeView.setEndPoint(withPinViewCenter)
+        hideField(withPinView)
 
         edgeViews.add(edgeView)
         withPinView.edgeViews.add(edgeView)
 
         activity.codeField.addView(edgeView)
         return edgeView
+    }
+
+    /**
+     * Восстановить значение по умолчанию
+     */
+    fun restoreConstant() {
+        val currentPin = pin
+
+        if (currentPin is InputDataPin && currentPin.adjacent != null
+            && currentPin.adjacent is ConstantPin
+        ) {
+
+            val constant = (currentPin.adjacent as ConstantPin).constant
+
+            when (constant.type) {
+                Type.INT -> binding.inputField.setText(constant.value.toString())
+                Type.FLOAT -> binding.inputField.setText(constant.value.toString())
+                Type.BOOLEAN -> {
+                    if (constant.value as Boolean) binding.tickIcon.visibility = VISIBLE
+                    else binding.crossIcon.visibility = VISIBLE
+                }
+                Type.STRING -> binding.inputField.setText(constant.value.toString())
+            }
+        }
     }
 }

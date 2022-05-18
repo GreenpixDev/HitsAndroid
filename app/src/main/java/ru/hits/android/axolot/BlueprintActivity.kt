@@ -17,6 +17,7 @@ import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.element.AxolotSource
 import ru.hits.android.axolot.blueprint.element.pin.PinToOne
+import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.compiler.BlueprintCompiler
@@ -148,10 +149,11 @@ class BlueprintActivity : AppCompatActivity() {
 
         pinViews.keys
             .filterIsInstance<PinToOne>()
-            .filter { it.adjacent != null }
+            .onEach { pinViews[it]?.restoreConstant() }
+            .filter { it.adjacent != null && it.adjacent !is ConstantPin }
             .forEach {
                 Handler(Looper.getMainLooper()).post {
-                    pinViews[it]!!.restoreEdge(pinViews[it.adjacent!!]!!)
+                    pinViews[it]?.restoreEdge(pinViews[it.adjacent!!]!!)
                 }
             }
 

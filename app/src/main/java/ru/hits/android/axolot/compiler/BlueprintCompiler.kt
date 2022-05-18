@@ -62,7 +62,7 @@ class BlueprintCompiler : Compiler {
         requireNotNull(main) { "cannot find main block of program" }
 
         // Получаем из блока входной узел для интерпретатора
-        val executable = map[main]?.firstNotNullOf { it.value }
+        val executable = map[main]?.firstNotNullOfOrNull { it.value }
         require(executable is NodeExecutable?) { "fatal error" }
 
         return executable
@@ -139,11 +139,11 @@ class BlueprintCompiler : Compiler {
             .mapKeys { it.key.type }
             .mapValues { it.value.values }
             .filterIsInstance<FunctionType, Collection<Node>>()
-            .forEach { nodes ->
-                val node = nodes.value.filterIsInstance<NodeFunctionInvoke>().first()
-                node.function = functions[nodes.key]!!
+            .forEach { nodeList ->
+                val node = nodeList.value.filterIsInstance<NodeFunctionInvoke>().first()
+                node.function = functions[nodeList.key]!!
 
-                nodes.value.filterIsInstance<NodeFunctionReturned>().forEach {
+                nodeList.value.filterIsInstance<NodeFunctionReturned>().forEach {
                     it.nodeInvoke = node
                 }
             }
@@ -152,16 +152,16 @@ class BlueprintCompiler : Compiler {
             .mapKeys { it.key.type }
             .mapValues { it.value.values }
             .filterIsInstance<FunctionEndType, Collection<Node>>()
-            .forEach { nodes ->
-                val node = nodes.value.filterIsInstance<NodeFunctionEnd>().first()
-                node.function = functions[nodes.key.functionType]!!
+            .forEach { nodeList ->
+                val node = nodeList.value.filterIsInstance<NodeFunctionEnd>().first()
+                node.function = functions[nodeList.key.functionType]!!
             }
 
         adjacent
             .filterKeys { it.type is FunctionBeginType }
             .mapValues { it.value.values }
             .forEach { e ->
-                val executable = adjacent[e.key]?.firstNotNullOf { it.value }
+                val executable = adjacent[e.key]?.firstNotNullOfOrNull { it.value }
                 require(executable is NodeExecutable?) { "fatal error" }
                 functions[(e.key.type as FunctionBeginType).functionType]?.inputExecutable =
                     executable
