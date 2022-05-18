@@ -31,22 +31,24 @@
         android:id="@+id/inputField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:textSize="8sp"
+        android:visibility="gone"
+        tools:ignore="SmallSp" />
 
     <ImageView
         android:id="@+id/tickIcon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_margin="5dp"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_margin="10dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_tick"
         android:visibility="gone" />
 
     <ImageView
         android:id="@+id/crossIcon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_margin="5dp"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_margin="10dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_cross"
         android:visibility="gone" />
