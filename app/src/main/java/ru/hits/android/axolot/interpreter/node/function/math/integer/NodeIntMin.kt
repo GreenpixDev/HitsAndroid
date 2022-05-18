@@ -15,6 +15,10 @@ class NodeIntMin : NodeFunction() {
         }
     }
 
+    fun add(input: NodeDependency) {
+        dependencies[dependencies.size] = input
+    }
+
     override operator fun invoke(context: InterpreterContext): Variable {
         var min = Integer.MAX_VALUE
         for (i in dependencies.values.indices) {

@@ -5,17 +5,26 @@ import ru.hits.android.axolot.blueprint.element.pin.impl.OutputFlowPin
 import ru.hits.android.axolot.interpreter.node.Node
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
 
-class DeclaredSingleOutputFlowPin @JvmOverloads constructor(
+class DeclaredSingleOutputFlowPin constructor(
     private val handler: (Collection<Node>, NodeExecutable) -> Unit,
-    private val name: String = ""
+    private val lazyName: () -> String
 ) : DeclaredPin {
+
+    constructor(
+        handler: (Collection<Node>, NodeExecutable) -> Unit,
+        name: String
+    ) : this(handler, { name })
+
+    constructor(
+        handler: (Collection<Node>, NodeExecutable) -> Unit,
+    ) : this(handler, { "" })
 
     override fun handle(target: Collection<Node>, node: Node) {
         handler.invoke(target, node as NodeExecutable)
     }
 
-    override fun createPin(owner: AxolotOwner): Collection<OutputFlowPin> {
-        return listOf(OutputFlowPin(owner, this, name))
+    override fun createAllPin(owner: AxolotOwner): Collection<OutputFlowPin> {
+        return listOf(OutputFlowPin(owner, this, lazyName.invoke()))
     }
 
 }

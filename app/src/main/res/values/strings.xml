@@ -38,8 +38,8 @@
 
     <string-array name="TypeBlock">
         <item>Boolean</item>
-        <item>Integer</item>
-        <item>Double</item>
+        <item>Int</item>
+        <item>Float</item>
         <item>String</item>
     </string-array>
 
@@ -62,15 +62,67 @@
         <item>сложение</item>
     </string-array>
 
-    <string name="native.while">while</string>
-    <string name="native.for">for</string>
-    <string name="native.sequence">последовательно</string>
-    <string name="native.foreach">forEach</string>
-    <string name="native.branch">if else</string>
-    <string name="native.main">main</string>
-    <string name="native.print">print string</string>
-    <string name="native.math.int.add">сложение integer</string>
-    <string name="native.math.float.add">сложение float</string>
+    <string name="native.main">Main</string>
+    <string name="native.getVariable">Get</string>
+    <string name="native.setVariable">Set</string>
+    <string name="native.while">While</string>
+    <string name="native.for">For</string>
+    <string name="native.sequence">Sequence</string>
+    <string name="native.foreach">ForEach</string>
+    <string name="native.branch">If Else</string>
+    <string name="native.print">Print String</string>
+
+    <string name="native.math.boolean.or">OR</string>
+    <string name="native.math.boolean.and">AND</string>
+    <string name="native.math.boolean.not">NOT</string>
+
+    <string name="native.math.int.sum">Int + Int</string>
+    <string name="native.math.int.sub">Int - Int</string>
+    <string name="native.math.int.mul">Int * Int</string>
+    <string name="native.math.int.div">Int / Int</string>
+    <string name="native.math.int.mod">Int % Int</string>
+    <string name="native.math.int.abs">Abs |Int|</string>
+    <string name="native.math.int.min">Min Int</string>
+    <string name="native.math.int.max">Max Int</string>
+    <string name="native.math.int.equals">Int == Int</string>
+    <string name="native.math.int.notEquals">Int != Int</string>
+    <string name="native.math.int.less">Int &lt; Int</string>
+    <string name="native.math.int.lessOrEquals">Int &lt;= Int</string>
+    <string name="native.math.int.more">Int &gt; Int</string>
+    <string name="native.math.int.moreOrEquals">Int &gt;= Int</string>
+
+    <string name="native.math.float.sum">Float + Float</string>
+    <string name="native.math.float.sub">Float - Float</string>
+    <string name="native.math.float.mul">Float * Float</string>
+    <string name="native.math.float.div">Float / Float</string>
+    <string name="native.math.float.mod">Float % Float</string>
+    <string name="native.math.float.abs">Abs |Float|</string>
+    <string name="native.math.float.min">Min Float</string>
+    <string name="native.math.float.max">Max Float</string>
+    <string name="native.math.float.equals">Float == Float</string>
+    <string name="native.math.float.notEquals">Float != Float</string>
+    <string name="native.math.float.less">Float &lt; Float</string>
+    <string name="native.math.float.lessOrEquals">Float &lt;= Float</string>
+    <string name="native.math.float.more">Float &gt; Float</string>
+    <string name="native.math.float.moreOrEquals">Float &gt;= Float</string>
+
+    <string name="native.math.log">Log</string>
+    <string name="native.math.sin">Sin</string>
+    <string name="native.math.cos">Cos</string>
+    <string name="native.math.tan">Tan</string>
+    <string name="native.math.asin">ArcSin</string>
+    <string name="native.math.acos">ArcCos</string>
+    <string name="native.math.atan">ArcTan</string>
+
+    <string name="native.localVariable.boolean">Local Boolean</string>
+    <string name="native.localVariable.int">Local Int</string>
+    <string name="native.localVariable.float">Local Float</string>
+    <string name="native.localVariable.string">Local String</string>
+
+    <string name="native.assignVariable.boolean">Assign Boolean</string>
+    <string name="native.assignVariable.int">Assign Int</string>
+    <string name="native.assignVariable.float">Assign Float</string>
+    <string name="native.assignVariable.string">Assign String</string>
 
     <string name="titleFunctions">Функции</string>
     <string name="newFunction">Добавить новую функцию</string>

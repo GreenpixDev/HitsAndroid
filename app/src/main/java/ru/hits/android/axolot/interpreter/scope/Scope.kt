@@ -12,7 +12,7 @@ interface Scope {
     fun getVariable(name: String): Variable
 
     fun declareVariable(name: String, type: VariableType<*>) {
-        declareVariable(name, Variable.nullVariable(type))
+        declareVariable(name, Variable.defaultVariable(type))
     }
 
     fun <T : Any> declareVariable(name: String, type: VariableType<T>, value: T) {

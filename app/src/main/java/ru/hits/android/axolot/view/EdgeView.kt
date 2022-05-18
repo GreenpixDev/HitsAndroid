@@ -5,10 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import ru.hits.android.axolot.R
 import ru.hits.android.axolot.util.Vec2f
 import ru.hits.android.axolot.util.convertDpToPixel
-import ru.hits.android.axolot.util.getThemeColor
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -47,12 +45,11 @@ class EdgeView @JvmOverloads constructor(
         const val CIRCLE_RADIUS_DP = 6.25f
     }
 
-    private var paintBrush: Paint = Paint()
+    val paintBrush: Paint = Paint()
 
     val points = mutableListOf<Vec2f>()
 
     init {
-        paintBrush.color = context.getThemeColor(R.attr.colorLine)
         paintBrush.strokeWidth = 5f
     }
 
