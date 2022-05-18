@@ -21,6 +21,6 @@ interface BlueprintView {
      * [AxolotSource] для взаимодействия с промежуточными компонентами для компилятора
      */
     val sourceCode: AxolotSource
-        get() = activity.program
+        get() = activity.currentSource
 
 }

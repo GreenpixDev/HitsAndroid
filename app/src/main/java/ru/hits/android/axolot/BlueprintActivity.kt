@@ -44,6 +44,8 @@ class BlueprintActivity : AppCompatActivity() {
     val program = AxolotProgram.create()
     val console = Console()
 
+    val currentSource = AxolotProgram.create()
+
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,7 +130,7 @@ class BlueprintActivity : AppCompatActivity() {
      * Метод создания всех вьюшек  нативных типов блоков
      */
     private fun createBlockTypeViews() {
-        program.blockTypes.values.forEach {
+        currentSource.blockTypes.values.forEach {
             val nameBlock = getLocalizedString(it.fullName)
             val textView = TextView(this)
 
@@ -188,11 +190,11 @@ class BlueprintActivity : AppCompatActivity() {
         // Если это главный блок - указываем это в программе.
         // Если главный блок уже был - кинет ошибку AxolotException
         if (type == AxolotNativeLibrary.BLOCK_MAIN) {
-            program.mainBlock = blockView.block
+            currentSource.mainBlock = blockView.block
         }
 
         // Привязываем блок к программе
-        program.addBlock(blockView.block)
+        currentSource.addBlock(blockView.block)
 
         // Добавляем готовый блок на поле
         binding.codeField.addView(blockView)
@@ -210,21 +212,21 @@ class BlueprintActivity : AppCompatActivity() {
         variableView.initComponents()
         variableView.variableName = "variable"
 
-        program.createVariable(variableView.variableName)
+        currentSource.createVariable(variableView.variableName)
         binding.listVariables.addView(variableView)
 
         // Прослушка изменений имени переменной
         variableView.name.addTextChangedListener { title, _, _, _ ->
-            program.renameVariable(variableView.variableName, title.toString())
+            currentSource.renameVariable(variableView.variableName, title.toString())
             variableView.variableName = title.toString()
         }
 
         // Прослушка изменений типа переменной
         variableView.type.addItemSelectedListener { parent, _, _, _ ->
-            program.variableTypes[parent.selectedItem.toString()
+            currentSource.variableTypes[parent.selectedItem.toString()
                 .lowercase(Locale.getDefault())]
                 ?.let { type ->
-                    program.retypeVariable(variableView.variableName, type)
+                    currentSource.retypeVariable(variableView.variableName, type)
                     val newColorName = "colorVariable${type}"
 
                     blockViews.filter { it.block.type is VariableGetterBlockType }
@@ -241,7 +243,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Прослушка кнопка добавления блока
         variableView.btnAdd.setOnClickListener {
-            val variableGetter = program.getVariableGetter(variableView.variableName)
+            val variableGetter = currentSource.getVariableGetter(variableView.variableName)
             val blockView = BlockView(this)
             createBlock(blockView, variableGetter, VariableGetterBlockType.PREFIX_NAME)
 
@@ -266,8 +268,8 @@ class BlueprintActivity : AppCompatActivity() {
 
     private fun startProgram() {
         val compiler = BlueprintCompiler()
-        val interpreter = compiler.prepareInterpreter(program, console)
-        val node = compiler.compile(program)
+        val interpreter = compiler.prepareInterpreter(currentSource, console)
+        val node = compiler.compile(currentSource)
 
         try {
             interpreter.execute(node)
