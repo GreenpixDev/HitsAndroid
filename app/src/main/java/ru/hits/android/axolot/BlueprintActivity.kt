@@ -205,7 +205,7 @@ class BlueprintActivity : AppCompatActivity() {
             val textView = TextView(this)
 
             textView.text = nameBlock
-            textView.setTextColor(Color.BLACK)
+            textView.setTextColor(Color.WHITE)
             textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
             textView.textSize = 20f
             textView.typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
