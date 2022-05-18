@@ -43,3 +43,8 @@ fun <E, K, V> MutableMap<E, MutableMap<K, V>>.putMap(entry: Map.Entry<E, Map<K, 
     }
     map.putAll(entry.value)
 }
+
+fun <E> Iterable<E>.associateWithIndex(): Map<E, Int> {
+    var index = 0
+    return associateWith { index++ }
+}
