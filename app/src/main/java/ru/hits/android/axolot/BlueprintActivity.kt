@@ -306,7 +306,6 @@ class BlueprintActivity : AppCompatActivity() {
         variableView.btnGet.setOnClickListener {
             val variableGetter = program.getVariableGetter(variableView.variableName)
             val blockView = BlockView(this)
-            blockView.title.setTextColor(Color.BLUE)
             createBlock(blockView, variableGetter, VariableGetterBlockType.PREFIX_NAME)
 
             // Цвет заголовка

@@ -15,8 +15,9 @@
     <color name="bg_icon">#002B5B65</color>
     <color name="bg_btn_for_fragments">#791E2D32</color>
     <color name="bg_header">#E90B0A0A</color>
-    <!--    <color name="bg_btn_menu">#0B0A0A</color>-->
+
     <color name="bg_menu">#F5032D3A</color>
+    <color name="bg_console">#BC0B0A0A</color>
     <color name="bg_view_info">#720B0A0A</color>
     <color name="btn_start">#909F4E89</color>
 

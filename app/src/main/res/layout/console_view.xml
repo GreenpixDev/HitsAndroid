@@ -10,7 +10,7 @@
         android:id="@+id/consoleView"
         android:layout_width="400dp"
         android:layout_height="300dp"
-        android:background="@drawable/round_rectangle"
+        android:background="@drawable/console_rectangle"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewConsole"
         app:layout_constraintEnd_toStartOf="@+id/imageViewConsole"
         app:layout_constraintStart_toStartOf="parent"
