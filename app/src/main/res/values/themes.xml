@@ -15,16 +15,16 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
 
-        <item name="colorBlockHeaderDefault">#7E7E7E</item>
-        <item name="colorBlockHeaderMain">#F44336</item>
-        <item name="colorBlockHeaderFunction">#9C27B0</item>
-        <item name="colorBlockHeaderMacros">#2196F3</item>
-        <item name="colorBlockHeaderVariable">#FF9800</item>
+        <item name="colorBlockHeaderDefault">@color/colorBlockHeaderDefault</item>
+        <item name="colorBlockHeaderMain">@color/colorBlockHeaderMain</item>
+        <item name="colorBlockHeaderFunction">@color/colorBlockHeaderFunction</item>
+        <item name="colorBlockHeaderMacros">@color/colorBlockHeaderMacros</item>
+        <item name="colorBlockHeaderVariable">@color/colorBlockHeaderVariable</item>
 
         <item name="colorFlowControl">@color/white</item>
-        <item name="colorVariableBoolean">#D3362A</item>
-        <item name="colorVariableInt">#009688</item>
-        <item name="colorVariableFloat">#8BC34A</item>
-        <item name="colorVariableString">#DD46E8</item>
+        <item name="colorVariableBoolean">@color/colorVariableBoolean</item>
+        <item name="colorVariableInt">@color/colorVariableInt</item>
+        <item name="colorVariableFloat">@color/colorVariableFloat</item>
+        <item name="colorVariableString">@color/colorVariableString</item>
     </style>
 </resources>

@@ -10,7 +10,7 @@ import ru.hits.android.axolot.custom_spinner.CustomAdapter
 import ru.hits.android.axolot.custom_spinner.UITypes
 import ru.hits.android.axolot.databinding.CreatorItemBinding
 
-open class CreatorView @JvmOverloads constructor(
+abstract class CreatorView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
 ) : ConstraintLayout(context, attrs) {
@@ -49,6 +49,8 @@ open class CreatorView @JvmOverloads constructor(
         val adapter = CustomAdapter(context, UITypes.list!!)
         binding.typeVariable.adapter = adapter
     }
+
+    abstract fun addViewMenu()
 
     init {
         initLayoutParams()
