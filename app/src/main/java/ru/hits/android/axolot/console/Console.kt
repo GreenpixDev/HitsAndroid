@@ -17,6 +17,14 @@ class Console : FrontendConsole {
         str?.let { listener.invoke(it) }
     }
 
+
+    fun getInApp(): String? {
+        if (toApp.isEmpty()) {
+            return null;
+        }
+        return toApp.remove()
+    }
+
     override fun send(inputString: String) {
         sendStringFromUser(inputString)
     }
