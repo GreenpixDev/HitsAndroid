@@ -6,8 +6,8 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
-import ru.hits.android.axolot.custom_spinner.SpinnerCustomAdapter
-import ru.hits.android.axolot.custom_spinner.Types
+import ru.hits.android.axolot.custom_spinner.CustomAdapter
+import ru.hits.android.axolot.custom_spinner.UITypes
 import ru.hits.android.axolot.databinding.CreatorItemBinding
 
 open class CreatorView @JvmOverloads constructor(
@@ -46,7 +46,7 @@ open class CreatorView @JvmOverloads constructor(
     }
 
     private fun setCustomSpinner() {
-        val adapter = SpinnerCustomAdapter(context, Types.list!!)
+        val adapter = CustomAdapter(context, UITypes.list!!)
         binding.typeVariable.adapter = adapter
     }
 

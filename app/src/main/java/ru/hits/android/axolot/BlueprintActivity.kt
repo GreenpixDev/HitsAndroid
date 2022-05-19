@@ -6,10 +6,8 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.Gravity
 import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -49,6 +47,9 @@ class BlueprintActivity : AppCompatActivity() {
     val program = AxolotProgram.create()
     val console = Console()
 
+    /**
+     * для понимания куда добавлять variablesView
+     */
     enum class VariablePlaces {
         INPUT_PARAMETERS,
         OUTPUT_VARIABLES
@@ -62,13 +63,13 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Палитра цветов
         blockTitleToColor = mapOf(
-            Regex("^native\\.main$") to getColor(R.color.colorBlockHeaderMain),
-            Regex("^native\\..+\\.boolean.*") to getColor(R.color.colorVariableBoolean),
-            Regex("^native\\..+\\.int.*") to getColor(R.color.colorVariableInt),
-            Regex("^native\\..+\\.float.*") to getColor(R.color.colorVariableFloat),
-            Regex("^native\\..+\\.string.*") to getColor(R.color.colorVariableString),
-            Regex("^function\\..*") to getColor(R.color.colorBlockHeaderFunction),
-            Regex("^macros\\..*") to getColor(R.color.colorBlockHeaderMacros),
+            Regex("^native\\.main$") to getThemeColor(R.attr.colorBlockHeaderMain),
+            Regex("^native\\..+\\.boolean.*") to getThemeColor(R.attr.colorVariableBoolean),
+            Regex("^native\\..+\\.int.*") to getThemeColor(R.attr.colorVariableInt),
+            Regex("^native\\..+\\.float.*") to getThemeColor(R.attr.colorVariableFloat),
+            Regex("^native\\..+\\.string.*") to getThemeColor(R.attr.colorVariableString),
+            Regex("^function\\..*") to getThemeColor(R.attr.colorBlockHeaderFunction),
+            Regex("^macros\\..*") to getThemeColor(R.attr.colorBlockHeaderMacros),
         )
 
         addEventListeners()
@@ -137,18 +138,14 @@ class BlueprintActivity : AppCompatActivity() {
      * Метод создания атрибутов и выходных переменных для функций и макросов
      */
     private fun addCreatorForFuncAndMacros(isFunc: Boolean) {
-
         val view = CreatorView(this)
 
         view.creator.addView(CreatorForFunctionView(this))
         view.typeExpression = false
         view.initComponents()
 
-        if (isFunc) {
-            binding.listFunction.addView(view)
-        } else {
-            binding.listMacros.addView(view)
-        }
+        if (isFunc) binding.listFunction.addView(view)
+        if (!isFunc) binding.listMacros.addView(view)
 
         view.creator.plusInputParam.setOnClickListener {
             createVariableView(view, VariablePlaces.INPUT_PARAMETERS)
@@ -169,8 +166,6 @@ class BlueprintActivity : AppCompatActivity() {
             val nameBlock = getLocalizedString(it.fullName)
             val typeBlock = Button(this)
 
-            //typeBlock.layoutParams = initLayoutParams(typeBlock)
-
             typeBlock.text = nameBlock
             typeBlock.setTextColor(Color.WHITE)
             typeBlock.setBackgroundColor(R.color.bg_btn_menu)
@@ -190,20 +185,6 @@ class BlueprintActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun initLayoutParams(view: Button): LinearLayout.LayoutParams {
-        val params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply {
-            gravity = Gravity.CENTER
-            marginStart = 5
-            marginEnd = 5
-        }
-
-        return params
-    }
-
 
     /**
      * Метод создания блока на поле
@@ -262,7 +243,6 @@ class BlueprintActivity : AppCompatActivity() {
         creatorView: CreatorView? = null,
         place: VariablePlaces? = null
     ) {
-
         val variableView = VariableView(this)
 
         //инициализация creatorView
@@ -326,6 +306,7 @@ class BlueprintActivity : AppCompatActivity() {
         variableView.btnGet.setOnClickListener {
             val variableGetter = program.getVariableGetter(variableView.variableName)
             val blockView = BlockView(this)
+            blockView.title.setTextColor(Color.BLUE)
             createBlock(blockView, variableGetter, VariableGetterBlockType.PREFIX_NAME)
 
             // Цвет заголовка

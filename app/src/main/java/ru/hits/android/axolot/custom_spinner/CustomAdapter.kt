@@ -8,10 +8,10 @@ import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.spinner_item.view.*
 import ru.hits.android.axolot.R
 
-class SpinnerCustomAdapter(
+class CustomAdapter(
     context: Context,
-    typeList: List<Type>
-) : ArrayAdapter<Type>(context, 0, typeList) {
+    typeList: List<UIType>
+) : ArrayAdapter<UIType>(context, 0, typeList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return initView(position, convertView, parent, isDropdownView = false)

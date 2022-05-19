@@ -80,7 +80,7 @@ class ConsoleView @JvmOverloads constructor(
 
         textView.textSize = 18f
         textView.typeface = ResourcesCompat.getFont(activity, R.font.montserrat_regular)
-        textView.setTextColor(Color.BLACK)
+        textView.setTextColor(Color.CYAN)
 
         binding.linearLayoutConsole.addView(textView)   //добавили TextView
         consoleLines.add(textView)                      //добавили в массив со всеми TextView
