@@ -6,6 +6,7 @@ import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
 import ru.hits.android.axolot.interpreter.node.executable.NodeSetVariable
 import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayAssignElement
 import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayResize
+import ru.hits.android.axolot.interpreter.node.executable.thread.NodeSleep
 import ru.hits.android.axolot.interpreter.node.flowcontrol.*
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
@@ -25,6 +26,7 @@ import ru.hits.android.axolot.interpreter.service.impl.executable.NodePrintStrin
 import ru.hits.android.axolot.interpreter.service.impl.executable.NodeSetVariableService
 import ru.hits.android.axolot.interpreter.service.impl.executable.array.NodeArrayAssignElementService
 import ru.hits.android.axolot.interpreter.service.impl.executable.array.NodeArrayResizeService
+import ru.hits.android.axolot.interpreter.service.impl.executable.thread.NodeSleepService
 import ru.hits.android.axolot.interpreter.service.impl.flowcontrol.*
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeCastService
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeGetVariableService
@@ -136,6 +138,7 @@ class ServiceInit(private val nodeHandlerService: NodeHandlerService, val consol
         map[NodeSetVariable::class] = NodeSetVariableService(nodeHandlerService)
         map[NodeArrayResize::class] = NodeArrayResizeService(nodeHandlerService)
         map[NodePrintString::class] = NodePrintStringService(nodeHandlerService, console)
+        map[NodeSleep::class] = NodeSleepService(nodeHandlerService)
         return map
     }
 

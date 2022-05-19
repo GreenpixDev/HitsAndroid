@@ -4,6 +4,7 @@ import ru.hits.android.axolot.blueprint.declaration.NativeBlockType
 import ru.hits.android.axolot.blueprint.declaration.pin.*
 import ru.hits.android.axolot.blueprint.project.AxolotLibrary
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
+import ru.hits.android.axolot.interpreter.node.executable.thread.NodeSleep
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
@@ -103,6 +104,30 @@ class AxolotNativeLibrary : AxolotLibrary() {
                 handler = { target, node ->
                     target
                         .filterIsInstance<NodePrintString>()
+                        .first().nextNode = node
+                },
+            )
+        )
+        )
+
+        // Остановить поток на n миллисекунд
+        registerBlock(NativeBlockType("sleep",
+            DeclaredSingleInputFlowPin(
+                nodeFabric = { NodeSleep() }
+            ),
+            DeclaredSingleInputDataPin(
+                handler = { target, node ->
+                    target
+                        .filterIsInstance<NodeSleep>()
+                        .first().init(node)
+                },
+                name = "delay",
+                type = Type.INT
+            ),
+            DeclaredSingleOutputFlowPin(
+                handler = { target, node ->
+                    target
+                        .filterIsInstance<NodeSleep>()
                         .first().nextNode = node
                 },
             )

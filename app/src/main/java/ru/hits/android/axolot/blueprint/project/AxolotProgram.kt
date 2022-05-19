@@ -2,6 +2,7 @@ package ru.hits.android.axolot.blueprint.project
 
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.FunctionType
+import ru.hits.android.axolot.blueprint.declaration.MacrosType
 import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
 import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
@@ -81,6 +82,20 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
 
         registerBlock(functionType)
         return functionType
+    }
+
+    /**
+     * Создать макрос
+     */
+    fun createMacros(name: String): MacrosType {
+        require("${MacrosType.PREFIX_NAME}.$name" !in blockTypes) {
+            "macros with name $name already exists"
+        }
+        val macrosType = MacrosType(name)
+        //macrosType.createBlock(macrosType.beginType) TODO
+
+        registerBlock(macrosType)
+        return macrosType
     }
 
     companion object {

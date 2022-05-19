@@ -71,6 +71,7 @@
     <string name="native.foreach">ForEach</string>
     <string name="native.branch">If Else</string>
     <string name="native.print">Print String</string>
+    <string name="native.sleep">Thread Sleep</string>
 
     <string name="native.math.boolean.or">OR</string>
     <string name="native.math.boolean.and">AND</string>

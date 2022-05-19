@@ -1,9 +1,6 @@
 package ru.hits.android.axolot.compiler
 
-import ru.hits.android.axolot.blueprint.declaration.FunctionBeginType
-import ru.hits.android.axolot.blueprint.declaration.FunctionEndType
-import ru.hits.android.axolot.blueprint.declaration.FunctionType
-import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
+import ru.hits.android.axolot.blueprint.declaration.*
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredAutonomicPin
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.element.AxolotSource
@@ -15,6 +12,7 @@ import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.interpreter.BlueprintInterpreter
 import ru.hits.android.axolot.interpreter.Interpreter
 import ru.hits.android.axolot.interpreter.element.InterpretedFunction
+import ru.hits.android.axolot.interpreter.element.InterpretedMacros
 import ru.hits.android.axolot.interpreter.node.Node
 import ru.hits.android.axolot.interpreter.node.NodeConstant
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
@@ -42,17 +40,24 @@ class BlueprintCompiler : Compiler {
     }
 
     override fun compile(program: AxolotProgram): NodeExecutable? {
+        // Создаем функции и макросы
         val functions = program.blockTypes.values
             .filterIsInstance<FunctionType>()
             .associateWith { InterpretedFunction() }
+        val macros = program.blockTypes.values
+            .filterIsInstance<MacrosType>()
+            .associateWith { InterpretedMacros() }
 
-        // Компилируем сначала макросы и функции
+        // Компилируем сначала функции и макросы
         program.blockTypes.values
             .filterIsInstance<AxolotSource>()
-            .forEach { compileSource(it, functions) }
+            .forEach { compileSource(it, functions, macros) }
+        program.blockTypes.values
+            .filterIsInstance<AxolotSource>()
+            .forEach { compileSource(it, functions, macros) }
 
         // Компилируем саму программу
-        val map = compileSource(program, functions)
+        val map = compileSource(program, functions, macros)
 
         // После предыдущего этапа мы получаем полноценный граф узлов, который можно
         // использовать в интерпретаторе. Для этого нужно найти входный узел нашей программы.
@@ -63,7 +68,7 @@ class BlueprintCompiler : Compiler {
 
         // Получаем из блока входной узел для интерпретатора
         val executable = map[main]?.firstNotNullOfOrNull { it.value }
-        require(executable is NodeExecutable?) { "fatal error" }
+        require(executable is NodeExecutable?) { "main block of program not executable" }
 
         return executable
     }
@@ -73,7 +78,8 @@ class BlueprintCompiler : Compiler {
      */
     private fun compileSource(
         source: AxolotSource,
-        functions: Map<FunctionType, InterpretedFunction>
+        functions: Map<FunctionType, InterpretedFunction>,
+        macros: Map<MacrosType, InterpretedMacros>
     ): Map<AxolotBlock, Map<TypedPin, Node>> {
         // У каждого блока есть пины, которые требуют зависимости (автономный пин).
         // Пробегаемся по всем блокам, находим такие пины и создаём для них узлы.
@@ -134,7 +140,22 @@ class BlueprintCompiler : Compiler {
             }
         }
 
-        // Инициализируем узлы функции
+        // Инициализируем узлы функции и макросов
+        postCompileFunctions(functions, nodes, adjacent)
+        postCompileMacros(macros, nodes, adjacent)
+
+        return adjacent
+    }
+
+    /**
+     * После компиляции инициализация функций
+     */
+    private fun postCompileFunctions(
+        functions: Map<FunctionType, InterpretedFunction>,
+        nodes: Map<AxolotBlock, Map<DeclaredAutonomicPin, Node>>,
+        adjacent: Map<AxolotBlock, MutableMap<TypedPin, Node>>
+    ) {
+        // Инициализация всех узлов Invoke и Returned
         nodes
             .mapKeys { it.key.type }
             .mapValues { it.value.values }
@@ -148,6 +169,7 @@ class BlueprintCompiler : Compiler {
                 }
             }
 
+        // Инициализация всех узлов End
         nodes
             .mapKeys { it.key.type }
             .mapValues { it.value.values }
@@ -157,16 +179,28 @@ class BlueprintCompiler : Compiler {
                 node.function = functions[nodeList.key.functionType]!!
             }
 
+        // Инициализация всех узлов Begin
         adjacent
             .filterKeys { it.type is FunctionBeginType }
             .mapValues { it.value.values }
             .forEach { e ->
                 val executable = adjacent[e.key]?.firstNotNullOfOrNull { it.value }
-                require(executable is NodeExecutable?) { "fatal error" }
+                require(executable is NodeExecutable?) {
+                    "begin block of ${e.key.type.fullName} not executable"
+                }
                 functions[(e.key.type as FunctionBeginType).functionType]?.inputExecutable =
                     executable
             }
+    }
 
-        return adjacent
+    /**
+     * После компиляции инициализация макросов
+     */
+    private fun postCompileMacros(
+        macros: Map<MacrosType, InterpretedMacros>,
+        nodes: Map<AxolotBlock, Map<DeclaredAutonomicPin, Node>>,
+        adjacent: Map<AxolotBlock, MutableMap<TypedPin, Node>>
+    ) {
+
     }
 }

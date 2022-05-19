@@ -26,8 +26,8 @@ import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
 import ru.hits.android.axolot.exception.AxolotException
 import ru.hits.android.axolot.util.*
 import ru.hits.android.axolot.view.BlockView
-import ru.hits.android.axolot.view.CreatorView
 import ru.hits.android.axolot.view.FunctionView
+import ru.hits.android.axolot.view.MacrosView
 import ru.hits.android.axolot.view.VariableView
 import java.util.*
 
@@ -121,14 +121,7 @@ class BlueprintActivity : AppCompatActivity() {
         binding.plusFunction.setOnClickListener { createFunctionView() }
 
         // Создание нового макроса
-        binding.plusMacros.setOnClickListener {
-            val view = CreatorView(this)
-
-            view.typeExpression = false
-            view.initComponents()
-
-            binding.listMacros.addView(view)
-        }
+        binding.plusMacros.setOnClickListener { createMacrosView() }
 
         // Обратно в Main программы
         binding.goToMain.setOnClickListener { restoreSource(program) }
@@ -315,9 +308,33 @@ class BlueprintActivity : AppCompatActivity() {
         functionView.functionName = functionName
         binding.listFunction.addView(functionView)
 
-        // Прослушка изменений типа переменной
+        // Прослушка добавлении вызова функции на поле
+        functionView.btnAdd.setOnClickListener {
+            createBlock(BlockView(this), functionType, functionName)
+        }
+
+        // Прослушка изменений функции
         functionView.btnEdit.setOnClickListener {
             restoreSource(functionType)
+        }
+    }
+
+    private fun createMacrosView() {
+        val macrosName = "macros"
+        val macrosType = program.createMacros(macrosName)
+        val macrosView = MacrosView(this)
+
+        macrosView.macrosName = macrosName
+        binding.listMacros.addView(macrosView)
+
+        // Прослушка добавлении вызова макроса на поле
+        macrosView.btnAdd.setOnClickListener {
+            createBlock(BlockView(this), macrosType, macrosName)
+        }
+
+        // Прослушка изменений макроса
+        macrosView.btnEdit.setOnClickListener {
+            restoreSource(macrosType)
         }
     }
 
