@@ -15,7 +15,7 @@ class NodeInputService(val console: Console) : NodeDependencyService {
         if (node is NodeInput) {
             var value = console.getInApp()
             while (value == null) {
-                value = console?.getInApp()
+                value = console.getInApp()
                 Thread.yield()
             }
             return Variable(Type.STRING, value)
