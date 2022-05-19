@@ -23,8 +23,8 @@ class EdgeView @JvmOverloads constructor(
 ) : View(context, attrs, defstyleAttr, defstyleRes) {
 
     companion object {
-        /**
-         * Количество промежуточных точек на прямой.
+
+        /**Количество промежуточных точек на прямой.
          * Меньше - сплайн более кривой.
          * Больше сплайн лучше, но менее производительный.
          */
@@ -35,14 +35,11 @@ class EdgeView @JvmOverloads constructor(
          */
         const val BUFFER_POINT_DISTANCE = 200f
 
-        /**
-         * Нужно ли рисовать вспомогательные точки
-         */
+
+        //Нужно ли рисовать вспомогательные точки
         const val BUFFER_POINT_DRAW_ENABLED = true
 
-        /**
-         * Радиус точки в DPI
-         */
+        //Радиус точки в DPI
         const val CIRCLE_RADIUS_DP = 6.25f
     }
 

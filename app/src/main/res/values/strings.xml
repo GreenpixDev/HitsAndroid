@@ -1,6 +1,6 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">HitsAndroid</string>
-    <string name="welcome">Добро пожаловать</string>
+    <string name="nameProgram">AXOLOT</string>
     <string name="begin">Начать</string>
     <string name="aboutUs">О нас</string>
     <string name="main">Главная</string>
@@ -9,6 +9,7 @@
     <string name="play_icon_description">Это кнопка, запускающая сформированный вами код</string>
     <string name="show_and_not_show_toolbar">Это кнопка, закрывающая и открывающая тулбар</string>
     <string name="menu_description">Это меню, где можно выбрать блок для визуального программирования</string>
+    <string name="console_icon_description">Кнопка, открывающая и закрывающая консоль</string>
 
     <string name="Konstantin">Константин</string>
     <string name="Elena">Елена</string>
@@ -26,19 +27,26 @@
     <string name="back_to_game">Вернуться к игре</string>
     <string name="exit">Выход</string>
 
+    <string name="modeDelete">Режим удаления</string>
+
+    <string name="listBlocks">Блоки</string>
+
+    <string name="console">Это консоль</string>
+
     <string name="variable">variable</string>
 
-    <string name="blockSET">SET</string>
-    <string name="blockAdd">Add</string>
+    <string name="blockSET">Set</string>
     <string name="blockGet">Get</string>
+    <string name="blockEdit" tools:ignore="ExtraTranslation">Edit</string>
+    <string name="blockDelete" tools:ignore="ExtraTranslation">Delete</string>
     <string name="blockBranch">Branch</string>
     <string name="inputData">Condition</string>
     <string name="outputTrue">True</string>
     <string name="outputFalse">False</string>
 
-    <string-array name="TypeBlock">
+    <string-array name="typeBlock">
         <item>Boolean</item>
-        <item>Int</item>
+        <item>Integer</item>
         <item>Float</item>
         <item>String</item>
     </string-array>
@@ -56,11 +64,12 @@
         <item>for</item>
         <item>forEach</item>
         <item>if else</item>
-        <!--        это branch-->
         <item>main</item>
         <item>print string</item>
         <item>сложение</item>
     </string-array>
+
+    <string name="hintEditText">Enter name</string>
 
     <string name="native.main">Main</string>
     <string name="native.getVariable">Get</string>

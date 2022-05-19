@@ -4,42 +4,54 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import androidx.appcompat.widget.LinearLayoutCompat
+import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import ru.hits.android.axolot.custom_spinner.CustomAdapter
+import ru.hits.android.axolot.custom_spinner.UITypes
 import ru.hits.android.axolot.databinding.CreatorItemBinding
 
 open class CreatorView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defstyleAttr: Int = 0,
-    defstyleRes: Int = 0
-) : ConstraintLayout(context, attrs, defstyleAttr, defstyleRes) {
+) : ConstraintLayout(context, attrs) {
 
     private val binding = CreatorItemBinding.inflate(LayoutInflater.from(context), this)
 
     var nameDescription = true
     var typeExpression = true
+    var btnAddDel = false
     var edit = true
+    var isVar = false
 
     private fun initLayoutParams() {
-        val params = LinearLayoutCompat.LayoutParams(
-            LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
-            LinearLayoutCompat.LayoutParams.WRAP_CONTENT
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
             gravity = Gravity.CENTER
+            marginStart = 10
+            marginEnd = 10
         }
 
         binding.rowForMenu.layoutParams = params
     }
 
     fun initComponents() {
-        if (!nameDescription) binding.rowForMenu.removeView(binding.name)
-        if (!typeExpression) binding.rowForMenu.removeView(binding.type)
-        if (!edit) binding.rowForMenu.removeView(binding.btnEdit)
+        if (!nameDescription) binding.name.visibility = GONE
+        if (!typeExpression) binding.typeVariable.visibility = GONE
+        if (!edit) binding.btnEdit.visibility = GONE
+        if (isVar) binding.creator.background = null
+        if (btnAddDel) binding.btnSet.visibility = GONE
+        if (btnAddDel) binding.btnGet.visibility = GONE
+    }
+
+    private fun setCustomSpinner() {
+        val adapter = CustomAdapter(context, UITypes.list!!)
+        binding.typeVariable.adapter = adapter
     }
 
     init {
         initLayoutParams()
-
+        setCustomSpinner()
     }
 }

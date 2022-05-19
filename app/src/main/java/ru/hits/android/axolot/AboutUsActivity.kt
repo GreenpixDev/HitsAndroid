@@ -1,10 +1,9 @@
 package ru.hits.android.axolot
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import ru.hits.android.axolot.databinding.ActivityAboutUsBinding
-import java.util.zip.Inflater
 
 class AboutUsActivity : AppCompatActivity() {
 
@@ -15,16 +14,20 @@ class AboutUsActivity : AppCompatActivity() {
         binding = ActivityAboutUsBinding.inflate(layoutInflater)
         setContentView(binding.aboutUsLayout)
 
+        addEventListener()
+    }
+
+    private fun addEventListener() {
         binding.toMainPage.setOnClickListener() {
             startActivity(Intent(this, MainActivity::class.java))
         }
 
         binding.toAboutUsPage.setOnClickListener() {
-            startActivity(Intent(this,AboutUsActivity::class.java))
+            startActivity(Intent(this, AboutUsActivity::class.java))
         }
 
         binding.informationIcon.setOnClickListener() {
-            startActivity(Intent(this,InformationActivity::class.java))
+            startActivity(Intent(this, InformationActivity::class.java))
         }
 
         binding.settingsIcon.setOnClickListener() {
