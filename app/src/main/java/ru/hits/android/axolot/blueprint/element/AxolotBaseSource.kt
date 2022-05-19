@@ -40,7 +40,7 @@ open class AxolotBaseSource : AxolotSource {
         }
 
         if (from is PinToOne && to is PinToMany) {
-            if (from.adjacent != null) {
+            if (from.adjacent != null && from.adjacent !is ConstantPin) {
                 throw AxolotPinOneAdjacentException(from) { "Pin 'from' can have 1 adjacent pin" }
             }
             from connect to
@@ -48,7 +48,7 @@ open class AxolotBaseSource : AxolotSource {
         }
 
         if (from is PinToMany && to is PinToOne) {
-            if (to.adjacent != null) {
+            if (to.adjacent != null && to.adjacent !is ConstantPin) {
                 throw AxolotPinOneAdjacentException(to) { "Pin 'to' can have 1 adjacent pin" }
             }
             from connect to
