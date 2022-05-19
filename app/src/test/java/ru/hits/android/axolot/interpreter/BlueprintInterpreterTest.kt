@@ -106,7 +106,9 @@ class BlueprintInterpreterTest {
     @Test
     fun printTest2() {
         val scope = GlobalScope()
-        val console = Console()
+        val console = Console {
+            it.invoke()
+        }
         console.send("hi")
         val interpreter = BlueprintInterpreter(scope, console)
         val consoleInput = NodeInput()
