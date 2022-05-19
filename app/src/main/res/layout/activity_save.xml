@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
+    tools:context=".SaveActivity">
+
+    <View
+        android:id="@+id/roundRectangle"
+        android:layout_width="600dp"
+        android:layout_height="280dp"
+        android:background="@drawable/round_rectangle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintVertical_bias="0.725" />
+
+    <LinearLayout
+        android:layout_width="500dp"
+        android:layout_height="280dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/roundRectangle"
+        app:layout_constraintEnd_toEndOf="@+id/roundRectangle"
+        app:layout_constraintStart_toStartOf="@+id/roundRectangle"
+        app:layout_constraintTop_toTopOf="@+id/roundRectangle"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/goBackToGame"
+            android:text="@string/back_to_game"
+            style="@style/btnForFragmentSave" />
+
+        <Button
+            android:id="@+id/button1"
+            android:text="текст"
+            style="@style/btnForFragmentSave" />
+
+        <Button
+            android:id="@+id/button2"
+            android:text="текст"
+            style="@style/btnForFragmentSave" />
+
+        <Button
+            android:id="@+id/button3"
+            android:text="текст"
+            style="@style/btnForFragmentSave" />
+
+        <Button
+            android:id="@+id/button4"
+            android:text="текст"
+            style="@style/btnForFragmentSave" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_semibold"
+        android:text="Smart text"
+        android:textAlignment="center"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/roundRectangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.326"
+        style="@style/textViewStyle" />
+</androidx.constraintlayout.widget.ConstraintLayout>

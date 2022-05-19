@@ -13,6 +13,10 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.settingsLayout)
 
+        addEventListeners()
+    }
+
+    private fun addEventListeners() {
         binding.goToMain.setOnClickListener() {
             startActivity(Intent(this, MainActivity::class.java))
         }

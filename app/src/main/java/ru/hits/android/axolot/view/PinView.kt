@@ -52,7 +52,7 @@ class PinView @JvmOverloads constructor(
     private val color: Int
         get() {
             if (pin is FlowPin) {
-                return context.getThemeColor(R.attr.colorFlowControl)
+                return context.getColor(R.color.colorFlowControl)
             }
             if (pin is TypedPin) {
                 val pinType = (pin as TypedPin).type

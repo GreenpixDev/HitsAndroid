@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:orientation="vertical">
+
+        <TableRow
+            android:id="@+id/inputRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_gravity="left">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:paddingStart="1dp"
+                android:paddingEnd="1dp"
+                android:text="Input"
+                android:textSize="15dp"
+                style="@style/textViewStyle" />
+
+            <ImageButton
+                android:id="@+id/plusInputParam"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/ic_plus"
+                android:layout_gravity="center_vertical" />
+
+        </TableRow>
+
+        <!--        тут входящие параметры-->
+        <LinearLayout
+            android:id="@+id/listParameters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:orientation="vertical" />
+
+        <TableRow
+            android:id="@+id/outputRow"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="10dp"
+            android:paddingBottom="5dp"
+            android:layout_gravity="left">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="15dp"
+                android:text="Output"
+                android:textAlignment="center"
+                android:paddingStart="1dp"
+                android:paddingEnd="1dp"
+                style="@style/textViewStyle" />
+
+            <ImageButton
+                android:id="@+id/plusOutputVar"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/ic_plus"
+                android:layout_gravity="center_vertical" />
+        </TableRow>
+
+        <LinearLayout
+            android:id="@+id/listOutputVar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+
+</merge>

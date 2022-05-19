@@ -9,6 +9,7 @@ import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayResize
 import ru.hits.android.axolot.interpreter.node.flowcontrol.*
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
+import ru.hits.android.axolot.interpreter.node.function.NodeInput
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayFindElement
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayGetElement
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArraySize
@@ -28,6 +29,7 @@ import ru.hits.android.axolot.interpreter.service.impl.executable.array.NodeArra
 import ru.hits.android.axolot.interpreter.service.impl.flowcontrol.*
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeCastService
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeGetVariableService
+import ru.hits.android.axolot.interpreter.service.impl.function.NodeInputService
 import ru.hits.android.axolot.interpreter.service.impl.function.array.NodeArrayService
 import ru.hits.android.axolot.interpreter.service.impl.function.custom.NodeFunctionEndService
 import ru.hits.android.axolot.interpreter.service.impl.function.custom.NodeFunctionInvokeService
@@ -136,6 +138,7 @@ class ServiceInit(private val nodeHandlerService: NodeHandlerService, val consol
         map[NodeSetVariable::class] = NodeSetVariableService(nodeHandlerService)
         map[NodeArrayResize::class] = NodeArrayResizeService(nodeHandlerService)
         map[NodePrintString::class] = NodePrintStringService(nodeHandlerService, console)
+        map[NodeInput::class] = NodeInputService(console)
         return map
     }
 

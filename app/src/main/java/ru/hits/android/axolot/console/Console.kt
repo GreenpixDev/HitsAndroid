@@ -21,6 +21,14 @@ class Console(private val executor: (() -> Unit) -> Unit) : FrontendConsole {
         }
     }
 
+
+    fun getInApp(): String? {
+        if (toApp.isEmpty()) {
+            return null;
+        }
+        return toApp.remove()
+    }
+
     override fun send(inputString: String) {
         sendStringFromUser(inputString)
     }
