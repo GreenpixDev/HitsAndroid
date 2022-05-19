@@ -30,11 +30,6 @@ class EdgeView @JvmOverloads constructor(
          */
         const val POINT_COUNT = 10
 
-
-
-        //Растояние вспомогательных точек
-        const val BUFFER_POINT_DISTANCE = 75f
-
         /**
          * Растояние вспомогательных точек
          */
