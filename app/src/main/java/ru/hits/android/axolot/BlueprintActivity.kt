@@ -44,7 +44,11 @@ class BlueprintActivity : AppCompatActivity() {
     var consoleIsVisible = true
 
     val program = AxolotProgram.create()
-    val console = Console()
+    val console = Console {
+        Handler(Looper.getMainLooper()).post {
+            it.invoke()
+        }
+    }
 
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {

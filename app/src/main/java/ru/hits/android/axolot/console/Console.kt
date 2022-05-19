@@ -1,15 +1,13 @@
 package ru.hits.android.axolot.console
 
-import android.os.Handler
-import android.os.Looper
 import ru.hits.android.axolot.blueprint.FrontendConsole
 import java.util.*
 
-class Console : FrontendConsole {
+class Console(private val executor: (() -> Unit) -> Unit) : FrontendConsole {
 
     private var listener: (String) -> Unit = {}
 
-    private val toApp: Queue<String> = LinkedList<String>()
+    private val toApp: Queue<String> = LinkedList()
 
     private fun sendStringFromUser(str: String?) {
         toApp.add(str)
@@ -17,7 +15,7 @@ class Console : FrontendConsole {
 
     fun sendStringToUser(str: String?) {
         str?.let {
-            Handler(Looper.getMainLooper()).post {
+            executor.invoke {
                 listener.invoke(it)
             }
         }
