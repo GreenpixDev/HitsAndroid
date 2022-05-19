@@ -330,7 +330,6 @@ class BlueprintActivity : AppCompatActivity() {
             }
         } else {
             variableView.initComponents()
-
             blueprintBinding.listVariables.addView(variableView)
         }
 
@@ -360,8 +359,8 @@ class BlueprintActivity : AppCompatActivity() {
                 }
         }
 
-        // Прослушка кнопки добавления блока
-        variableView.btnAdd.setOnClickListener {
+        // Прослушка кнопки GET добавления блока
+        variableView.btnGet.setOnClickListener {
             val variableGetter = program.getVariableGetter(variableView.variableName)
             val blockView = BlockView(this)
             createBlock(blockView, variableGetter, VariableGetterBlockType.PREFIX_NAME)
@@ -374,6 +373,11 @@ class BlueprintActivity : AppCompatActivity() {
             variableView.name.addTextChangedListener { title, _, _, _ ->
                 blockView.pinViews.forEach { it.displayName = title.toString() }
             }
+        }
+
+        // Прослушка кнопки SET добавления блока
+        variableView.btnSet.setOnClickListener {
+            //TODO: сделать добавление блоков SET
         }
     }
 

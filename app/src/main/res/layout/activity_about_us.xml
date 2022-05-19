@@ -91,7 +91,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header"
         app:layout_constraintVertical_bias="0.255"
-        style="@style/BtnAboutUsStyle" />
+        style="@style/btnAboutUsStyle" />
 
     <Button
         android:id="@+id/btnIvan"
@@ -102,7 +102,7 @@
         app:layout_constraintStart_toEndOf="@id/btnRoman"
         app:layout_constraintTop_toBottomOf="@+id/header"
         app:layout_constraintVertical_bias="0.255"
-        style="@style/BtnAboutUsStyle" />
+        style="@style/btnAboutUsStyle" />
 
     <Button
         android:id="@+id/btnElena"
@@ -113,7 +113,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnRoman"
         app:layout_constraintVertical_bias="0.449"
-        style="@style/BtnAboutUsStyle" />
+        style="@style/btnAboutUsStyle" />
 
     <Button
         android:id="@+id/btnKonstantin"
@@ -124,6 +124,6 @@
         app:layout_constraintStart_toEndOf="@id/btnElena"
         app:layout_constraintTop_toBottomOf="@+id/btnIvan"
         app:layout_constraintVertical_bias="0.449"
-        style="@style/BtnAboutUsStyle" />
+        style="@style/btnAboutUsStyle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,7 +41,8 @@ open class CreatorView @JvmOverloads constructor(
         if (!typeExpression) binding.typeVariable.visibility = GONE
         if (!edit) binding.btnEdit.visibility = GONE
         if (isVar) binding.creator.background = null
-        if (btnAddDel) binding.btnAdd.visibility = GONE
+        if (btnAddDel) binding.btnSet.visibility = GONE
+        if (btnAddDel) binding.btnGet.visibility = GONE
     }
 
     private fun setCustomSpinner() {
