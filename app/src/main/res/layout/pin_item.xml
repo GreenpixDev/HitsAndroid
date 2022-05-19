@@ -29,27 +29,24 @@
 
     <EditText
         android:id="@+id/inputField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@drawable/edit_text_style"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
+        android:textColor="@color/white"
         android:paddingBottom="2dp"
         android:paddingTop="2dp"
         android:layout_marginTop="5dp"
         android:layout_marginStart="4dp"
-        android:textSize="8sp"
-        android:visibility="gone"
-        android:textAlignment="center"
-        android:imeOptions="actionDone"
-        android:cursorVisible="false"
-        android:background="@drawable/edit_text_style"
-        tools:ignore="SmallSp" />
+        tools:ignore="SmallSp"
+        style="@style/editTextStyle" />
 
     <ImageView
         android:id="@+id/tickIcon"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_tick"
         android:visibility="gone" />
@@ -58,7 +55,9 @@
         android:id="@+id/crossIcon"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="5dp"
+        android:layout_gravity="center_vertical"
         android:scaleType="fitXY"
         android:src="@drawable/ic_cross"
         android:visibility="gone" />

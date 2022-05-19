@@ -9,34 +9,41 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="bg_main">#052530</color>
+    <color name="bg_name_program">#DFDCE2</color>
     <color name="bg_main_start">#1C0539</color>
     <color name="bg_main_end">#2B5B65</color>
     <color name="bg_icon">#002B5B65</color>
     <color name="bg_btn_for_fragments">#791E2D32</color>
     <color name="bg_header">#E90B0A0A</color>
-    <color name="bg_menu">#E41C0539</color>
+    <!--    <color name="bg_btn_menu">#0B0A0A</color>-->
+    <color name="bg_menu">#F5032D3A</color>
     <color name="bg_view_info">#720B0A0A</color>
-    <color name="button_start">#CD131313</color>
+    <color name="btn_start">#909F4E89</color>
 
-    <color name="bg_btn_menu_close">#CE1E5467</color>
-    <color name="bg_btn_menu_open">#D72B1D3C</color>
+    <color name="bg_btn_menu_click">#D09C16</color>
+    <color name="bg_btn_menu">#B0046B8C</color>
 
     <color name="buttons">#C4D8DC</color>
     <color name="toolBar_color">#C4D8DC</color>
     <color name="circle_button">#83AFC0</color>
 
-    <color name="bgBlock">#99ADB4</color>
+    <color name="bgBlock">#97000000</color>
 
-    <color name="colorBlockHeaderDefault">#7E7E7E</color>
-    <color name="colorBlockHeaderMain">#F44336</color>
-    <color name="colorBlockHeaderFunction">#9C27B0</color>
-    <color name="colorBlockHeaderMacros">#2196F3</color>
-    <color name="colorBlockHeaderVariable">#FF9800</color>
+    <color name="colorBlockHeaderDefault">#6E6C6C</color>
+    <color name="colorBlockHeaderMain">#AA4F48</color>
+    <color name="colorBlockHeaderFunction">#93499F</color>
+    <color name="colorBlockHeaderMacros">#5687AE</color>
+    <color name="colorBlockHeaderVariable">#AC6F15</color>
 
     <color name="colorFlowControl">@color/white</color>
-    <color name="colorVariableBoolean">#D85E54</color>
-    <color name="colorVariableInt">#5BDDD0</color>
-    <color name="colorVariableFloat">#9CD55B</color>
-    <color name="colorVariableString">#CF5BD8</color>
+    <color name="colorVariableBoolean">#CD5147</color>
+    <color name="colorVariableInt">#62AEA6</color>
+    <color name="colorVariableFloat">#7AA14E</color>
+    <color name="colorVariableString">#A563AA</color>
+
+    <color name="titleBlocks">#FFBF00</color>
+    <color name="titleFunction">#2AD397</color>
+    <color name="titleMacros">#45C1D3</color>
+    <color name="titleVariable">#BD5890</color>
 
 </resources>

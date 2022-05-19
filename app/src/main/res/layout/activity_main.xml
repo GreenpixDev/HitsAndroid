@@ -53,26 +53,26 @@
     <TextView
         android:id="@+id/nameProgram"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:fontFamily="@font/montserrat_alternates_semibold"
         android:gravity="center_horizontal|center_vertical"
         android:text="@string/nameProgram"
-        android:textColor="@color/white"
+        android:textColor="@color/bg_name_program"
         android:textSize="80sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.869"
+        app:layout_constraintHorizontal_bias="0.079"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        app:layout_constraintVertical_bias="0.398" />
+        app:layout_constraintVertical_bias="0.336" />
 
     <Button
         android:id="@+id/btnStart"
         android:layout_width="183dp"
         android:layout_height="71dp"
-        android:backgroundTint="@color/button_start"
-        android:elevation="10dp"
-        android:fontFamily="@font/montserrat_thin"
+        android:backgroundTint="@color/btn_start"
+        app:elevation="100dp"
+        android:fontFamily="@font/montserrat_light"
         android:gravity="center_horizontal|center_vertical"
         android:stateListAnimator="@null"
         android:text="@string/begin"
@@ -81,27 +81,25 @@
         android:translationZ="7dp"
         app:cornerRadius="35dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/nameProgram"
-        app:layout_constraintHorizontal_bias="0.401"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.857"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/nameProgram"
-        app:layout_constraintVertical_bias="0.155" />
+        app:layout_constraintVertical_bias="0.43" />
 
     <ImageButton
         android:id="@+id/btnInfo"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginBottom="84dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="21dp"
         android:background="@color/bg_icon"
         android:contentDescription="@string/info_icon_description"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/nameProgram"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnStart"
-        app:layout_constraintVertical_bias="0.68"
+        app:layout_constraintStart_toStartOf="@+id/btnStart"
+        app:layout_constraintTop_toBottomOf="@+id/btnStart"
+        app:layout_constraintVertical_bias="0.048"
         app:srcCompat="@drawable/ic_info_icon" />
 
     <ImageButton
@@ -109,15 +107,16 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="24dp"
         android:background="@color/bg_icon"
         android:contentDescription="@string/settings_icon_description"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/btnInfo"
-        app:layout_constraintEnd_toStartOf="@+id/nameProgram"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnStart"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/btnInfo"
-        app:layout_constraintTop_toTopOf="@+id/btnInfo"
+        app:layout_constraintTop_toBottomOf="@+id/btnStart"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_setting_icon" />
+        app:srcCompat="@drawable/ic_settings_main_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

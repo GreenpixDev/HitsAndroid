@@ -69,6 +69,8 @@
         <item>сложение</item>
     </string-array>
 
+    <string name="hintEditText">Enter name</string>
+
     <string name="native.main">Main</string>
     <string name="native.getVariable">Get</string>
     <string name="native.setVariable">Set</string>

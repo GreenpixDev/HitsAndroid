@@ -12,7 +12,6 @@ class AddNodeView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs) {
 
     private val binding = AddNodeItemBinding.inflate(LayoutInflater.from(context), this)
-
     var addNode = false
 
     init {

@@ -24,27 +24,29 @@
                 android:id="@+id/typeVariable"
                 android:layout_width="25dp"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@color/bg_menu"
                 android:layout_gravity="center"
                 android:layout_marginStart="2dp"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="3dp"
+                android:layout_marginEnd="1dp"
                 tools:ignore="MissingClass,TouchTargetSizeCheck" />
 
             <EditText
                 android:id="@+id/name"
                 android:minWidth="10dp"
-                android:maxWidth="30dp"
-                android:background="@color/white"
-                android:hint="Enter name"
+                android:maxWidth="35dp"
+                android:background="@drawable/border_style"
+                android:hint="@string/hintEditText"
+                android:textColorHint="@color/white"
                 android:paddingBottom="5dp"
                 android:layout_gravity="center"
+                android:textColor="@color/white"
                 android:layout_marginEnd="2dp"
-                android:layout_marginStart="3dp"
+                android:layout_marginStart="1dp"
                 android:layout_marginBottom="1dp"
                 android:layout_marginTop="1dp"
-                android:paddingTop="2dp"
+                android:paddingTop="3dp"
                 style="@style/editTextStyle" />
 
             <Button
@@ -67,8 +69,9 @@
 
             <ImageButton
                 android:id="@+id/btnDelete"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="5dp"
                 android:background="@drawable/ic_cross"
                 android:elevation="10dp"
                 style="@style/btnCreatorViewStyle" />

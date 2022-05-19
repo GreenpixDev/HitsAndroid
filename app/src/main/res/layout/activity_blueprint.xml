@@ -41,7 +41,6 @@
             android:id="@+id/codeField"
             android:layout_width="100000dp"
             android:layout_height="100000dp"
-            android:background="@drawable/ic_launcher_background"
             android:clipChildren="false">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -53,14 +52,14 @@
         android:id="@+id/menu"
         android:layout_width="255dp"
         android:layout_height="0dp"
-        android:background="@color/bg_view_info"
+        android:background="@color/bg_menu"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintVertical_bias="0.0" />
 
     <ScrollView
         android:id="@+id/scrollViewMenu"
@@ -86,6 +85,9 @@
                 android:id="@+id/listBlocks"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -93,7 +95,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="5dp"
+                    android:textColor="@color/titleBlocks"
                     android:text="@string/listBlocks"
+                    android:fontFamily="@font/montserrat_alternates_semibold"
                     android:textSize="20sp"
                     style="@style/textViewStyle" />
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -108,28 +112,25 @@
                     android:id="@+id/tableRowFunction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     tools:ignore="ExtraText">
 
                     <TextView
                         android:id="@+id/titleFunction"
+                        style="@style/textViewStyle"
+                        android:textColor="@color/titleFunction"
+                        android:fontFamily="@font/montserrat_alternates_semibold"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="@string/titleFunctions"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
                         android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        style="@style/textViewStyle" />
+                        android:paddingBottom="10dp"
+                        android:text="@string/titleFunctions" />
 
                     <ImageButton
                         android:id="@+id/plusFunction"
-                        android:background="@drawable/ic_plus"
+                        style="@style/btnPlusForMenu"
                         android:layout_gravity="center_vertical"
-                        style="@style/btnPlusForMenu" />
+                        android:background="@drawable/ic_plus" />
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -147,23 +148,21 @@
 
                     <TextView
                         android:id="@+id/titleMacros"
+                        style="@style/textViewStyle"
+                        android:textColor="@color/titleMacros"
+                        android:fontFamily="@font/montserrat_alternates_semibold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="Макросы"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
                         android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        style="@style/textViewStyle" />
+                        android:paddingBottom="10dp"
+                        android:text="Макросы" />
 
                     <ImageButton
                         android:id="@+id/plusMacros"
-                        android:background="@drawable/ic_plus"
+                        style="@style/btnPlusForMenu"
                         android:layout_gravity="center_vertical"
-                        style="@style/btnPlusForMenu" />
+                        android:background="@drawable/ic_plus" />
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -182,29 +181,39 @@
 
                     <TextView
                         android:id="@+id/titleVariables"
+                        style="@style/textViewStyle"
+                        android:textColor="@color/titleVariable"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="@string/titleVariable"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
+                        android:fontFamily="@font/montserrat_alternates_semibold"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
-                        style="@style/textViewStyle" />
+                        android:text="@string/titleVariable" />
 
                     <ImageButton
                         android:id="@+id/plusVariable"
-                        android:background="@drawable/ic_plus"
+                        style="@style/btnPlusForMenu"
                         android:layout_gravity="center_vertical"
-                        style="@style/btnPlusForMenu" />
+                        android:background="@drawable/ic_plus" />
 
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
+
+    <Switch
+        android:id="@+id/modeDelete"
+        android:layout_width="114dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="@string/modeDelete"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/ToStartCode"
+        app:layout_constraintEnd_toStartOf="@+id/ToStartCode"
+        app:layout_constraintTop_toTopOf="@id/ToStartCode"
+        tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
 
     <ImageButton
         android:id="@+id/showMenu"
@@ -235,12 +244,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1"
-        app:srcCompat="@drawable/ic_setting_icon" />
+        app:srcCompat="@drawable/ic_settings_icon" />
 
     <ImageView
         android:id="@+id/ToStartCode"
-        android:layout_width="18dp"
-        android:layout_height="23dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:contentDescription="@string/play_icon_description"

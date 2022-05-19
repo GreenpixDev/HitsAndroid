@@ -25,13 +25,5 @@ class InformationActivity : AppCompatActivity() {
         informationBinding.leftArrow.setOnClickListener() {
             startActivity(Intent(this, MainActivity::class.java))
         }
-
-        informationBinding.rightArrow.setOnClickListener() {
-            startActivity(Intent(this, BlueprintActivity::class.java))
-        }
-
-        informationBinding.start.setOnClickListener() {
-            startActivity(Intent(this, BlueprintActivity::class.java))
-        }
     }
 }

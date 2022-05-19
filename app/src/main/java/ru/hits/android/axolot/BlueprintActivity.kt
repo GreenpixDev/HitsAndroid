@@ -6,7 +6,10 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Gravity
 import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -59,13 +62,13 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Палитра цветов
         blockTitleToColor = mapOf(
-            Regex("^native\\.main$") to getThemeColor(R.attr.colorBlockHeaderMain),
-            Regex("^native\\..+\\.boolean.*") to getThemeColor(R.attr.colorVariableBoolean),
-            Regex("^native\\..+\\.int.*") to getThemeColor(R.attr.colorVariableInt),
-            Regex("^native\\..+\\.float.*") to getThemeColor(R.attr.colorVariableFloat),
-            Regex("^native\\..+\\.string.*") to getThemeColor(R.attr.colorVariableString),
-            Regex("^function\\..*") to getThemeColor(R.attr.colorBlockHeaderFunction),
-            Regex("^macros\\..*") to getThemeColor(R.attr.colorBlockHeaderMacros),
+            Regex("^native\\.main$") to getColor(R.color.colorBlockHeaderMain),
+            Regex("^native\\..+\\.boolean.*") to getColor(R.color.colorVariableBoolean),
+            Regex("^native\\..+\\.int.*") to getColor(R.color.colorVariableInt),
+            Regex("^native\\..+\\.float.*") to getColor(R.color.colorVariableFloat),
+            Regex("^native\\..+\\.string.*") to getColor(R.color.colorVariableString),
+            Regex("^function\\..*") to getColor(R.color.colorBlockHeaderFunction),
+            Regex("^macros\\..*") to getColor(R.color.colorBlockHeaderMacros),
         )
 
         addEventListeners()
@@ -130,6 +133,9 @@ class BlueprintActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Метод создания атрибутов и выходных переменных для функций и макросов
+     */
     private fun addCreatorForFuncAndMacros(isFunc: Boolean) {
 
         val view = CreatorView(this)
@@ -157,22 +163,25 @@ class BlueprintActivity : AppCompatActivity() {
     /**
      * Метод создания всех вьюшек нативных типов блоков
      */
-    @SuppressLint("UseCompatLoadingForDrawables")
+    @SuppressLint("UseCompatLoadingForDrawables", "ResourceAsColor")
     private fun createBlockTypeViews() {
         program.blockTypes.values.forEach {
             val nameBlock = getLocalizedString(it.fullName)
-            val textView = TextView(this)
+            val typeBlock = Button(this)
 
-            textView.text = nameBlock
-            textView.setTextColor(Color.WHITE)
-            textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-            textView.textSize = 20f
-            textView.background = resources.getDrawable(R.drawable.border_style)
-            textView.typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
+            //typeBlock.layoutParams = initLayoutParams(typeBlock)
 
-            binding.listBlocks.addView(textView)
+            typeBlock.text = nameBlock
+            typeBlock.setTextColor(Color.WHITE)
+            typeBlock.setBackgroundColor(R.color.bg_btn_menu)
+            typeBlock.textAlignment = View.TEXT_ALIGNMENT_CENTER
+            typeBlock.textSize = 15f
+            typeBlock.background = resources.getDrawable(R.drawable.border_style)
+            typeBlock.typeface = ResourcesCompat.getFont(this, R.font.montserrat_light)
 
-            textView.setOnClickListener { _ ->
+            binding.listBlocks.addView(typeBlock)
+
+            typeBlock.setOnClickListener { _ ->
                 try {
                     createBlock(BlockView(this), it, it.fullName)
                 } catch (e: AxolotException) {
@@ -181,6 +190,20 @@ class BlueprintActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun initLayoutParams(view: Button): LinearLayout.LayoutParams {
+        val params = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = Gravity.CENTER
+            marginStart = 5
+            marginEnd = 5
+        }
+
+        return params
+    }
+
 
     /**
      * Метод создания блока на поле
@@ -252,6 +275,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         //проверка куда добавлять
         if (creatorView != null) {
+            variableView.name.width = 200
             variableView.btnAddDel = true
             variableView.initComponents()
 
@@ -267,6 +291,7 @@ class BlueprintActivity : AppCompatActivity() {
                 else -> throw IllegalStateException("Что-то пошло не так")
             }
         } else {
+            variableView.name.width = 160
             variableView.initComponents()
             binding.listVariables.addView(variableView)
         }
