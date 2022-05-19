@@ -1,5 +1,7 @@
 package ru.hits.android.axolot.math
 
+import kotlin.math.*
+
 class MathInterpreterImpl : MathInterpreter {
 
     val elemStringParseSymbols = "+-*/%()^&|![]<<>>_"
@@ -7,12 +9,13 @@ class MathInterpreterImpl : MathInterpreter {
     val doublingsOperators = "<< >>"
 
     val functionWithBrakes =
-        "sin( cos( tg( ctg( arcsin( arccos( arctg( arcctg( ln( log( trunc( floor( ceil( abs( sqrt( exp( ( ["
-
+        "sin( cos( tg( ctg( arcsin( arccos( arctg( arcctg( ln( lg( trunc( floor( ceil( abs( sqrt( exp( ( ["
+    val functionWithBrakesMass = functionWithBrakes.split(" ")
     val mathWithBrakes =
-        "sin( cos( tg( ctg( arcsin( arccos( arctg( arcctg( ln( log( trunc( floor( ceil( abs( sqrt( exp("
+        "sin( cos( tg( ctg( arcsin( arccos( arctg( arcctg( ln( lg( trunc( floor( ceil( abs( sqrt( exp("
+    val mathWithBrakesMass = mathWithBrakes.split(" ")
 
-    val math = "sin cos tg ctg arcsin arccos arctg arcctg ln log trunc floor ceil abs sqrt exp"
+    val math = "sin cos tg ctg arcsin arccos arctg arcctg ln lg trunc floor ceil abs sqrt exp"
 
     val mathSequence = "^*/%+-&|!<<>>"
 
@@ -76,19 +79,14 @@ class MathInterpreterImpl : MathInterpreter {
             elementary[0] = "_"
         }
         for (i in 1 until elementary.size) {
-            if (elementary[i] == "-" && (elementary[i - 1] in functionWithBrakes || elementary[i - 1] in elemStringParseSymbols)) {
+            if (elementary[i] == "-" && (elementary[i - 1] in functionWithBrakesMass || elementary[i - 1] in elemStringParseSymbols)) {
                 elementary[i] = "_"
             }
         }
         return elementary
     }
 
-    private fun numerizathion(
-        merged: MutableList<String>,
-        variables: Map<String, Double>
-    ): MutableList<String> {
-        return merged
-    }
+
 
     private fun toPolishAndNum(
         mergedAndUnary: MutableList<String>,
@@ -171,34 +169,112 @@ class MathInterpreterImpl : MathInterpreter {
         return polish
     }
 
-    override fun calcExpression(expression: String, variables: Map<String, Double>): Double {
+    fun calc(polish: MutableList<String>): Double {
+        val stack: MutableList<Double> = mutableListOf()
 
+        for (i in 0 until polish.size) {
+            if (polish[i].toDoubleOrNull() != null) {
+                stack.add(polish[i].toDouble())
+            } else {
+                if (polish[i] == "+") {
+                    val a = stack.removeLast()
+                    val b = stack.removeLast()
+                    stack.add(a + b)
+                } else if (polish[i] == "-") {
+                    val a = stack.removeLast()
+                    val b = stack.removeLast()
+                    stack.add(a - b)
+                } else if (polish[i] == "*") {
+                    val a = stack.removeLast()
+                    val b = stack.removeLast()
+                    stack.add(a * b)
+                } else if (polish[i] == "/") {
+                    val a = stack.removeLast()
+                    val b = stack.removeLast()
+                    stack.add(a / b)
+                } else if (polish[i] == "%") {
+                    val a = stack.removeLast()
+                    val b = stack.removeLast()
+                    stack.add(a % b)
+                } else if (polish[i] == "^") {
+                    val a = stack.removeLast()
+                    val b = stack.removeLast()
+                    stack.add(a.pow(b))
+                } else if (polish[i] == "&") {
+                    throw IllegalArgumentException("Не поддерживается" + polish[i])
+                } else if (polish[i] == "|") {
+                    throw IllegalArgumentException("Не поддерживается" + polish[i])
+                } else if (polish[i] == ">>") {
+                    throw IllegalArgumentException("Не поддерживается" + polish[i])
+                } else if (polish[i] == "<<") {
+                    throw IllegalArgumentException("Не поддерживается" + polish[i])
+                } else if (polish[i] == "_") {
+                    val a = stack.removeLast()
+                    stack.add(-a)
+                } else if (polish[i] == "!") {
+                    val a = stack.removeLast()
+                    throw IllegalArgumentException("Не поддерживается" + polish[i])
+                } else if (polish[i] == "sin") {
+                    val a = stack.removeLast()
+                    stack.add(sin(a))
+                } else if (polish[i] == "cos") {
+                    val a = stack.removeLast()
+                    stack.add(cos(a))
+                } else if (polish[i] == "tg") {
+                    val a = stack.removeLast()
+                    stack.add(tan(a))
+                } else if (polish[i] == "ctg") {
+                    val a = stack.removeLast()
+                    stack.add(1 / tan(a))
+                } else if (polish[i] == "arcsin") {
+                    val a = stack.removeLast()
+                    stack.add(asin(a))
+                } else if (polish[i] == "arccos") {
+                    val a = stack.removeLast()
+                    stack.add(acos(a))
+                } else if (polish[i] == "arctg") {
+                    val a = stack.removeLast()
+                    stack.add(atan(a))
+                } else if (polish[i] == "arcctg") {
+                    val a = stack.removeLast() //TODO(не работает)
+                    stack.add(1 / atan(a))
+                    throw IllegalArgumentException("Не поддерживается" + polish[i])
+                } else if (polish[i] == "ln") {
+                    val a = stack.removeLast()
+                    stack.add(ln(a))
+                } else if (polish[i] == "lg") {
+                    val a = stack.removeLast()
+                    stack.add(log10(a))
+                } else if (polish[i] == "trunc") {
+                    val a = stack.removeLast()
+                    stack.add(truncate(a))
+                } else if (polish[i] == "floor") {
+                    val a = stack.removeLast()
+                    stack.add(floor(a))
+                } else if (polish[i] == "ceil") {
+                    val a = stack.removeLast()
+                    stack.add(ceil(a))
+                } else if (polish[i] == "abs") {
+                    val a = stack.removeLast()
+                    stack.add(abs(a))
+                } else if (polish[i] == "sqrt") {
+                    val a = stack.removeLast()
+                    stack.add(sqrt(a))
+                } else if (polish[i] == "exp") {
+                    val a = stack.removeLast()
+                    stack.add(exp(a))
+                }
+            }
+        }
+
+        return stack.last()
+    }
+
+    override fun calcExpression(expression: String, variables: Map<String, Double>): Double {
         if (expression == "") {
             throw IllegalArgumentException("Send null string.")
         }
-
-        println(findUnar(merge(parseToElementary("-123.23+213.2"))))
-        println(findUnar(merge(parseToElementary("a + a - c +0.30*2*(b +2)"))))
-        println(findUnar(merge(parseToElementary("[ab + ba] - abc* 23 + 3 + a << c"))))
-        println(findUnar(merge(parseToElementary("(a + b) - c * ((a + b) * ((c + d)))"))))
-        println(findUnar(merge(parseToElementary("sin( sin(cos (ln(log(4)))) + 23.0 * 32.12)"))))
-        println(findUnar(merge(parseToElementary("----23"))))
-        println(findUnar(merge(parseToElementary("a + - 1 * -a + (-ds * - a + 3.2)"))))
-        println(
-            toPolishAndNum(
-                findUnar(merge(parseToElementary("3 + 4 * 2 / (1 - 5)^2"))),
-                mapOf<String, Double>()
-            )
-        )
-        println(
-            toPolishAndNum(
-                findUnar(merge(parseToElementary("exp(-1/2*3)"))),
-                mapOf<String, Double>()
-            )
-        )
-//        println(parseToElementary("123.23+213.2"))
-//        println(parseToElementary("123.23+213.2"))
-        return 0.0
+        return calc(toPolishAndNum(findUnar(merge(parseToElementary(expression))), variables))
     }
 
 }
