@@ -10,7 +10,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -154,11 +153,11 @@ class BlueprintActivity : AppCompatActivity() {
         if (!isFunc) binding.listMacros.addView(view)
 
         view.creator.plusInputParam.setOnClickListener {
-            createVariableView(view, VariablePlaces.INPUT_PARAMETERS)
+            createParameterView(view, VariablePlaces.INPUT_PARAMETERS)
         }
 
         view.creator.plusOutputVar.setOnClickListener {
-            createVariableView(view, VariablePlaces.OUTPUT_VARIABLES)
+            createParameterView(view, VariablePlaces.OUTPUT_VARIABLES)
         }
     }
 
@@ -241,13 +240,42 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     /**
-     * Метод создания новой переменной в меню
-     * TODO Рома из будущего, сделай переменные с привязкой к компилятору
+     * Метод создания новой переменной в функции/макросе
      */
-    private fun createVariableView(
-        creatorView: CreatorView? = null,
-        place: VariablePlaces? = null
+    private fun createParameterView(
+        creatorView: CreatorView,
+        place: VariablePlaces
     ) {
+        val variableView = VariableView(this)
+
+        //инициализация creatorView
+        variableView.edit = false
+        variableView.isVar = true
+
+        //дефолтное название
+        variableView.variableName = "param"
+        variableView.name.setText(variableView.variableName)
+
+        variableView.name.width = 200
+        variableView.btnAddDel = true
+        variableView.initComponents()
+
+        //проверка куда добавлять
+        when (place) {
+            VariablePlaces.INPUT_PARAMETERS -> {
+                creatorView.listParameters.addView(variableView)
+            }
+
+            VariablePlaces.OUTPUT_VARIABLES -> {
+                creatorView.creator.listOutputVar.addView(variableView)
+            }
+        }
+    }
+
+    /**
+     * Метод создания новой переменной в меню
+     */
+    private fun createVariableView() {
         val variableView = VariableView(this)
 
         //инициализация creatorView
@@ -260,28 +288,10 @@ class BlueprintActivity : AppCompatActivity() {
 
         program.createVariable(variableView.variableName)
 
-        //проверка куда добавлять
-        if (creatorView != null) {
-            variableView.name.width = 200
-            variableView.btnAddDel = true
-            variableView.initComponents()
-
-            when (place) {
-                VariablePlaces.INPUT_PARAMETERS -> {
-                    creatorView.listParameters.addView(variableView)
-                }
-
-                VariablePlaces.OUTPUT_VARIABLES -> {
-                    creatorView.creator.listOutputVar.addView(variableView)
-                }
-
-                else -> throw IllegalStateException("Что-то пошло не так")
-            }
-        } else {
-            variableView.name.width = 160
-            variableView.initComponents()
-            binding.listVariables.addView(variableView)
-        }
+        // Добавляем в меню
+        variableView.name.width = 160
+        variableView.initComponents()
+        binding.listVariables.addView(variableView)
 
         // Прослушка изменений имени переменной
         val listener = object : TextWatcher {
@@ -305,6 +315,7 @@ class BlueprintActivity : AppCompatActivity() {
                 ).show()
             }
         }
+        variableView.name.addTextChangedListener(listener)
 
         // Прослушка изменений типа переменной
         variableView.typeVariable.addItemSelectedListener { parent, _, _, _ ->
