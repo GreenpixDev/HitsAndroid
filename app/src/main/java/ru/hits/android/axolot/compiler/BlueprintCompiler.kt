@@ -7,6 +7,7 @@ import ru.hits.android.axolot.blueprint.element.pin.PinToOne
 import ru.hits.android.axolot.blueprint.element.pin.TypedPin
 import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
+import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.interpreter.BlueprintInterpreter
 import ru.hits.android.axolot.interpreter.Interpreter
 import ru.hits.android.axolot.interpreter.node.Node
@@ -19,9 +20,9 @@ import ru.hits.android.axolot.util.putMap
 
 class BlueprintCompiler : Compiler {
 
-    override fun prepareInterpreter(program: AxolotProgram): Interpreter {
+    override fun prepareInterpreter(program: AxolotProgram, console: Console): Interpreter {
         val scope = GlobalScope()
-        val interpreter = BlueprintInterpreter(scope)
+        val interpreter = BlueprintInterpreter(scope, console)
 
         program.blockTypes.values
             .filterIsInstance<VariableGetterBlockType>()
