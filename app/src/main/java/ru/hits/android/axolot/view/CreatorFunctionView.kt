@@ -5,7 +5,7 @@ import kotlinx.android.synthetic.main.activity_blueprint.*
 
 class CreatorFunctionView(context: Context) : CreatorView(context), BlueprintView {
 
-    override fun addViewMenu(view: CreatorView) {
-        activity.listFunction.addView(view)
+    override fun addViewMenu() {
+        activity.listFunction.addView(this)
     }
 }

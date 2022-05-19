@@ -147,7 +147,7 @@ class BlueprintActivity : AppCompatActivity() {
         view.typeExpression = false
         view.initComponents()
 
-        view.addViewMenu(view)
+        view.addViewMenu()
 
         view.creator.plusInputParam.setOnClickListener {
             createParameterView(view, VariablePlaces.INPUT_PARAMETERS)
@@ -288,7 +288,7 @@ class BlueprintActivity : AppCompatActivity() {
         // Добавляем в меню
         variableView.name.width = 160
         variableView.initComponents()
-        binding.listVariables.addView(variableView)
+        variableView.addViewMenu()
 
         // Прослушка изменений имени переменной
         val listener = object : TextWatcher {

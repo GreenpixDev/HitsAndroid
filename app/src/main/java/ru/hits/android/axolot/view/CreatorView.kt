@@ -50,7 +50,7 @@ abstract class CreatorView @JvmOverloads constructor(
         binding.typeVariable.adapter = adapter
     }
 
-    abstract fun addViewMenu(view: CreatorView)
+    abstract fun addViewMenu()
 
     init {
         initLayoutParams()
