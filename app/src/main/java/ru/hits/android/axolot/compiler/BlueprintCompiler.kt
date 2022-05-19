@@ -19,6 +19,9 @@ import ru.hits.android.axolot.interpreter.node.NodeExecutable
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionEnd
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionInvoke
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionReturned
+import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosDependency
+import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosInput
+import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosOutput
 import ru.hits.android.axolot.interpreter.scope.GlobalScope
 import ru.hits.android.axolot.util.filterIsInstance
 import ru.hits.android.axolot.util.filterValuesNotNull
@@ -40,24 +43,18 @@ class BlueprintCompiler : Compiler {
     }
 
     override fun compile(program: AxolotProgram): NodeExecutable? {
-        // Создаем функции и макросы
+        // Создаем функции
         val functions = program.blockTypes.values
             .filterIsInstance<FunctionType>()
             .associateWith { InterpretedFunction() }
-        val macros = program.blockTypes.values
-            .filterIsInstance<MacrosType>()
-            .associateWith { InterpretedMacros() }
 
-        // Компилируем сначала функции и макросы
+        // Компилируем сначала функции
         program.blockTypes.values
-            .filterIsInstance<AxolotSource>()
-            .forEach { compileSource(it, functions, macros) }
-        program.blockTypes.values
-            .filterIsInstance<AxolotSource>()
-            .forEach { compileSource(it, functions, macros) }
+            .filterIsInstance<FunctionType>()
+            .forEach { compileFunction(it, functions) }
 
         // Компилируем саму программу
-        val map = compileSource(program, functions, macros)
+        val adjacent = compileSource(program, functions).second
 
         // После предыдущего этапа мы получаем полноценный граф узлов, который можно
         // использовать в интерпретаторе. Для этого нужно найти входный узел нашей программы.
@@ -67,7 +64,7 @@ class BlueprintCompiler : Compiler {
         requireNotNull(main) { "cannot find main block of program" }
 
         // Получаем из блока входной узел для интерпретатора
-        val executable = map[main]?.firstNotNullOfOrNull { it.value }
+        val executable = adjacent[main]?.firstNotNullOfOrNull { it.value }
         require(executable is NodeExecutable?) { "main block of program not executable" }
 
         return executable
@@ -78,9 +75,19 @@ class BlueprintCompiler : Compiler {
      */
     private fun compileSource(
         source: AxolotSource,
-        functions: Map<FunctionType, InterpretedFunction>,
-        macros: Map<MacrosType, InterpretedMacros>
-    ): Map<AxolotBlock, Map<TypedPin, Node>> {
+        functions: Map<FunctionType, InterpretedFunction>
+    ): Pair<Map<AxolotBlock, Map<DeclaredAutonomicPin, Node>>,
+            Map<AxolotBlock, Map<TypedPin, Node>>
+            > {
+        // Ищем все вызовы макросов и создаем для них InterpretedMacros
+        val macros = source.blocks
+            .filter { it.type is MacrosType }
+            .associateWith { InterpretedMacros() }
+
+        /*
+         * ОСНОВНАЯ ЧАСТЬ
+         */
+
         // У каждого блока есть пины, которые требуют зависимости (автономный пин).
         // Пробегаемся по всем блокам, находим такие пины и создаём для них узлы.
         // Этот словарь содержит следующие данные:
@@ -140,22 +147,11 @@ class BlueprintCompiler : Compiler {
             }
         }
 
-        // Инициализируем узлы функции и макросов
-        postCompileFunctions(functions, nodes, adjacent)
-        postCompileMacros(macros, nodes, adjacent)
+        /*
+         * ФУНКЦИИ
+         */
 
-        return adjacent
-    }
-
-    /**
-     * После компиляции инициализация функций
-     */
-    private fun postCompileFunctions(
-        functions: Map<FunctionType, InterpretedFunction>,
-        nodes: Map<AxolotBlock, Map<DeclaredAutonomicPin, Node>>,
-        adjacent: Map<AxolotBlock, MutableMap<TypedPin, Node>>
-    ) {
-        // Инициализация всех узлов Invoke и Returned
+        // Инициализация всех узлов Invoke и Returned для функций
         nodes
             .mapKeys { it.key.type }
             .mapValues { it.value.values }
@@ -168,6 +164,53 @@ class BlueprintCompiler : Compiler {
                     it.nodeInvoke = node
                 }
             }
+
+        /*
+         * МАКРОСЫ
+         */
+
+        // Инициализация первой половины узлов InterpretedMacros
+        nodes.forEach { e ->
+            e.value.filterIsInstance<DeclaredAutonomicPin, NodeMacrosInput>().forEach {
+                macros[e.key]!!.inputExecutable[it.key.name] = it.value
+            }
+            e.value.filterIsInstance<DeclaredAutonomicPin, NodeMacrosDependency>().forEach {
+                macros[e.key]!!.output[it.key.name] = it.value
+            }
+        }
+
+        // Так как макросы мы встраваем в наш код, то мы находим все блоки вызова макросов
+        // и заменяем их на то, что внутри макросов.
+        // Поэтому каждый вызов макроса компилируем отдельно (функции мы компилировали 1 раз для каждой)
+        macros.forEach { compileMacros(it.value, it.key.type as MacrosType, functions) }
+
+        // Так как инициализация обычных узлов не работает для макросов,
+        // мы инициализируем их тут.
+        adjacent
+            .filter { it.key.type is MacrosType }
+            .forEach { block ->
+                block.value.forEach { pin ->
+                    val macro = macros[block.key]!!
+                    val collection = mutableListOf<Node>()
+                    collection.addAll(macro.input.values)
+                    collection.addAll(macro.outputExecutable.values)
+                    pin.key.type.handle(collection, pin.value)
+                }
+            }
+
+        return nodes to adjacent
+    }
+
+    /**
+     * Компиляция функций
+     */
+    private fun compileFunction(
+        source: FunctionType,
+        functions: Map<FunctionType, InterpretedFunction>
+    ) {
+        val result = compileSource(source, functions)
+        val nodes = result.first
+        val adjacent = result.second
 
         // Инициализация всех узлов End
         nodes
@@ -194,13 +237,46 @@ class BlueprintCompiler : Compiler {
     }
 
     /**
-     * После компиляции инициализация макросов
+     * Компиляция макросов
      */
-    private fun postCompileMacros(
-        macros: Map<MacrosType, InterpretedMacros>,
-        nodes: Map<AxolotBlock, Map<DeclaredAutonomicPin, Node>>,
-        adjacent: Map<AxolotBlock, MutableMap<TypedPin, Node>>
+    private fun compileMacros(
+        macros: InterpretedMacros,
+        source: MacrosType,
+        functions: Map<FunctionType, InterpretedFunction>
     ) {
+        val result = compileSource(source, functions)
+        val nodes = result.first
+        val adjacent = result.second
 
+        // Инициализация второй половины узлов InterpretedMacros
+        nodes
+            .filter { it.key.type is MacrosBeginType || it.key.type is MacrosEndType }
+            .forEach { block ->
+                block.value.filterIsInstance<DeclaredAutonomicPin, NodeMacrosDependency>().forEach {
+                    macros.input[it.key.name] = it.value
+                }
+                block.value.filterIsInstance<DeclaredAutonomicPin, NodeMacrosOutput>().forEach {
+                    macros.outputExecutable[it.key.name] = it.value
+                }
+            }
+
+        // Так как инициализация обычных узлов не работает для макросов,
+        // мы инициализируем их тут.
+        adjacent
+            .filter { it.key.type is MacrosBeginType }
+            .forEach { block ->
+                block.value.forEach { pin ->
+                    var collection = macros.inputExecutable.values
+                    pin.key.type.handle(collection, pin.value)
+                }
+            }
+        adjacent
+            .filter { it.key.type is MacrosEndType }
+            .forEach { block ->
+                block.value.forEach { pin ->
+                    var collection = macros.output.values
+                    pin.key.type.handle(collection, pin.value)
+                }
+            }
     }
 }

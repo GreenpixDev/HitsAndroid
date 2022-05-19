@@ -10,6 +10,9 @@ class DeclaredSingleInputFlowPin constructor(
     private val lazyName: () -> String,
 ) : DeclaredAutonomicPin {
 
+    override val name: String
+        get() = lazyName.invoke()
+
     constructor(
         nodeFabric: () -> NodeExecutable,
         name: String

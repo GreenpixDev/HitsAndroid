@@ -7,7 +7,7 @@ import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionEnd
 import ru.hits.android.axolot.interpreter.type.VariableType
 
 /**
- * Декларация функции
+ * Декларация конца функции
  */
 class FunctionEndType(
     val functionType: FunctionType

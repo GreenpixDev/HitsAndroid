@@ -78,7 +78,7 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
             "function with name $name already exists"
         }
         val functionType = FunctionType(name)
-        functionType.createBlock(functionType.beginType)
+        functionType.beginBlock = functionType.createBlock(functionType.beginType)
 
         registerBlock(functionType)
         return functionType
@@ -92,7 +92,8 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
             "macros with name $name already exists"
         }
         val macrosType = MacrosType(name)
-        //macrosType.createBlock(macrosType.beginType) TODO
+        macrosType.beginBlock = macrosType.createBlock(macrosType.beginType)
+        macrosType.endBlock = macrosType.createBlock(macrosType.endType)
 
         registerBlock(macrosType)
         return macrosType

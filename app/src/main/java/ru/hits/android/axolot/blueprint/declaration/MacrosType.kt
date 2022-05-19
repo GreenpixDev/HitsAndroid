@@ -1,7 +1,10 @@
 package ru.hits.android.axolot.blueprint.declaration
 
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
+import ru.hits.android.axolot.blueprint.declaration.pin.*
 import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
+import ru.hits.android.axolot.blueprint.element.AxolotBlock
+import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosDependency
+import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosInput
 import ru.hits.android.axolot.interpreter.type.VariableType
 
 /**
@@ -14,6 +17,12 @@ class MacrosType(
     companion object {
         const val PREFIX_NAME = "macros"
     }
+
+    lateinit var beginBlock: AxolotBlock
+    lateinit var endBlock: AxolotBlock
+
+    val beginType = MacrosBeginType(this)
+    val endType = MacrosEndType(this)
 
     val inputFlow = mutableSetOf<String>()
     val outputFlow = mutableSetOf<String>()
@@ -28,26 +37,60 @@ class MacrosType(
 
     override val declaredPins = mutableListOf<DeclaredPin>()
 
-    /*fun addInputData(inputName: String, type: VariableType<*>) {
-        declaredPins.add(declaredPins.size - 1, DeclaredSingleInputDataPin(
+    fun addInputFlow(inputName: String) {
+        val pin = DeclaredSingleInputFlowPin(
+            nodeFabric = { NodeMacrosInput(inputName) },
+            lazyName = { inputName }
+        )
+        declaredPins.add(pin)
+        beginType.addFlow(inputName).createAllPin(endBlock).forEach {
+            beginBlock.contacts.add(it)
+        }
+    }
+
+    fun addInputData(inputName: String, type: VariableType<*>) {
+        val pin = DeclaredSingleInputDataPin(
             handler = { target, node ->
                 target
                     .filterIsInstance<NodeMacrosDependency>()
-                    .first().dependencies[parameterName] = node
+                    .find { it.name == inputName }
+                    ?.let { it.init(node) }
             },
             lazyName = { inputName },
             lazyType = { type }
-        ))
-        beginType.addParameter(parameterName, type)
+        )
+        declaredPins.add(pin)
+        beginType.addData(inputName, type).createAllPin(endBlock).forEach {
+            beginBlock.contacts.add(it)
+        }
+    }
+
+    fun addOutputFlow(outputName: String) {
+        val pin = DeclaredSingleOutputFlowPin(
+            handler = { target, node ->
+                target
+                    .filterIsInstance<NodeMacrosInput>()
+                    .find { it.name == outputName }
+                    ?.let { it.nextNode = node }
+            },
+            lazyName = { outputName }
+        )
+        declaredPins.add(pin)
+        endType.addFlow(outputName).createAllPin(endBlock).forEach {
+            endBlock.contacts.add(it)
+        }
     }
 
     fun addOutputData(outputName: String, type: VariableType<*>) {
-        declaredPins.add(declaredPins.size - 1, DeclaredSingleOutputDataPin(
-            nodeFabric = { NodeMacrosDependency() },
+        val pin = DeclaredSingleOutputDataPin(
+            nodeFabric = { NodeMacrosDependency(outputName) },
             lazyName = { outputName },
             lazyType = { type }
-        ))
-        endType.addResult(resultName, type)
-    }*/
+        )
+        declaredPins.add(pin)
+        endType.addData(outputName, type).createAllPin(endBlock).forEach {
+            endBlock.contacts.add(it)
+        }
+    }
 
 }

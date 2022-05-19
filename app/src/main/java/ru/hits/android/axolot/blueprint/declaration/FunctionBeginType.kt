@@ -7,7 +7,7 @@ import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionParam
 import ru.hits.android.axolot.interpreter.type.VariableType
 
 /**
- * Декларация функции
+ * Декларация начала функции
  */
 class FunctionBeginType(
     val functionType: FunctionType

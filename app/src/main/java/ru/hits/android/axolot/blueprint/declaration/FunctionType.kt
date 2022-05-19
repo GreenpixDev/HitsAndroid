@@ -5,6 +5,7 @@ import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputFlowP
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleOutputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleOutputFlowPin
 import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
+import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionInvoke
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionReturned
 import ru.hits.android.axolot.interpreter.type.VariableType
@@ -19,6 +20,8 @@ class FunctionType(
     companion object {
         const val PREFIX_NAME = "function"
     }
+
+    lateinit var beginBlock: AxolotBlock
 
     val beginType = FunctionBeginType(this)
     val endType = FunctionEndType(this)
@@ -46,7 +49,7 @@ class FunctionType(
     )
 
     fun addInput(parameterName: String, type: VariableType<*>) {
-        declaredPins.add(declaredPins.size - 1, DeclaredSingleInputDataPin(
+        declaredPins.add(DeclaredSingleInputDataPin(
             handler = { target, node ->
                 target
                     .filterIsInstance<NodeFunctionInvoke>()
@@ -59,7 +62,7 @@ class FunctionType(
     }
 
     fun addOutput(resultName: String, type: VariableType<*>) {
-        declaredPins.add(declaredPins.size - 1, DeclaredSingleOutputDataPin(
+        declaredPins.add(DeclaredSingleOutputDataPin(
             nodeFabric = { NodeFunctionReturned(resultName) },
             lazyName = { resultName },
             lazyType = { type }

@@ -108,16 +108,17 @@ class BlueprintInterpreterTest {
          Делаем макрос
          */
         val macros = InterpretedMacros()
-        macros.inputExecutable["input"] = NodeMacrosInput()
-        macros.input["condition"] = NodeMacrosDependency()
-        macros.outputExecutable["loopBody"] = NodeMacrosOutput()
-        macros.outputExecutable["completed"] = NodeMacrosOutput()
+        macros.inputExecutable["input"] = NodeMacrosInput("input")
+        macros.input["condition"] = NodeMacrosDependency("condition")
+        macros.outputExecutable["loopBody"] = NodeMacrosOutput("loopBody")
+        macros.outputExecutable["completed"] = NodeMacrosOutput("completed")
 
         val branch = NodeBranch()                               // нода IF
         val sequence = NodeSequence()                           // нода последовательности
 
         branch.init(macros.input["condition"]!!)                // Проверяем условие
-        branch.trueNode = sequence                              // Если true - переходим к ноде последовательности
+        branch.trueNode =
+            sequence                              // Если true - переходим к ноде последовательности
         branch.falseNode = macros.outputExecutable["completed"] // Если false - цикл завершен
 
         sequence.then(macros.outputExecutable["loopBody"]!!)    // Сначала цикл
@@ -269,23 +270,26 @@ class BlueprintInterpreterTest {
          Делаем макрос
          */
         val macros = InterpretedMacros()
-        macros.inputExecutable["input"] = NodeMacrosInput()
-        macros.inputExecutable["break"] = NodeMacrosInput()
-        macros.input["firstIndex"] = NodeMacrosDependency()
-        macros.input["lastIndex"] = NodeMacrosDependency()
-        macros.outputExecutable["loopBody"] = NodeMacrosOutput()
-        macros.outputExecutable["completed"] = NodeMacrosOutput()
-        macros.output["index"] = NodeMacrosDependency()
+        macros.inputExecutable["input"] = NodeMacrosInput("input")
+        macros.inputExecutable["break"] = NodeMacrosInput("break")
+        macros.input["firstIndex"] = NodeMacrosDependency("firstIndex")
+        macros.input["lastIndex"] = NodeMacrosDependency("lastIndex")
+        macros.outputExecutable["loopBody"] = NodeMacrosOutput("loopBody")
+        macros.outputExecutable["completed"] = NodeMacrosOutput("completed")
+        macros.output["index"] = NodeMacrosDependency("index")
 
         // Объявляем все узлы
-        val localBreak = NodeLocalVariable(Type.BOOLEAN)            // Нода локальной переменной: boolean break
-        val localIndex = NodeLocalVariable(Type.INT)                // Нода локальной переменной: int index
+        val localBreak =
+            NodeLocalVariable(Type.BOOLEAN)            // Нода локальной переменной: boolean break
+        val localIndex =
+            NodeLocalVariable(Type.INT)                // Нода локальной переменной: int index
         val firstAssignBreak = NodeAssignVariable()                 // Нода присваивания: break = ..
         val firstAssignIndex = NodeAssignVariable()                 // Нода присваивания: index = ..
 
         val lessOrEqual = NodeIntLessOrEqual()                      // Нода <=: index <= lastIndex
         val not = NodeBooleanNot()                                  // Нода NOT: !break
-        val and = NodeBooleanAnd()                                  // Нода AND: !break && index <= lastIndex
+        val and =
+            NodeBooleanAnd()                                  // Нода AND: !break && index <= lastIndex
         val preBranch = NodeBranch()                                // Нода IF: if (!break && index <= lastIndex)
 
         val sequence = NodeSequence()                               // Нода последовательности
@@ -547,12 +551,12 @@ class BlueprintInterpreterTest {
 
     private fun forLoop(): InterpretedMacros {
         val macros = InterpretedMacros()
-        macros.inputExecutable["input"] = NodeMacrosInput()
-        macros.input["firstIndex"] = NodeMacrosDependency()
-        macros.input["lastIndex"] = NodeMacrosDependency()
-        macros.outputExecutable["loopBody"] = NodeMacrosOutput()
-        macros.outputExecutable["completed"] = NodeMacrosOutput()
-        macros.output["index"] = NodeMacrosDependency()
+        macros.inputExecutable["input"] = NodeMacrosInput("input")
+        macros.input["firstIndex"] = NodeMacrosDependency("firstIndex")
+        macros.input["lastIndex"] = NodeMacrosDependency("lastIndex")
+        macros.outputExecutable["loopBody"] = NodeMacrosOutput("loopBody")
+        macros.outputExecutable["completed"] = NodeMacrosOutput("completed")
+        macros.output["index"] = NodeMacrosDependency("index")
 
         val localInt =
             NodeLocalVariable(Type.INT)              // Нода локальной переменной localInt
