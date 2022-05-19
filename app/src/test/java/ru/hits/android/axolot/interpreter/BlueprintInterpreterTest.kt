@@ -15,6 +15,7 @@ import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeForLoopIndex
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
+import ru.hits.android.axolot.interpreter.node.function.NodeInput
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayGetElement
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArraySize
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionEnd
@@ -96,6 +97,24 @@ class BlueprintInterpreterTest {
         printNode.init(nodeGetVariable)
 
         interpreter.execute(printNode)
+    }
+
+    @Test
+    fun printTest2() {
+        val scope = GlobalScope()
+        val console = Console()
+        console.send("hi")
+        val interpreter = BlueprintInterpreter(scope, console)
+        val consoleInput = NodeInput()
+        scope.declareVariable("str", Type.STRING, "hello")
+        val nodeSetVariable = NodeSetVariable("str")
+        nodeSetVariable.init(consoleInput)
+        val nodeGetVariable = NodeGetVariable("str")
+
+        val printNode = NodePrintString()
+        printNode.init(nodeGetVariable)
+        nodeSetVariable.nextNode = printNode
+        interpreter.execute(nodeSetVariable)
     }
 
     @Test
