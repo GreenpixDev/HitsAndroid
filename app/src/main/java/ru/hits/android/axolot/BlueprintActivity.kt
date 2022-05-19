@@ -23,10 +23,7 @@ import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
 import ru.hits.android.axolot.exception.AxolotException
 import ru.hits.android.axolot.util.*
-import ru.hits.android.axolot.view.BlockView
-import ru.hits.android.axolot.view.CreatorForFunctionView
-import ru.hits.android.axolot.view.CreatorView
-import ru.hits.android.axolot.view.VariableView
+import ru.hits.android.axolot.view.*
 import java.util.*
 
 /**
@@ -125,27 +122,27 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Создание новой функции
         binding.plusFunction.setOnClickListener {
-            addCreatorForFuncAndMacros(isFunc = true)
+            val view = CreatorFunctionView(this)
+            addCreatorForFuncAndMacros(view)
         }
 
         // Создание нового макроса
         binding.plusMacros.setOnClickListener {
-            addCreatorForFuncAndMacros(isFunc = false)
+            val view = CreatorMacrosView(this)
+            addCreatorForFuncAndMacros(view)
         }
     }
 
     /**
      * Метод создания атрибутов и выходных переменных для функций и макросов
      */
-    private fun addCreatorForFuncAndMacros(isFunc: Boolean) {
-        val view = CreatorView(this)
+    private fun addCreatorForFuncAndMacros(view: CreatorView) {
 
         view.creator.addView(CreatorForFunctionView(this))
         view.typeExpression = false
         view.initComponents()
 
-        if (isFunc) binding.listFunction.addView(view)
-        if (!isFunc) binding.listMacros.addView(view)
+        view.addViewMenu(view)
 
         view.creator.plusInputParam.setOnClickListener {
             createVariableView(view, VariablePlaces.INPUT_PARAMETERS)
@@ -155,7 +152,6 @@ class BlueprintActivity : AppCompatActivity() {
             createVariableView(view, VariablePlaces.OUTPUT_VARIABLES)
         }
     }
-
 
     /**
      * Метод создания всех вьюшек нативных типов блоков
