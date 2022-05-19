@@ -1,10 +1,12 @@
 package ru.hits.android.axolot.custom_spinner
 
 import ru.hits.android.axolot.R
+import ru.hits.android.axolot.interpreter.type.Type
 
 data class UIType(val image: Int, val name: String) {
 
     override fun toString() = name
+
 }
 
 object UITypes {
@@ -17,10 +19,10 @@ object UITypes {
     )
 
     private val types = arrayOf(
-        "Boolean",
-        "Integer",
-        "Float",
-        "String"
+        Type.BOOLEAN.toString(),
+        Type.INT.toString(),
+        Type.FLOAT.toString(),
+        Type.STRING.toString()
     )
 
     var list: List<UIType> = images.indices.map {
