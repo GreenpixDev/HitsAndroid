@@ -6,8 +6,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.InputType
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
@@ -216,7 +219,8 @@ class BlueprintActivity : AppCompatActivity() {
 
         variableView.edit = false
         variableView.initComponents()
-        variableView.variableName = "variable"
+        variableView.variableName = createVariableName()
+        variableView.name.setText(variableView.variableName)
 
         program.createVariable(variableView.variableName)
         binding.listVariables.addView(variableView)
@@ -224,7 +228,24 @@ class BlueprintActivity : AppCompatActivity() {
         // Прослушка изменений имени переменной
         variableView.name.addTextChangedListener { title, _, _, _ ->
             program.renameVariable(variableView.variableName, title.toString())
+
             variableView.variableName = title.toString()
+
+            if (getCountSameVariableName(variableView.variableName) > 1) {
+                //Из-за этого крашится. Предположение: если мы делаем program.renameVariable(variableView.variableName, newName)
+                //то при создании переменной с предыдущем именем (с которой названия совпали), приложение крашнется
+
+//                val newName = createVariableName()
+//                program.renameVariable(variableView.variableName, newName)
+//                variableView.variableName = newName
+//                variableView.name.setText(newName)
+
+                //Сейчас переменные в менюшке, у которых одинаковые названия, связаны.
+                //То есть при измении типа одной переменной, у другой тоже поменяется тип
+                //Если бы мы могли реагировать один раз на изменения EditText (после всех изменений, например когда клавиатура пропадает),
+                //то в теории мы бы смогли пофиксить две проблемы (но это не точно)
+                Toast.makeText(this, "Придумайте другое название!", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // Прослушка изменений типа переменной
@@ -260,6 +281,10 @@ class BlueprintActivity : AppCompatActivity() {
             // Прослушка изменений имени переменной
             variableView.name.addTextChangedListener { title, _, _, _ ->
                 blockView.pinViews.forEach { it.displayName = title.toString() }
+            }
+            if (variableView.name is EditText) {
+                (variableView.name as EditText).inputType = InputType.TYPE_NULL
+
             }
         }
     }
@@ -298,4 +323,40 @@ class BlueprintActivity : AppCompatActivity() {
         menuIsVisible = false
     }
 
+    /**
+     * Генерация первого уникального имени по шаблону var<число>
+     */
+    private fun createVariableName(): String {
+        var counter = 1
+
+        while (counter <= binding.listVariables.childCount + 1) {
+            if (isNameExist("var$counter")) {
+                return "var$counter"
+            }
+            counter++
+        }
+        return "var$counter"
+    }
+
+    /**
+     * Проврка на существование переменной с таким именем
+     */
+    private fun isNameExist(name: String): Boolean {
+        return getCountSameVariableName(name) == 0
+    }
+
+    /**
+     * Получить количество переменных с таким именем.
+     */
+    private fun getCountSameVariableName(name: String): Int {
+        var counter = 0
+        for (i in 0 until binding.listVariables.childCount) {
+            val variableView = binding.listVariables.getChildAt(i)
+            if (variableView is VariableView && variableView.variableName == name) {
+                counter++
+            }
+        }
+
+        return counter
+    }
 }
