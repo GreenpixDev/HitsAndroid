@@ -55,3 +55,51 @@ fun EditText.addTextChangedListener(
         }
     })
 }
+
+fun EditText.addBeforeTextChangedListener(
+    listener: (
+        title: CharSequence,
+        start: Int,
+        count: Int,
+        after: Int
+    ) -> Unit
+) {
+    addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(title: Editable) {}
+
+        override fun beforeTextChanged(
+            title: CharSequence,
+            start: Int,
+            count: Int,
+            after: Int
+        ) {
+            listener.invoke(title, start, count, after)
+        }
+
+        override fun onTextChanged(title: CharSequence, start: Int, before: Int, count: Int) {
+        }
+    })
+}
+
+fun EditText.addAfterTextChangedListener(
+    listener: (
+        title: Editable
+    ) -> Unit
+) {
+    addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(title: Editable) {
+            listener.invoke(title)
+        }
+
+        override fun beforeTextChanged(
+            title: CharSequence,
+            start: Int,
+            count: Int,
+            after: Int
+        ) {
+        }
+
+        override fun onTextChanged(title: CharSequence, start: Int, before: Int, count: Int) {
+        }
+    })
+}

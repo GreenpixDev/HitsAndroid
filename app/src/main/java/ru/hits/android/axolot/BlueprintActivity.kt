@@ -6,7 +6,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -219,34 +221,35 @@ class BlueprintActivity : AppCompatActivity() {
 
         variableView.edit = false
         variableView.initComponents()
-        variableView.variableName = createVariableName()
+        variableView.variableName = generateVariable()
         variableView.name.setText(variableView.variableName)
 
         program.createVariable(variableView.variableName)
         binding.listVariables.addView(variableView)
 
         // Прослушка изменений имени переменной
-        variableView.name.addTextChangedListener { title, _, _, _ ->
-            program.renameVariable(variableView.variableName, title.toString())
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            variableView.variableName = title.toString()
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
-            if (getCountSameVariableName(variableView.variableName) > 1) {
-                //Из-за этого крашится. Предположение: если мы делаем program.renameVariable(variableView.variableName, newName)
-                //то при создании переменной с предыдущем именем (с которой названия совпали), приложение крашнется
-
-//                val newName = createVariableName()
-//                program.renameVariable(variableView.variableName, newName)
-//                variableView.variableName = newName
-//                variableView.name.setText(newName)
-
-                //Сейчас переменные в менюшке, у которых одинаковые названия, связаны.
-                //То есть при измении типа одной переменной, у другой тоже поменяется тип
-                //Если бы мы могли реагировать один раз на изменения EditText (после всех изменений, например когда клавиатура пропадает),
-                //то в теории мы бы смогли пофиксить две проблемы (но это не точно)
-                Toast.makeText(this, "Придумайте другое название!", Toast.LENGTH_SHORT).show()
+            override fun afterTextChanged(title: Editable) {
+                if (!hasVariable(title.toString())) {
+                    program.renameVariable(variableView.variableName, title.toString())
+                    variableView.variableName = title.toString()
+                    return
+                }
+                variableView.name.removeTextChangedListener(this)
+                variableView.name.setText(variableView.variableName)
+                variableView.name.addTextChangedListener(this)
+                Toast.makeText(
+                    this@BlueprintActivity,
+                    "Такая переменная уже есть!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
+        variableView.name.addTextChangedListener(listener)
 
         // Прослушка изменений типа переменной
         variableView.type.addItemSelectedListener { parent, _, _, _ ->
@@ -326,11 +329,11 @@ class BlueprintActivity : AppCompatActivity() {
     /**
      * Генерация первого уникального имени по шаблону var<число>
      */
-    private fun createVariableName(): String {
+    private fun generateVariable(): String {
         var counter = 1
 
         while (counter <= binding.listVariables.childCount + 1) {
-            if (isNameExist("var$counter")) {
+            if (!hasVariable("var$counter")) {
                 return "var$counter"
             }
             counter++
@@ -341,22 +344,13 @@ class BlueprintActivity : AppCompatActivity() {
     /**
      * Проврка на существование переменной с таким именем
      */
-    private fun isNameExist(name: String): Boolean {
-        return getCountSameVariableName(name) == 0
-    }
-
-    /**
-     * Получить количество переменных с таким именем.
-     */
-    private fun getCountSameVariableName(name: String): Int {
-        var counter = 0
+    private fun hasVariable(name: String): Boolean {
         for (i in 0 until binding.listVariables.childCount) {
             val variableView = binding.listVariables.getChildAt(i)
             if (variableView is VariableView && variableView.variableName == name) {
-                counter++
+                return true
             }
         }
-
-        return counter
+        return false
     }
 }
