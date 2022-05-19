@@ -115,15 +115,28 @@
     <string name="native.math.acos">ArcCos</string>
     <string name="native.math.atan">ArcTan</string>
 
-    <string name="native.localVariable.boolean">Local Boolean</string>
+    <string name="native.localVariable.boolean">Local Bool</string>
     <string name="native.localVariable.int">Local Int</string>
     <string name="native.localVariable.float">Local Float</string>
     <string name="native.localVariable.string">Local String</string>
 
-    <string name="native.assignVariable.boolean">Assign Boolean</string>
+    <string name="native.assignVariable.boolean">Assign Bool</string>
     <string name="native.assignVariable.int">Assign Int</string>
     <string name="native.assignVariable.float">Assign Float</string>
     <string name="native.assignVariable.string">Assign String</string>
+
+    <string name="native.cast.int_boolean">Int -> Bool</string>
+    <string name="native.cast.int_float">Int -> Float</string>
+    <string name="native.cast.int_string">Int -> String</string>
+    <string name="native.cast.float_boolean">Float -> Bool</string>
+    <string name="native.cast.float_int">Float -> Int</string>
+    <string name="native.cast.float_string">Float -> String</string>
+    <string name="native.cast.boolean_int">Bool -> Int</string>
+    <string name="native.cast.boolean_float">Bool -> Float</string>
+    <string name="native.cast.boolean_string">Bool -> String</string>
+    <string name="native.cast.string_boolean">String -> Bool</string>
+    <string name="native.cast.string_int">String -> Int</string>
+    <string name="native.cast.string_float">String -> Float</string>
 
     <string name="titleFunctions">Функции</string>
     <string name="newFunction">Добавить новую функцию</string>

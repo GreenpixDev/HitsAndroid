@@ -7,6 +7,7 @@ import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
 import ru.hits.android.axolot.interpreter.node.executable.thread.NodeSleep
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
+import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNot
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanOr
@@ -32,6 +33,31 @@ class AxolotNativeLibrary : AxolotLibrary() {
         variableTypes["int"] = Type.INT
         variableTypes["float"] = Type.FLOAT
         variableTypes["string"] = Type.STRING
+
+        // Преобразования типов (сделано потупому, потому что у Ромы косяк в архитектуре)
+        for (from in variableTypes) {
+            for (to in variableTypes) {
+                if (from != to) {
+                    registerBlock(
+                        NativeBlockType(
+                            "cast.${from.key}_${to.key}",
+                            DeclaredSingleInputDataPin(
+                                handler = { target, node ->
+                                    target
+                                        .filterIsInstance<NodeCast>()
+                                        .first().init(node)
+                                },
+                                type = from.value
+                            ),
+                            DeclaredSingleOutputDataPin(
+                                nodeFabric = { NodeCast(to.value) },
+                                type = to.value
+                            )
+                        )
+                    )
+                }
+            }
+        }
 
         // Главный блок программы, с которого всё начинается
         registerBlock(BLOCK_MAIN)
