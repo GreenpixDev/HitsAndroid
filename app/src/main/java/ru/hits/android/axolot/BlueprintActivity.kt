@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
+import kotlinx.android.synthetic.main.creator_for_func_item.view.*
 import kotlinx.android.synthetic.main.creator_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
@@ -21,6 +22,7 @@ import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
 import ru.hits.android.axolot.exception.AxolotException
 import ru.hits.android.axolot.util.*
 import ru.hits.android.axolot.view.BlockView
+import ru.hits.android.axolot.view.CreatorForFunctionView
 import ru.hits.android.axolot.view.CreatorView
 import ru.hits.android.axolot.view.VariableView
 import java.util.*
@@ -119,38 +121,35 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Создание новой функции
         blueprintBinding.plusFunction.setOnClickListener {
-            val view = CreatorView(this)
-
-            view.typeExpression = false
-            view.initComponents()
-
-            blueprintBinding.listFunction.addView(view)
-
-            view.plusInputParam.setOnClickListener {
-                createVariableView(view, VariablePlaces.INPUT_PARAMETERS)
-            }
-
-            view.plusOutputVar.setOnClickListener {
-                createVariableView(view, VariablePlaces.OUTPUT_VARIABLES)
-            }
+            addCreatorForFuncAndMacros(isFunc = true)
         }
 
         // Создание нового макроса
         blueprintBinding.plusMacros.setOnClickListener {
-            val view = CreatorView(this)
+            addCreatorForFuncAndMacros(isFunc = false)
+        }
+    }
 
-            view.typeExpression = false
-            view.initComponents()
+    private fun addCreatorForFuncAndMacros(isFunc: Boolean) {
 
+        val view = CreatorView(this)
+
+        view.creator.addView(CreatorForFunctionView(this))
+        view.typeExpression = false
+        view.initComponents()
+
+        if (isFunc) {
+            blueprintBinding.listFunction.addView(view)
+        } else {
             blueprintBinding.listMacros.addView(view)
+        }
 
-            view.plusInputParam.setOnClickListener {
-                createVariableView(view, VariablePlaces.INPUT_PARAMETERS)
-            }
+        view.creator.plusInputParam.setOnClickListener {
+            createVariableView(view, VariablePlaces.INPUT_PARAMETERS)
+        }
 
-            view.plusOutputVar.setOnClickListener {
-                createVariableView(view, VariablePlaces.OUTPUT_VARIABLES)
-            }
+        view.creator.plusOutputVar.setOnClickListener {
+            createVariableView(view, VariablePlaces.OUTPUT_VARIABLES)
         }
     }
 
@@ -220,6 +219,7 @@ class BlueprintActivity : AppCompatActivity() {
     /**
      * Метод создания всех вьюшек нативных типов блоков
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun createBlockTypeViews() {
         program.blockTypes.values.forEach {
             val nameBlock = getLocalizedString(it.fullName)
@@ -229,6 +229,7 @@ class BlueprintActivity : AppCompatActivity() {
             textView.setTextColor(Color.WHITE)
             textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
             textView.textSize = 20f
+            textView.background = resources.getDrawable(R.drawable.border_style)
             textView.typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
 
             blueprintBinding.listBlocks.addView(textView)
@@ -305,19 +306,16 @@ class BlueprintActivity : AppCompatActivity() {
 
         //инициализация creatorView
         variableView.edit = false
-        variableView.inputRow = false
-        variableView.outputRow = false
         variableView.isVar = true
 
+        //дефолтное название
         variableView.variableName = "variable"
-
         program.createVariable(variableView.variableName)
 
         //проверка куда добавлять
-        if (creatorView == null) {
-            blueprintBinding.listVariables.addView(variableView)
-        } else {
+        if (creatorView != null) {
             variableView.btnAddDel = true
+            variableView.initComponents()
 
             when (place) {
                 VariablePlaces.INPUT_PARAMETERS -> {
@@ -325,14 +323,16 @@ class BlueprintActivity : AppCompatActivity() {
                 }
 
                 VariablePlaces.OUTPUT_VARIABLES -> {
-                    creatorView.listOutputVar.addView(variableView)
+                    creatorView.creator.listOutputVar.addView(variableView)
                 }
 
-                else -> throw IllegalStateException("Ошибка")
+                else -> throw IllegalStateException("Что-то пошло не так")
             }
-        }
+        } else {
+            variableView.initComponents()
 
-        variableView.initComponents()
+            blueprintBinding.listVariables.addView(variableView)
+        }
 
         // Прослушка изменений имени переменной
         variableView.name.addTextChangedListener { title, _, _, _ ->

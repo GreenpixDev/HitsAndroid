@@ -13,19 +13,15 @@ import ru.hits.android.axolot.databinding.CreatorItemBinding
 open class CreatorView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defstyleAttr: Int = 0,
-    defstyleRes: Int = 0
-) : ConstraintLayout(context, attrs, defstyleAttr, defstyleRes) {
+) : ConstraintLayout(context, attrs) {
 
     private val binding = CreatorItemBinding.inflate(LayoutInflater.from(context), this)
 
     var nameDescription = true
     var typeExpression = true
-    var edit = true
-    var inputRow = true
-    var outputRow = true
-    var isVar = false
     var btnAddDel = false
+    var edit = true
+    var isVar = false
 
     private fun initLayoutParams() {
         val params = LinearLayout.LayoutParams(
@@ -44,10 +40,8 @@ open class CreatorView @JvmOverloads constructor(
         if (!nameDescription) binding.name.visibility = GONE
         if (!typeExpression) binding.typeVariable.visibility = GONE
         if (!edit) binding.btnEdit.visibility = GONE
-        if (!inputRow) binding.inputRow.visibility = GONE
-        if (!outputRow) binding.outputRow.visibility = GONE
-        if (btnAddDel) binding.btnAdd.visibility = GONE
         if (isVar) binding.creator.background = null
+        if (btnAddDel) binding.btnAdd.visibility = GONE
     }
 
     private fun setCustomSpinner() {

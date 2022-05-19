@@ -46,4 +46,8 @@
         <item name="layout_gravity">center_vertical</item>
         <item name="android:layout_marginStart">3dp</item>
     </style>
+
+    <style name="editTextStyle">
+
+    </style>
 </resources>
