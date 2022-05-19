@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -221,7 +219,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         variableView.edit = false
         variableView.initComponents()
-        variableView.variableName = generateVariable()
+        variableView.variableName = program.generateVariableName()
         variableView.name.setText(variableView.variableName)
 
         program.createVariable(variableView.variableName)
@@ -234,7 +232,7 @@ class BlueprintActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(title: Editable) {
-                if (!hasVariable(title.toString())) {
+                if (!program.hasVariable(title.toString())) {
                     program.renameVariable(variableView.variableName, title.toString())
                     variableView.variableName = title.toString()
                     return
@@ -285,10 +283,6 @@ class BlueprintActivity : AppCompatActivity() {
             variableView.name.addTextChangedListener { title, _, _, _ ->
                 blockView.pinViews.forEach { it.displayName = title.toString() }
             }
-            if (variableView.name is EditText) {
-                (variableView.name as EditText).inputType = InputType.TYPE_NULL
-
-            }
         }
     }
 
@@ -296,6 +290,8 @@ class BlueprintActivity : AppCompatActivity() {
      * Запуск нашей БОМБЕЗНОЙ программы
      */
     private fun startProgram() {
+        // Запускаем это всё в отдельном потоке, потому что
+        // в нашей программе присутствуют прерывания
         Thread {
             val compiler = BlueprintCompiler()
             val interpreter = compiler.prepareInterpreter(program, console)
@@ -324,33 +320,5 @@ class BlueprintActivity : AppCompatActivity() {
     fun closeMenu() {
         binding.menu.visibility = View.GONE
         menuIsVisible = false
-    }
-
-    /**
-     * Генерация первого уникального имени по шаблону var<число>
-     */
-    private fun generateVariable(): String {
-        var counter = 1
-
-        while (counter <= binding.listVariables.childCount + 1) {
-            if (!hasVariable("var$counter")) {
-                return "var$counter"
-            }
-            counter++
-        }
-        return "var$counter"
-    }
-
-    /**
-     * Проврка на существование переменной с таким именем
-     */
-    private fun hasVariable(name: String): Boolean {
-        for (i in 0 until binding.listVariables.childCount) {
-            val variableView = binding.listVariables.getChildAt(i)
-            if (variableView is VariableView && variableView.variableName == name) {
-                return true
-            }
-        }
-        return false
     }
 }

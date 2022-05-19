@@ -28,10 +28,30 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
         }
 
     /**
-     * Регистрация новой переменной
+     * Регистрация новой переменной с именем [variableName]
      */
-    fun createVariable(name: String) {
-        registerBlock(VariableGetterBlockType(name, Type.BOOLEAN))
+    fun createVariable(variableName: String) {
+        require(!hasVariable(variableName)) { "variable $variableName already exists" }
+        registerBlock(VariableGetterBlockType(variableName, Type.BOOLEAN))
+    }
+
+    /**
+     * Генерация первого уникального имени по шаблону var<число>
+     */
+    fun generateVariableName(): String {
+        var counter = 0
+        while (hasVariable("var$counter")) {
+            counter++
+        }
+        return "var$counter"
+    }
+
+    /**
+     * Проврка на существование переменной с именем [variableName]
+     */
+    fun hasVariable(variableName: String): Boolean {
+        val variableGetter = blockTypes["${VariableGetterBlockType.PREFIX_NAME}.$variableName"]
+        return variableGetter != null && variableGetter is VariableGetterBlockType
     }
 
     /**
@@ -58,7 +78,7 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
     }
 
     /**
-     * Изменить тип переменной [name]
+     * Изменить тип переменной [variableName]
      */
     fun retypeVariable(variableName: String, newType: VariableType<*>) {
         getVariableGetter(variableName).variableType = newType
