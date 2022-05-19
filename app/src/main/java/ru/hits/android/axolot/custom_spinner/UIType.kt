@@ -2,7 +2,10 @@ package ru.hits.android.axolot.custom_spinner
 
 import ru.hits.android.axolot.R
 
-data class UIType(val image: Int, val name: String)
+data class UIType(val image: Int, val name: String) {
+
+    override fun toString() = name
+}
 
 object UITypes {
 
