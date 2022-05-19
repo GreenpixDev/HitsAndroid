@@ -35,9 +35,12 @@ class PinView @JvmOverloads constructor(
 
     private val binding = PinItemBinding.inflate(LayoutInflater.from(context), this)
 
-    private val edgeViews = mutableListOf<EdgeView>()
+    private val _edgeViews = mutableListOf<EdgeView>()
 
     lateinit var pin: Pin
+
+    val edgeViews: List<EdgeView>
+        get() = _edgeViews
 
     init {
         binding.contact.setOnTouchListener(this::onTouchEvent)
@@ -71,12 +74,10 @@ class PinView @JvmOverloads constructor(
         }
 
     /**
-     * Обновить пин (если изменился цвет)
+     * Обновить пин
      */
     fun update() {
-        //
-        //binding.contact.setColorFilter(color)
-        // TODO
+
     }
 
     /**
@@ -120,7 +121,7 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.setText("0")
 
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
-                        var inputData = inputDataBlock.toString()
+                        val inputData = inputDataBlock.toString()
 
                         //Если поле ввода пустое, то будем отправлять значения по умолчанию
                         if (inputData != "") {
@@ -196,7 +197,7 @@ class PinView @JvmOverloads constructor(
      * Сдвинуть конечную точку на ребре на [delta] относительно прошлой позиции
      */
     fun move(delta: Vec2f) {
-        edgeViews.forEach {
+        _edgeViews.forEach {
             when (pin) {
                 is InputPin -> it.points[it.points.size - 1] += delta
                 is OutputPin -> it.points[0] += delta
@@ -237,20 +238,20 @@ class PinView @JvmOverloads constructor(
                 edgeView.points.add(Vec2f.ZERO)
                 edgeView.points.add(Vec2f.ZERO)
 
-                edgeViews.add(edgeView)
+                _edgeViews.add(edgeView)
                 activity.codeField.addView(edgeView)
             }
 
             // Когда двигаем пальцем - отрисовываем каждый кадр
             MotionEvent.ACTION_MOVE -> {
-                val edgeView = edgeViews.last()
+                val edgeView = _edgeViews.last()
                 edgeView.setEndPoint(pointer)
                 edgeView.invalidate()
             }
 
             // Когда отжимаем палец - либо удаляем линию, либо сохраняем её и соединяем пины
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                val edgeView = edgeViews.last()
+                val edgeView = _edgeViews.last()
                 val parent =
                     activity.codeField.findViewAt(pointer) { it !is EdgeView }?.parent
 
@@ -265,7 +266,7 @@ class PinView @JvmOverloads constructor(
                         return true
                     }
                 }
-                edgeViews.removeLast()
+                _edgeViews.removeLast()
                 activity.codeField.removeView(edgeView)
             }
         }
@@ -279,7 +280,7 @@ class PinView @JvmOverloads constructor(
     private fun connectWith(pinView: PinView, edgeView: EdgeView): Boolean {
         return try {
             sourceCode.connect(pin, pinView.pin)
-            pinView.edgeViews.add(edgeView)
+            pinView._edgeViews.add(edgeView)
             //после соединения нужно спрятать поля, если мы соединили константы
             hideField(pinView)
 
@@ -289,12 +290,12 @@ class PinView @JvmOverloads constructor(
         catch (e: AxolotPinOneAdjacentException) {
             if (e.pin == pin) {
                 e.pin.adjacent = null
-                activity.codeField.removeView(edgeViews.removeAt(edgeViews.size - 2))
+                activity.codeField.removeView(_edgeViews.removeAt(_edgeViews.size - 2))
                 return connectWith(pinView, edgeView)
             }
             if (e.pin == pinView.pin) {
                 e.pin.adjacent = null
-                activity.codeField.removeView(pinView.edgeViews.removeLast())
+                activity.codeField.removeView(pinView._edgeViews.removeLast())
                 return connectWith(pinView, edgeView)
             }
             false

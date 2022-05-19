@@ -6,9 +6,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
@@ -39,13 +41,16 @@ class BlueprintActivity : AppCompatActivity() {
     private lateinit var blockTitleToColor: Map<Regex, Int>
 
     private val blockViews = mutableListOf<BlockView>()
-    private var consoleLines: MutableList<TextView> = mutableListOf()
 
     private var menuIsVisible = true
     var consoleIsVisible = true
 
     val program = AxolotProgram.create()
-    val console = Console()
+    val console = Console {
+        Handler(Looper.getMainLooper()).post {
+            it.invoke()
+        }
+    }
 
     /**
      * для понимания куда добавлять variablesView
@@ -148,14 +153,13 @@ class BlueprintActivity : AppCompatActivity() {
         if (!isFunc) binding.listMacros.addView(view)
 
         view.creator.plusInputParam.setOnClickListener {
-            createVariableView(view, VariablePlaces.INPUT_PARAMETERS)
+            createParameterView(view, VariablePlaces.INPUT_PARAMETERS)
         }
 
         view.creator.plusOutputVar.setOnClickListener {
-            createVariableView(view, VariablePlaces.OUTPUT_VARIABLES)
+            createParameterView(view, VariablePlaces.OUTPUT_VARIABLES)
         }
     }
-
 
     /**
      * Метод создания всех вьюшек нативных типов блоков
@@ -236,12 +240,11 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     /**
-     * Метод создания новой переменной в меню
-     * TODO Рома из будущего, сделай переменные с привязкой к компилятору
+     * Метод создания новой переменной в функции/макросе
      */
-    private fun createVariableView(
-        creatorView: CreatorView? = null,
-        place: VariablePlaces? = null
+    private fun createParameterView(
+        creatorView: CreatorView,
+        place: VariablePlaces
     ) {
         val variableView = VariableView(this)
 
@@ -250,37 +253,69 @@ class BlueprintActivity : AppCompatActivity() {
         variableView.isVar = true
 
         //дефолтное название
-        variableView.variableName = "variable"
-        program.createVariable(variableView.variableName)
+        variableView.variableName = "param"
+        variableView.name.setText(variableView.variableName)
+
+        variableView.name.width = 200
+        variableView.btnAddDel = true
+        variableView.initComponents()
 
         //проверка куда добавлять
-        if (creatorView != null) {
-            variableView.name.width = 200
-            variableView.btnAddDel = true
-            variableView.initComponents()
-
-            when (place) {
-                VariablePlaces.INPUT_PARAMETERS -> {
-                    creatorView.listParameters.addView(variableView)
-                }
-
-                VariablePlaces.OUTPUT_VARIABLES -> {
-                    creatorView.creator.listOutputVar.addView(variableView)
-                }
-
-                else -> throw IllegalStateException("Что-то пошло не так")
+        when (place) {
+            VariablePlaces.INPUT_PARAMETERS -> {
+                creatorView.listParameters.addView(variableView)
             }
-        } else {
-            variableView.name.width = 160
-            variableView.initComponents()
-            binding.listVariables.addView(variableView)
+
+            VariablePlaces.OUTPUT_VARIABLES -> {
+                creatorView.creator.listOutputVar.addView(variableView)
+            }
         }
+    }
+
+    /**
+     * Метод создания новой переменной в меню
+     */
+    private fun createVariableView() {
+        val variableView = VariableView(this)
+
+        //инициализация creatorView
+        variableView.edit = false
+        variableView.isVar = true
+
+        //дефолтное название
+        variableView.variableName = program.generateVariableName()
+        variableView.name.setText(variableView.variableName)
+
+        program.createVariable(variableView.variableName)
+
+        // Добавляем в меню
+        variableView.name.width = 160
+        variableView.initComponents()
+        binding.listVariables.addView(variableView)
 
         // Прослушка изменений имени переменной
-        variableView.name.addTextChangedListener { title, _, _, _ ->
-            program.renameVariable(variableView.variableName, title.toString())
-            variableView.variableName = title.toString()
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(title: Editable) {
+                if (!program.hasVariable(title.toString())) {
+                    program.renameVariable(variableView.variableName, title.toString())
+                    variableView.variableName = title.toString()
+                    return
+                }
+                variableView.name.removeTextChangedListener(this)
+                variableView.name.setText(variableView.variableName)
+                variableView.name.addTextChangedListener(this)
+                Toast.makeText(
+                    this@BlueprintActivity,
+                    "Такая переменная уже есть!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
+        variableView.name.addTextChangedListener(listener)
 
         // Прослушка изменений типа переменной
         variableView.typeVariable.addItemSelectedListener { parent, _, _, _ ->
@@ -324,16 +359,23 @@ class BlueprintActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Запуск нашей БОМБЕЗНОЙ программы
+     */
     private fun startProgram() {
-        val compiler = BlueprintCompiler()
-        val interpreter = compiler.prepareInterpreter(program, console)
-        val node = compiler.compile(program)
+        // Запускаем это всё в отдельном потоке, потому что
+        // в нашей программе присутствуют прерывания
+        Thread {
+            val compiler = BlueprintCompiler()
+            val interpreter = compiler.prepareInterpreter(program, console)
+            val node = compiler.compile(program)
 
-        try {
-            interpreter.execute(node)
-        } catch (e: Throwable) {
-            e.printStackTrace()
-        }
+            try {
+                interpreter.execute(node)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }.start()
     }
 
     /**
