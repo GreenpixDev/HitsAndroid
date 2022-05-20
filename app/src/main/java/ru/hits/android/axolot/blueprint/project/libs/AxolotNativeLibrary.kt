@@ -7,6 +7,7 @@ import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
+import ru.hits.android.axolot.interpreter.node.function.NodeInput
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNot
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanOr
@@ -41,8 +42,8 @@ class AxolotNativeLibrary : AxolotLibrary() {
                 "input",
 
                 DeclaredSingleOutputDataPin(
-                    nodeFabric = { NodeBooleanNot() },
-                    type = Type.BOOLEAN
+                    nodeFabric = { NodeInput() },
+                    type = Type.STRING
                 )
             )
         )
