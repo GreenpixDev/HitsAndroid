@@ -57,7 +57,7 @@ class AxolotNativeLibrary : AxolotLibrary() {
             )
         )
 
-        registerNative(
+        registerBlock(
             NativeBlockType(
                 "math",
                 DeclaredSingleInputDataPin(

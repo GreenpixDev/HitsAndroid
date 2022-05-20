@@ -1,5 +1,6 @@
 package ru.hits.android.axolot.interpreter.service
 
+import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.interpreter.node.NodeConstant
 import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
@@ -146,7 +147,7 @@ class ServiceInit(private val nodeHandlerService: NodeHandlerService, val consol
         map[NodeArrayResize::class] = NodeArrayResizeService(nodeHandlerService)
         map[NodePrintString::class] = NodePrintStringService(nodeHandlerService, console)
         map[NodeInput::class] = NodeInputService(console)
-        map[NodePrintString::class] = NodePrintStringService(nodeHandlerService)
+        map[NodePrintString::class] = NodePrintStringService(nodeHandlerService, console)
 
         map[NodeMath::class] = NodeMathService(nodeHandlerService, MathInterpreterImpl())
         return map
