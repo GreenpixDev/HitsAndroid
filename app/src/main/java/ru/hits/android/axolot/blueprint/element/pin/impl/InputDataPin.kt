@@ -11,5 +11,7 @@ class InputDataPin @JvmOverloads constructor(
 ) : DataPin, PinToOne, InputPin, TypedPin {
 
     override var adjacent: PinToMany? = null
-
+    fun clear() {
+        adjacent?.adjacent?.remove(this)
+    }
 }

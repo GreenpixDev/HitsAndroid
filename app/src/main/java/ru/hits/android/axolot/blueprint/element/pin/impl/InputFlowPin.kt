@@ -11,5 +11,9 @@ class InputFlowPin @JvmOverloads constructor(
 ) : FlowPin, PinToMany, InputPin, TypedPin {
 
     override var adjacent = mutableListOf<PinToOne>()
-
+    fun clear() {
+        for (i in adjacent) {
+            i.adjacent?.adjacent?.remove(i)
+        }
+    }
 }

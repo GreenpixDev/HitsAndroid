@@ -28,6 +28,10 @@ class BlockView @JvmOverloads constructor(
     defstyleRes: Int = 0
 ) : ConstraintLayout(context, attrs, defstyleAttr, defstyleRes), BlueprintView {
 
+    val delete: Boolean = true
+
+    var myListener: () -> Unit = {}
+
     private val blockBinding = BlockItemBinding.inflate(LayoutInflater.from(context), this)
 
     private val _pinViews = mutableListOf<PinView>()
@@ -121,7 +125,11 @@ class BlockView @JvmOverloads constructor(
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                offset = event.position
+                if (delete) {
+                    myListener.invoke()
+                } else {
+                    offset = event.position
+                }
             }
             MotionEvent.ACTION_MOVE -> {
                 val to = pointer - offset

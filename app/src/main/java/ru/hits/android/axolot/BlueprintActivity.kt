@@ -222,6 +222,13 @@ class BlueprintActivity : AppCompatActivity() {
         // Переименовываем блок
         blockView.displayName = getLocalizedString(name)
 
+        blockView.myListener = {
+
+            program.deleteBlock(blockView.block)
+            blockViews.remove(blockView)
+            blockView.visibility = View.INVISIBLE
+        }
+
         // Если это главный блок - указываем это в программе.
         // Если главный блок уже был - кинет ошибку AxolotException
         if (type == AxolotNativeLibrary.BLOCK_MAIN) {

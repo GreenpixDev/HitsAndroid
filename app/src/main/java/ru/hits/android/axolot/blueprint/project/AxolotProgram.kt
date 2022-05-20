@@ -4,6 +4,7 @@ import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
 import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
+import ru.hits.android.axolot.blueprint.element.pin.impl.*
 import ru.hits.android.axolot.blueprint.project.libs.AxolotDefaultLibrary
 import ru.hits.android.axolot.exception.AxolotException
 import ru.hits.android.axolot.interpreter.type.Type
@@ -13,6 +14,31 @@ import ru.hits.android.axolot.interpreter.type.VariableType
  * Класс исполняемой программы на языке Axolot.
  */
 class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
+
+    fun deleteBlock(block: AxolotBlock) {
+        for (i in blockTypes.values) {
+            if (block.type == i) {
+                for (contact in block.contacts) {
+                    if (contact is ConstantPin) {
+                        contact.clear()
+                    }
+                    if (contact is InputDataPin) {
+                        contact.clear()
+                    }
+                    if (contact is InputFlowPin) {
+                        contact.clear()
+                    }
+                    if (contact is OutputDataPin) {
+                        contact.clear()
+                    }
+                    if (contact is OutputFlowPin) {
+                        contact.clear()
+                    }
+                }
+            }
+        }
+        blocks.remove(block)
+    }
 
     override val variableTypes = mutableMapOf<String, VariableType<*>>()
 
