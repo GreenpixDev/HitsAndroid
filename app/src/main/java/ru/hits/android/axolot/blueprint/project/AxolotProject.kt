@@ -2,6 +2,9 @@ package ru.hits.android.axolot.blueprint.project
 
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.interpreter.type.VariableType
+import java.io.Externalizable
+import java.io.ObjectInput
+import java.io.ObjectOutput
 
 /**
  * Общий интерфейс проекта на языке Axolot.

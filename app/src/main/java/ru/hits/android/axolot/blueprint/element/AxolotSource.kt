@@ -4,13 +4,14 @@ import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.blueprint.element.pin.impl.InputDataPin
 import ru.hits.android.axolot.exception.AxolotPinException
 import ru.hits.android.axolot.interpreter.type.VariableType
+import java.io.Serializable
 
 /**
  * Интерфейс исходного кода.
  * Исходны код содержит множество блоков.
  * TODO в данный момент содержит ещё и множество контактов, т.е. пинов, возможно удалится в будущем
  */
-interface AxolotSource {
+interface AxolotSource: Serializable {
 
     val blocks: MutableSet<AxolotBlock>
 
