@@ -37,8 +37,6 @@ class PinView @JvmOverloads constructor(
 
     lateinit var pin: Pin
 
-    val edgeViews: List<EdgeView>
-        get() = _edgeViews
 
     init {
         binding.contact.setOnTouchListener(this::onTouchEvent)

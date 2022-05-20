@@ -244,14 +244,20 @@ class BlueprintActivity : AppCompatActivity() {
 
             //включен режим удаления
             if (isChecked && blockView.block.type != AxolotNativeLibrary.BLOCK_MAIN) {
+                for (i in blockView._pinViews) {
+                    for (j in i._edgeViews) {
+
+                        binding.codeField.removeView(j)
+                    }
+                    i._edgeViews.clear()
+                }
+
                 program.deleteBlock(blockView.block)
                 blockViews.remove(blockView)
+
                 binding.codeField.removeView(blockView)
 
-                for (i in blockView._pinViews) {
-                    i._edgeViews.clear()
-                    //как-то удалить линии
-                }
+
             }
         }
 
