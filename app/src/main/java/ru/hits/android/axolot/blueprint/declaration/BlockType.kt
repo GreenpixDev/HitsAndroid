@@ -1,5 +1,6 @@
 package ru.hits.android.axolot.blueprint.declaration
 
+import android.content.Context
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 
@@ -38,5 +39,15 @@ interface BlockType {
 
         return block
     }
+
+    /**
+     * Отображаемое имя
+     */
+    fun getDisplayName(context: Context): String
+
+    /**
+     * Отображаемый цвет заголовка
+     */
+    fun getDisplayColor(context: Context): Int
 
 }

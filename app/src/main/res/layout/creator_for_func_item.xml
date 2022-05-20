@@ -34,6 +34,7 @@
                 android:id="@+id/plusInputParam"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_marginTop="3dp"
                 android:layout_marginStart="5dp"
                 android:background="@drawable/ic_plus"
                 android:layout_gravity="center_vertical" />
@@ -52,7 +53,7 @@
             android:id="@+id/outputRow"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:paddingBottom="5dp"
             android:layout_gravity="left">
 
@@ -71,6 +72,7 @@
                 android:id="@+id/plusOutputVar"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_marginTop="3dp"
                 android:layout_marginStart="5dp"
                 android:background="@drawable/ic_plus"
                 android:layout_gravity="center_vertical" />

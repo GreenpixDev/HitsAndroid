@@ -11,7 +11,7 @@ data class UIType(val image: Int, val name: String) {
 
 object UITypes {
 
-    private val images = intArrayOf(
+    val images = mutableListOf(
         R.drawable.ic_boolean_variable,
         R.drawable.ic_int_variable,
         R.drawable.ic_float_variable,
@@ -22,7 +22,8 @@ object UITypes {
         Type.BOOLEAN.toString(),
         Type.INT.toString(),
         Type.FLOAT.toString(),
-        Type.STRING.toString()
+        Type.STRING.toString(),
+        "Execute"
     )
 
     var list: List<UIType> = images.indices.map {

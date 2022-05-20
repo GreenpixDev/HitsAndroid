@@ -200,6 +200,26 @@
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
+            <TextView
+                android:id="@+id/returnBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Return Блок"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/goToMain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Back To Main"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
 

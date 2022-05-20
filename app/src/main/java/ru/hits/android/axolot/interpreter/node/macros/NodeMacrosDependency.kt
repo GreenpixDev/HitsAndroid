@@ -5,7 +5,7 @@ import ru.hits.android.axolot.interpreter.node.NodeDependency
 import ru.hits.android.axolot.interpreter.node.NodeFunction
 import ru.hits.android.axolot.interpreter.variable.Variable
 
-class NodeMacrosDependency : NodeFunction() {
+class NodeMacrosDependency(val name: String) : NodeFunction() {
 
     companion object {
         const val INPUT = 0

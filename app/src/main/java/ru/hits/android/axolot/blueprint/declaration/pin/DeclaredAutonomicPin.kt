@@ -11,6 +11,8 @@ import ru.hits.android.axolot.interpreter.node.Node
  */
 interface DeclaredAutonomicPin : DeclaredPin {
 
+    val name: String
+
     fun createNode(owner: AxolotOwner): Node
 
 }

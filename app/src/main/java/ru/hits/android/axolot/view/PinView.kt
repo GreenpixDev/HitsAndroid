@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.pin_item.view.*
 import ru.hits.android.axolot.R
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredDataPin
 import ru.hits.android.axolot.blueprint.element.pin.*
+import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
 import ru.hits.android.axolot.blueprint.element.pin.impl.InputDataPin
 import ru.hits.android.axolot.databinding.PinItemBinding
 import ru.hits.android.axolot.exception.AxolotPinException
@@ -52,7 +53,7 @@ class PinView @JvmOverloads constructor(
     private val color: Int
         get() {
             if (pin is FlowPin) {
-                return context.getColor(R.color.colorFlowControl)
+                return context.getThemeColor(R.attr.colorFlowControl)
             }
             if (pin is TypedPin) {
                 val pinType = (pin as TypedPin).type
@@ -77,7 +78,7 @@ class PinView @JvmOverloads constructor(
      * Обновить пин
      */
     fun update() {
-
+        displayName = pin.name
     }
 
     /**
@@ -125,9 +126,9 @@ class PinView @JvmOverloads constructor(
 
                         //Если поле ввода пустое или равно "-", то будем отправлять значения по умолчанию
                         if (inputData != "" && inputData != "-") {
-                            activity.program.setValue(currentPin, Type.INT, inputData.toInt())
+                            activity.currentSource.setValue(currentPin, Type.INT, inputData.toInt())
                         } else {
-                            activity.program.setValue(currentPin, Type.INT, 0)
+                            activity.currentSource.setValue(currentPin, Type.INT, 0)
                         }
                     }
                 }
@@ -143,9 +144,9 @@ class PinView @JvmOverloads constructor(
 
                         //Если поле ввода пустое или равно "-" или начинается с ".", то будем отправлять значения по умолчанию
                         if (inputData != "" && inputData != "-" && inputData[0] != '.' && inputData[0] != '-') {
-                            activity.program.setValue(currentPin, Type.FLOAT, inputData.toDouble())
+                            activity.currentSource.setValue(currentPin, Type.FLOAT, inputData.toDouble())
                         } else {
-                            activity.program.setValue(currentPin, Type.FLOAT, 0.0)
+                            activity.currentSource.setValue(currentPin, Type.FLOAT, 0.0)
                         }
 
                     }
@@ -160,7 +161,7 @@ class PinView @JvmOverloads constructor(
                             binding.tickIcon.visibility = VISIBLE
                         }
 
-                        activity.program.setValue(currentPin, Type.BOOLEAN, value = true)
+                        activity.currentSource.setValue(currentPin, Type.BOOLEAN, true)
                     }
 
                     binding.tickIcon.setOnClickListener {
@@ -168,7 +169,7 @@ class PinView @JvmOverloads constructor(
                             binding.tickIcon.visibility = GONE
                             binding.crossIcon.visibility = VISIBLE
 
-                            activity.program.setValue(currentPin, Type.BOOLEAN, value = false)
+                            activity.currentSource.setValue(currentPin, Type.BOOLEAN, false)
                         }
                     }
                 }
@@ -180,7 +181,7 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
                         val inputData = inputDataBlock.toString()
 
-                        activity.program.setValue(currentPin, Type.STRING, inputData)
+                        activity.currentSource.setValue(currentPin, Type.STRING, inputData)
                     }
                 }
 
@@ -339,11 +340,65 @@ class PinView @JvmOverloads constructor(
                                 inputPinView.crossIcon.visibility = INVISIBLE
                             }
 
+                            // Раньше тут был баг
+                            //else -> throw IllegalStateException("Что-то не так (какая-то проблема с видимостью константы у входящего пина Boolean)")
                         }
                     }
 
                     else -> throw IllegalStateException("Что-то не так (сокрытие поля у входящего пина)")
                 }
+            }
+        }
+    }
+
+    /**
+     * Восстановить линию между пинами
+     */
+    fun restoreEdge(withPinView: PinView): EdgeView {
+        val view = binding.contact
+        val position = activity.codeField.findRelativePosition(view)
+        val center = position + view.center
+        val edgeView = EdgeView(context)
+
+        edgeView.position = center
+        edgeView.paintBrush.color = color
+
+        edgeView.points.add(Vec2f.ZERO)
+        edgeView.points.add(Vec2f.ZERO)
+
+        val withPinViewPosition = activity.codeField.findRelativePosition(withPinView.contact)
+        val withPinViewCenter = withPinViewPosition + withPinView.contact.center
+
+        edgeView.setEndPoint(withPinViewCenter)
+        hideField(withPinView)
+
+        _edgeViews.add(edgeView)
+        withPinView._edgeViews.add(edgeView)
+
+        activity.codeField.addView(edgeView)
+        return edgeView
+    }
+
+    /**
+     * Восстановить значение по умолчанию
+     */
+    fun restoreConstant() {
+        val currentPin = pin
+
+        if (currentPin is InputDataPin && currentPin.adjacent != null
+            && currentPin.adjacent is ConstantPin
+        ) {
+
+            val constant = (currentPin.adjacent as ConstantPin).constant
+
+            when (constant.type) {
+                Type.INT -> binding.inputField.setText(constant.value.toString())
+                Type.FLOAT -> binding.inputField.setText(constant.value.toString())
+                Type.BOOLEAN -> {
+                    if (constant.value as Boolean) binding.tickIcon.visibility = VISIBLE
+                    else binding.crossIcon.visibility = VISIBLE
+                }
+                Type.STRING -> binding.inputField.setText(constant.value.toString())
             }
         }
     }

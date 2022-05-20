@@ -10,6 +10,7 @@ import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayResize
 import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexFind
 import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexMatch
 import ru.hits.android.axolot.interpreter.node.executable.string.NodeStringConcatenation
+import ru.hits.android.axolot.interpreter.node.executable.thread.NodeSleep
 import ru.hits.android.axolot.interpreter.node.flowcontrol.*
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
@@ -35,6 +36,7 @@ import ru.hits.android.axolot.interpreter.service.impl.executable.array.NodeArra
 import ru.hits.android.axolot.interpreter.service.impl.executable.regex.NodeRegexFindService
 import ru.hits.android.axolot.interpreter.service.impl.executable.regex.NodeRegexMatchService
 import ru.hits.android.axolot.interpreter.service.impl.executable.string.NodeStringConcantenationService
+import ru.hits.android.axolot.interpreter.service.impl.executable.thread.NodeSleepService
 import ru.hits.android.axolot.interpreter.service.impl.flowcontrol.*
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeCastService
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeGetVariableService
@@ -163,6 +165,7 @@ class ServiceInit(private val nodeHandlerService: NodeHandlerService, val consol
         map[NodePrintString::class] = NodePrintStringService(nodeHandlerService, console)
 
         map[NodeMath::class] = NodeMathService(nodeHandlerService, MathInterpreterImpl())
+        map[NodeSleep::class] = NodeSleepService(nodeHandlerService)
         return map
     }
 

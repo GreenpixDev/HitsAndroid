@@ -12,6 +12,9 @@ class DeclaredSingleOutputDataPin constructor(
     override val lazyType: () -> VariableType<*>
 ) : DeclaredAutonomicPin, DeclaredDataPin {
 
+    override val name: String
+        get() = lazyName.invoke()
+
     constructor(
         nodeFabric: () -> NodeDependency,
         name: String,

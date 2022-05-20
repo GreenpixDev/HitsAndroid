@@ -71,6 +71,7 @@
 
     <string name="hintEditText">Enter name</string>
 
+    <string name="function_end">Return</string>
     <string name="native.main">Main</string>
     <string name="native.getVariable">Get</string>
     <string name="native.setVariable">Set</string>
@@ -80,6 +81,7 @@
     <string name="native.foreach">ForEach</string>
     <string name="native.branch">If Else</string>
     <string name="native.print">Print String</string>
+    <string name="native.sleep">Thread Sleep</string>
 
     <string name="native.regexMatch">Regex Match</string>
     <string name="native.regexFind">Regex Find</string>
@@ -130,15 +132,28 @@
     <string name="native.math.acos">ArcCos</string>
     <string name="native.math.atan">ArcTan</string>
 
-    <string name="native.localVariable.boolean">Local Boolean</string>
+    <string name="native.localVariable.boolean">Local Bool</string>
     <string name="native.localVariable.int">Local Int</string>
     <string name="native.localVariable.float">Local Float</string>
     <string name="native.localVariable.string">Local String</string>
 
-    <string name="native.assignVariable.boolean">Assign Boolean</string>
+    <string name="native.assignVariable.boolean">Assign Bool</string>
     <string name="native.assignVariable.int">Assign Int</string>
     <string name="native.assignVariable.float">Assign Float</string>
     <string name="native.assignVariable.string">Assign String</string>
+
+    <string name="native.cast.int_boolean">Int -> Bool</string>
+    <string name="native.cast.int_float">Int -> Float</string>
+    <string name="native.cast.int_string">Int -> String</string>
+    <string name="native.cast.float_boolean">Float -> Bool</string>
+    <string name="native.cast.float_int">Float -> Int</string>
+    <string name="native.cast.float_string">Float -> String</string>
+    <string name="native.cast.boolean_int">Bool -> Int</string>
+    <string name="native.cast.boolean_float">Bool -> Float</string>
+    <string name="native.cast.boolean_string">Bool -> String</string>
+    <string name="native.cast.string_boolean">String -> Bool</string>
+    <string name="native.cast.string_int">String -> Int</string>
+    <string name="native.cast.string_float">String -> Float</string>
 
     <string name="titleFunctions">Функции</string>
     <string name="newFunction">Добавить новую функцию</string>

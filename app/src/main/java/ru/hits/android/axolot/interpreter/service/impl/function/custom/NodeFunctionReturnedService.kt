@@ -10,7 +10,9 @@ class NodeFunctionReturnedService : NodeDependencyService {
 
     override fun invoke(node: Node, context: InterpreterContext): Variable {
         if(node is NodeFunctionReturned) {
-            return context.stack[node.nodeInvoke to node.name]!!
+            val returned = context.stack[node.nodeInvoke to node.name]
+            requireNotNull(returned) { "Функция не вернула требуемый параметр ${node.name}" }
+            return returned
         }
         throw createIllegalException(node)
     }

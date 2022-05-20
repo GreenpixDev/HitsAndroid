@@ -4,14 +4,20 @@ import android.content.Context
 import android.util.AttributeSet
 import kotlinx.android.synthetic.main.activity_blueprint.*
 
-class VariableView @JvmOverloads constructor(
+class FunctionView @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
+    attrs: AttributeSet? = null
 ) : CreatorView(context, attrs) {
 
-    lateinit var variableName: String
+    lateinit var functionName: String
+
+    init {
+        typeExpression = false
+        initComponents()
+    }
 
     override fun addViewMenu() {
-        activity.listVariables.addView(this)
+        activity.listFunction.addView(this)
     }
+
 }

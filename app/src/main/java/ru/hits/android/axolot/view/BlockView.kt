@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.activity_blueprint.*
+import kotlinx.android.synthetic.main.block_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargInputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
@@ -39,6 +40,14 @@ class BlockView @JvmOverloads constructor(
     val pinViews: List<PinView>
         get() = _pinViews
 
+    var position: Vec2f
+        get() = Vec2f(x, y)
+        set(value) {
+            x = value.x
+            y = value.y
+            block.position = value
+        }
+
     /**
      * Отображаемое название блока в заголовке
      */
@@ -56,12 +65,28 @@ class BlockView @JvmOverloads constructor(
         val pinView = PinView(context)
 
         pinView.pin = pin
-        pinView.displayName = pin.name
         pinView.update()
 
         _pinViews.add(pinView)
         pinView.addViewTo(this, indexGetter)
         return pinView
+    }
+
+    /**
+     * Обновить блок
+     */
+    fun update() {
+        // Добавляем новые пины
+        block.contacts
+            .filter { pin ->
+                !_pinViews.any { it.pin == pin }
+            }
+            .forEach { createPinView(it) }
+
+        // Визуал
+        header.setBackgroundColor(block.type.getDisplayColor(activity))
+        displayName = block.type.getDisplayName(activity)
+        _pinViews.forEach { it.update() }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
