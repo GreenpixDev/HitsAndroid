@@ -5,6 +5,8 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 
 interface Scope {
 
+    val variables: Map<String, Variable>
+
     fun declareVariable(name: String, variable: Variable)
 
     fun setVariable(name: String, variable: Variable)

@@ -8,6 +8,7 @@ import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayResize
 import ru.hits.android.axolot.interpreter.node.flowcontrol.*
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
+import ru.hits.android.axolot.interpreter.node.function.NodeMath
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayFindElement
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayGetElement
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArraySize
@@ -15,13 +16,7 @@ import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionEnd
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionInvoke
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionParameter
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionReturned
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNand
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNor
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNot
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanOr
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanXnor
-import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanXor
+import ru.hits.android.axolot.interpreter.node.function.math.bool.*
 import ru.hits.android.axolot.interpreter.node.function.math.integer.*
 import ru.hits.android.axolot.interpreter.node.function.math.real.*
 import ru.hits.android.axolot.interpreter.node.function.math.trig.*
@@ -33,6 +28,7 @@ import ru.hits.android.axolot.interpreter.service.impl.executable.array.NodeArra
 import ru.hits.android.axolot.interpreter.service.impl.flowcontrol.*
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeCastService
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeGetVariableService
+import ru.hits.android.axolot.interpreter.service.impl.function.NodeMathService
 import ru.hits.android.axolot.interpreter.service.impl.function.array.NodeArrayService
 import ru.hits.android.axolot.interpreter.service.impl.function.custom.NodeFunctionEndService
 import ru.hits.android.axolot.interpreter.service.impl.function.custom.NodeFunctionInvokeService
@@ -43,6 +39,7 @@ import ru.hits.android.axolot.interpreter.service.impl.function.math.NodeFloatSe
 import ru.hits.android.axolot.interpreter.service.impl.function.math.NodeIntService
 import ru.hits.android.axolot.interpreter.service.impl.function.math.NodeTrigService
 import ru.hits.android.axolot.interpreter.service.impl.macros.*
+import ru.hits.android.axolot.math.MathInterpreterImpl
 import kotlin.reflect.KClass
 
 class ServiceInit(private val nodeHandlerService: NodeHandlerService) {
@@ -141,6 +138,8 @@ class ServiceInit(private val nodeHandlerService: NodeHandlerService) {
         map[NodeSetVariable::class] = NodeSetVariableService(nodeHandlerService)
         map[NodeArrayResize::class] = NodeArrayResizeService(nodeHandlerService)
         map[NodePrintString::class] = NodePrintStringService(nodeHandlerService)
+
+        map[NodeMath::class] = NodeMathService(nodeHandlerService, MathInterpreterImpl())
         return map
     }
 

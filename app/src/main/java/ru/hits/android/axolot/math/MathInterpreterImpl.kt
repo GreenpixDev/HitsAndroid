@@ -39,7 +39,7 @@ class MathInterpreterImpl : MathInterpreter {
     }
 
     private fun parseToElementary(str: String): MutableList<String> {
-        var fstr = str.filter { (it != ' ') }
+        val fstr = str.filter { (it != ' ') }
         val elementary = mutableListOf("")
         for (i in fstr.indices) {
             if (fstr[i] in elemStringParseSymbols) {
@@ -79,7 +79,7 @@ class MathInterpreterImpl : MathInterpreter {
             elementary[0] = "_"
         }
         for (i in 1 until elementary.size) {
-            if (elementary[i] == "-" && (elementary[i - 1] in functionWithBrakesMass || elementary[i - 1] in elemStringParseSymbols)) {
+            if (elementary[i] == "-" && (elementary[i - 1] in functionWithBrakesMass || elementary[i - 1] in elemStringParseSymbols && elementary[i - 1] !in ")]")) {
                 elementary[i] = "_"
             }
         }
@@ -146,7 +146,7 @@ class MathInterpreterImpl : MathInterpreter {
                     stack.add(mergedAndUnary[i])
                     continue
                 }
-                var oPriority = getPriority(mergedAndUnary[i])
+                val oPriority = getPriority(mergedAndUnary[i])
                 var sPriority = getPriority(stack.last())
                 while (stack.last() in math || sPriority >= oPriority || stack.last() == "_") {
                     polish.add(stack.last())
@@ -183,7 +183,7 @@ class MathInterpreterImpl : MathInterpreter {
                 } else if (polish[i] == "-") {
                     val a = stack.removeLast()
                     val b = stack.removeLast()
-                    stack.add(a - b)
+                    stack.add(b - a)
                 } else if (polish[i] == "*") {
                     val a = stack.removeLast()
                     val b = stack.removeLast()
@@ -191,15 +191,15 @@ class MathInterpreterImpl : MathInterpreter {
                 } else if (polish[i] == "/") {
                     val a = stack.removeLast()
                     val b = stack.removeLast()
-                    stack.add(a / b)
+                    stack.add(b / a)
                 } else if (polish[i] == "%") {
                     val a = stack.removeLast()
                     val b = stack.removeLast()
-                    stack.add(a % b)
+                    stack.add(b % a)
                 } else if (polish[i] == "^") {
                     val a = stack.removeLast()
                     val b = stack.removeLast()
-                    stack.add(a.pow(b))
+                    stack.add(b.pow(a))
                 } else if (polish[i] == "&") {
                     throw IllegalArgumentException("Не поддерживается" + polish[i])
                 } else if (polish[i] == "|") {
