@@ -14,6 +14,7 @@ import ru.hits.android.axolot.interpreter.node.flowcontrol.*
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
 import ru.hits.android.axolot.interpreter.node.function.NodeInput
+import ru.hits.android.axolot.interpreter.node.function.NodeMath
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayFindElement
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayGetElement
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArraySize
@@ -38,6 +39,7 @@ import ru.hits.android.axolot.interpreter.service.impl.flowcontrol.*
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeCastService
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeGetVariableService
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeInputService
+import ru.hits.android.axolot.interpreter.service.impl.function.NodeMathService
 import ru.hits.android.axolot.interpreter.service.impl.function.array.NodeArrayService
 import ru.hits.android.axolot.interpreter.service.impl.function.custom.NodeFunctionEndService
 import ru.hits.android.axolot.interpreter.service.impl.function.custom.NodeFunctionInvokeService
@@ -48,6 +50,7 @@ import ru.hits.android.axolot.interpreter.service.impl.function.math.NodeFloatSe
 import ru.hits.android.axolot.interpreter.service.impl.function.math.NodeIntService
 import ru.hits.android.axolot.interpreter.service.impl.function.math.NodeTrigService
 import ru.hits.android.axolot.interpreter.service.impl.macros.*
+import ru.hits.android.axolot.math.MathInterpreterImpl
 import kotlin.reflect.KClass
 
 class ServiceInit(private val nodeHandlerService: NodeHandlerService, val console: Console) {
@@ -157,6 +160,9 @@ class ServiceInit(private val nodeHandlerService: NodeHandlerService, val consol
         map[NodeArrayResize::class] = NodeArrayResizeService(nodeHandlerService)
         map[NodePrintString::class] = NodePrintStringService(nodeHandlerService, console)
         map[NodeInput::class] = NodeInputService(console)
+        map[NodePrintString::class] = NodePrintStringService(nodeHandlerService, console)
+
+        map[NodeMath::class] = NodeMathService(nodeHandlerService, MathInterpreterImpl())
         return map
     }
 

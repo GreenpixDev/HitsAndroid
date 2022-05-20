@@ -10,6 +10,7 @@ import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexMatch
 import ru.hits.android.axolot.interpreter.node.executable.string.NodeStringConcatenation
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
+import ru.hits.android.axolot.interpreter.node.function.NodeMath
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNot
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanOr
@@ -27,7 +28,9 @@ import ru.hits.android.axolot.interpreter.type.Type
 class AxolotNativeLibrary : AxolotLibrary() {
 
     companion object {
+
         val BLOCK_MAIN = NativeBlockType("main", DeclaredSingleOutputFlowPin({ _, _ -> }))
+
     }
 
     init {
@@ -140,6 +143,26 @@ class AxolotNativeLibrary : AxolotLibrary() {
                             .first().nextNode = node
                     },
                     name = "async"
+                )
+            )
+        )
+
+        registerBlock(
+            NativeBlockType(
+                "math",
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeMath>()
+                            .first().init(node)
+                    },
+                    name = "expression",
+                    type = Type.STRING
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeMath() },
+                    name = "result",
+                    type = Type.FLOAT
                 )
             )
         )

@@ -4,7 +4,7 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 
 class GlobalScope : Scope {
 
-    private val variables: MutableMap<String, Variable> = mutableMapOf()
+    override val variables: MutableMap<String, Variable> = mutableMapOf()
 
     override fun declareVariable(name: String, variable: Variable) {
         variables[name] = variable
