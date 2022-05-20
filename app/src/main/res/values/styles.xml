@@ -19,7 +19,7 @@
         <item name="textOutlineColor">@color/white</item>
         <item name="android:textSize">20sp</item>
         <item name="fontFamily">@font/montserrat_alternates_semibold</item>
-        <item name="cornerRadius">15dp</item>
+        <item name="cornerRadius">100dp</item>
     </style>
 
     <style name="btnForFragmentSave">
@@ -29,7 +29,6 @@
         <item name="cornerRadius">100dp</item>
         <item name="layout_gravity">center</item>
         <item name="fontFamily">@font/montserrat_regular</item>
-        <item name="backgroundTint">@color/bg_btn_for_fragments</item>
     </style>
 
     <style name="textViewStyle">
