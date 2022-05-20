@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -79,6 +80,13 @@ class BlueprintActivity : AppCompatActivity() {
 
         openMenu()
         binding.consoleView.initConsole(console)
+
+        Log.d("activity condition", "onCreate")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("activity condition", "onStart")
     }
 
     override fun onResume() {
@@ -88,6 +96,32 @@ class BlueprintActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             binding.zoomLayout.zoomTo(binding.zoomLayout.getMaxZoom() / 2, false)
         }, 0)
+
+        Log.d("activity condition", "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Log.d("activity condition", "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        Log.d("activity condition", "onStop")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+
+        Log.d("activity condition", "onRestart")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Log.d("activity condition", "onDestroy")
     }
 
     /**
