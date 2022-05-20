@@ -10,6 +10,7 @@
     tools:context=".BlueprintActivity"
     tools:openDrawer="start">
 
+
     <com.otaliastudios.zoom.ZoomLayout
         android:id="@+id/zoomLayout"
         android:layout_width="match_parent"
@@ -41,9 +42,7 @@
             android:id="@+id/codeField"
             android:layout_width="100000dp"
             android:layout_height="100000dp"
-            android:clipChildren="false">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:clipChildren="false" />
 
     </com.otaliastudios.zoom.ZoomLayout>
 
@@ -92,14 +91,14 @@
 
                 <TextView
                     android:id="@+id/titleBlocks"
+                    style="@style/textViewStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:textColor="@color/titleBlocks"
-                    android:text="@string/listBlocks"
                     android:fontFamily="@font/montserrat_alternates_semibold"
-                    android:textSize="20sp"
-                    style="@style/textViewStyle" />
+                    android:paddingBottom="5dp"
+                    android:text="@string/listBlocks"
+                    android:textColor="@color/titleBlocks"
+                    android:textSize="20sp" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -117,14 +116,14 @@
                     <TextView
                         android:id="@+id/titleFunction"
                         style="@style/textViewStyle"
-                        android:textColor="@color/titleFunction"
-                        android:fontFamily="@font/montserrat_alternates_semibold"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/montserrat_alternates_semibold"
                         android:paddingTop="5dp"
                         android:paddingBottom="10dp"
-                        android:text="@string/titleFunctions" />
+                        android:text="@string/titleFunctions"
+                        android:textColor="@color/titleFunction" />
 
                     <ImageButton
                         android:id="@+id/plusFunction"
@@ -149,14 +148,14 @@
                     <TextView
                         android:id="@+id/titleMacros"
                         style="@style/textViewStyle"
-                        android:textColor="@color/titleMacros"
-                        android:fontFamily="@font/montserrat_alternates_semibold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/montserrat_alternates_semibold"
                         android:paddingTop="5dp"
                         android:paddingBottom="10dp"
-                        android:text="Макросы" />
+                        android:text="Макросы"
+                        android:textColor="@color/titleMacros" />
 
                     <ImageButton
                         android:id="@+id/plusMacros"
@@ -182,14 +181,14 @@
                     <TextView
                         android:id="@+id/titleVariables"
                         style="@style/textViewStyle"
-                        android:textColor="@color/titleVariable"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/montserrat_alternates_semibold"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
-                        android:text="@string/titleVariable" />
+                        android:text="@string/titleVariable"
+                        android:textColor="@color/titleVariable" />
 
                     <ImageButton
                         android:id="@+id/plusVariable"
@@ -283,6 +282,26 @@
         app:layout_constraintEnd_toStartOf="@+id/openSaveView"
         app:layout_constraintTop_toTopOf="@+id/openSaveView"
         app:srcCompat="@drawable/ic_console_icon" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10"
+        android:text="Сохранить"
+        app:layout_constraintBottom_toBottomOf="@+id/showConsole"
+        app:layout_constraintEnd_toStartOf="@+id/showConsole"
+        app:layout_constraintTop_toTopOf="@+id/showConsole" />
+
+    <Button
+        android:id="@+id/open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10"
+        android:text="Открыть"
+        app:layout_constraintBottom_toBottomOf="@+id/showConsole"
+        app:layout_constraintEnd_toStartOf="@+id/save"
+        app:layout_constraintTop_toTopOf="@+id/showConsole" />
 
     <ru.hits.android.axolot.view.ConsoleView
         android:id="@+id/consoleView"

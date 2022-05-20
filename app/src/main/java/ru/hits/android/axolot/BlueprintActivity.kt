@@ -136,6 +136,14 @@ class BlueprintActivity : AppCompatActivity() {
             val view = CreatorMacrosView(this)
             addCreatorForFuncAndMacros(view)
         }
+
+        binding.save.setOnClickListener{
+            //TODO добавить прослушку
+        }
+
+        binding.open.setOnClickListener{
+            //TODO добавить прослушку
+        }
     }
 
     /**
