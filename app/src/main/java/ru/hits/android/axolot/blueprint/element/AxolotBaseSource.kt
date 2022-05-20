@@ -7,6 +7,7 @@ import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
 import ru.hits.android.axolot.blueprint.element.pin.impl.InputDataPin
 import ru.hits.android.axolot.exception.AxolotPinException
 import ru.hits.android.axolot.exception.AxolotPinOneAdjacentException
+import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.interpreter.type.VariableType
 import ru.hits.android.axolot.interpreter.variable.Variable
 
@@ -19,10 +20,21 @@ open class AxolotBaseSource : AxolotSource {
     }
 
     override fun createBlock(blockType: BlockType): AxolotBlock {
-        return blockType.createBlock().let {
-            addBlock(it)
-            it
+        val block = blockType.createBlock()
+
+        block.contacts.forEach {
+            if (it is InputDataPin) {
+                when ((it.type as DeclaredDataPin).type) {
+                    Type.BOOLEAN -> setValue(it, Type.BOOLEAN, false)
+                    Type.INT -> setValue(it, Type.INT, 0)
+                    Type.FLOAT -> setValue(it, Type.FLOAT, 0.0)
+                    Type.STRING -> setValue(it, Type.STRING, "")
+                }
+            }
         }
+
+        addBlock(block)
+        return block
     }
 
     override fun <T> setValue(pin: InputDataPin, type: VariableType<T>, value: T) {
@@ -66,11 +78,6 @@ open class AxolotBaseSource : AxolotSource {
     }
 
     override fun disconnect(pin: Pin) {
-        if (pin is PinToOne) {
-            pin.adjacent = null
-        }
-        if (pin is PinToMany) {
-            pin.adjacent.clear()
-        }
+        pin.clear()
     }
 }

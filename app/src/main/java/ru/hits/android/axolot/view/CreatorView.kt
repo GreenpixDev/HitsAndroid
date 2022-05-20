@@ -13,7 +13,7 @@ import ru.hits.android.axolot.databinding.CreatorItemBinding
 abstract class CreatorView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-) : ConstraintLayout(context, attrs) {
+) : ConstraintLayout(context, attrs), BlueprintView {
 
     private val binding = CreatorItemBinding.inflate(LayoutInflater.from(context), this)
 
@@ -46,7 +46,7 @@ abstract class CreatorView @JvmOverloads constructor(
     }
 
     private fun setCustomSpinner() {
-        val adapter = CustomAdapter(context, UITypes.list!!)
+        val adapter = CustomAdapter(context, UITypes.list)
         binding.typeVariable.adapter = adapter
     }
 

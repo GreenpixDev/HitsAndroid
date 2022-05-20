@@ -20,6 +20,7 @@ class MacrosType(
 
     lateinit var beginBlock: AxolotBlock
     lateinit var endBlock: AxolotBlock
+    val invocationBlocks = mutableListOf<AxolotBlock>()
 
     val beginType = MacrosBeginType(this)
     val endType = MacrosEndType(this)
@@ -37,15 +38,23 @@ class MacrosType(
 
     override val declaredPins = mutableListOf<DeclaredPin>()
 
+    override fun createBlock(): AxolotBlock {
+        val block = super<BlockType>.createBlock()
+        invocationBlocks.add(block)
+        return block
+    }
+
     fun addInputFlow(inputName: String) {
         val pin = DeclaredSingleInputFlowPin(
             nodeFabric = { NodeMacrosInput(inputName) },
             lazyName = { inputName }
         )
         declaredPins.add(pin)
-        beginType.addFlow(inputName).createAllPin(endBlock).forEach {
-            beginBlock.contacts.add(it)
-        }
+        beginType.addFlow(inputName)
+
+        beginBlock.update()
+        endBlock.update()
+        invocationBlocks.forEach { it.update() }
     }
 
     fun addInputData(inputName: String, type: VariableType<*>) {
@@ -53,16 +62,17 @@ class MacrosType(
             handler = { target, node ->
                 target
                     .filterIsInstance<NodeMacrosDependency>()
-                    .find { it.name == inputName }
-                    ?.let { it.init(node) }
+                    .find { it.name == inputName }?.init(node)
             },
             lazyName = { inputName },
             lazyType = { type }
         )
         declaredPins.add(pin)
-        beginType.addData(inputName, type).createAllPin(endBlock).forEach {
-            beginBlock.contacts.add(it)
-        }
+        beginType.addData(inputName, type)
+
+        beginBlock.update()
+        endBlock.update()
+        invocationBlocks.forEach { it.update() }
     }
 
     fun addOutputFlow(outputName: String) {
@@ -76,9 +86,11 @@ class MacrosType(
             lazyName = { outputName }
         )
         declaredPins.add(pin)
-        endType.addFlow(outputName).createAllPin(endBlock).forEach {
-            endBlock.contacts.add(it)
-        }
+        endType.addFlow(outputName)
+
+        beginBlock.update()
+        endBlock.update()
+        invocationBlocks.forEach { it.update() }
     }
 
     fun addOutputData(outputName: String, type: VariableType<*>) {
@@ -88,9 +100,11 @@ class MacrosType(
             lazyType = { type }
         )
         declaredPins.add(pin)
-        endType.addData(outputName, type).createAllPin(endBlock).forEach {
-            endBlock.contacts.add(it)
-        }
+        endType.addData(outputName, type)
+
+        beginBlock.update()
+        endBlock.update()
+        invocationBlocks.forEach { it.update() }
     }
 
 }

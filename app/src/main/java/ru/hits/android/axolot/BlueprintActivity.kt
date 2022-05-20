@@ -18,16 +18,19 @@ import kotlinx.android.synthetic.main.creator_for_func_item.view.*
 import kotlinx.android.synthetic.main.creator_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
+import ru.hits.android.axolot.blueprint.declaration.VariableSetterBlockType
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.element.AxolotSource
 import ru.hits.android.axolot.blueprint.element.pin.PinToOne
 import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
-import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.compiler.BlueprintCompiler
 import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
 import ru.hits.android.axolot.exception.AxolotException
+import ru.hits.android.axolot.interpreter.Interpreter
+import ru.hits.android.axolot.interpreter.node.NodeExecutable
+import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.util.*
 import ru.hits.android.axolot.view.*
 import java.util.*
@@ -131,36 +134,13 @@ class BlueprintActivity : AppCompatActivity() {
         binding.plusVariable.setOnClickListener { createVariableView() }
 
         // Создание новой функции
-        binding.plusFunction.setOnClickListener {
-            val view = CreatorFunctionView(this)
-            addCreatorForFuncAndMacros(view)
-        }
+        binding.plusFunction.setOnClickListener { createFunctionView() }
 
         // Создание нового макроса
-        binding.plusMacros.setOnClickListener {
-            val view = CreatorMacrosView(this)
-            addCreatorForFuncAndMacros(view)
-        }
-    }
+        binding.plusMacros.setOnClickListener { createMacrosView() }
 
-    /**
-     * Метод создания атрибутов и выходных переменных для функций и макросов
-     */
-    private fun addCreatorForFuncAndMacros(view: CreatorView) {
-
-        view.creator.addView(CreatorForFunctionView(this))
-        view.typeExpression = false
-        view.initComponents()
-
-        view.addViewMenu()
-
-        view.creator.plusInputParam.setOnClickListener {
-            createParameterView(view, VariablePlaces.INPUT_PARAMETERS)
-        }
-
-        view.creator.plusOutputVar.setOnClickListener {
-            createParameterView(view, VariablePlaces.OUTPUT_VARIABLES)
-        }
+        // Возвращение в main
+        binding.goToMain.setOnClickListener { restoreSource(program) }
     }
 
     /**
@@ -210,7 +190,7 @@ class BlueprintActivity : AppCompatActivity() {
 
             typeBlock.setOnClickListener { _ ->
                 try {
-                    createBlock(BlockView(this), it, it.fullName)
+                    createBlock(it, it.fullName)
                 } catch (e: AxolotException) {
                     // nothing
                 }
@@ -223,24 +203,10 @@ class BlueprintActivity : AppCompatActivity() {
      */
     @SuppressLint("ClickableViewAccessibility")
     private fun createBlock(
-        blockView: BlockView,
         type: BlockType,
         name: String
-    ) {
-        // Инициализация
-        blockView.block = type.createBlock()
-
-        // Если это главный блок - указываем это в программе.
-        // Если главный блок уже был - кинет ошибку AxolotException
-        if (blockView.block.type == AxolotNativeLibrary.BLOCK_MAIN) {
-            program.mainBlock = blockView.block
-        }
-
-        // Привязываем блок к программе
-        currentSource.addBlock(blockView.block)
-
-        // Добавляем на поле
-        addBlock(blockView.block, name)
+    ): BlockView {
+        return addBlock(currentSource.createBlock(type), name)
     }
 
     /**
@@ -283,36 +249,13 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     /**
-     * Метод создания новой переменной в функции/макросе
+     * Метод создания атрибутов и выходных переменных для функций и макросов
      */
-    private fun createParameterView(
-        creatorView: CreatorView,
-        place: VariablePlaces
-    ) {
-        val variableView = VariableView(this)
-
-        //инициализация creatorView
-        variableView.edit = false
-        variableView.isVar = true
-
-        //дефолтное название
-        variableView.variableName = "param"
-        variableView.name.setText(variableView.variableName)
-
-        variableView.name.width = 200
-        variableView.btnAddDel = true
-        variableView.initComponents()
-
-        //проверка куда добавлять
-        when (place) {
-            VariablePlaces.INPUT_PARAMETERS -> {
-                creatorView.listParameters.addView(variableView)
-            }
-
-            VariablePlaces.OUTPUT_VARIABLES -> {
-                creatorView.creator.listOutputVar.addView(variableView)
-            }
-        }
+    private fun addCreator(view: CreatorView) {
+        view.creator.addView(CreatorForFunctionView(this))
+        view.typeExpression = false
+        view.initComponents()
+        view.addViewMenu()
     }
 
     /**
@@ -326,7 +269,7 @@ class BlueprintActivity : AppCompatActivity() {
         variableView.isVar = true
 
         //дефолтное название
-        variableView.variableName = program.generateVariableName()
+        variableView.variableName = generateName("var") { !program.hasVariable(it) }
         variableView.name.setText(variableView.variableName)
 
         program.createVariable(variableView.variableName)
@@ -383,8 +326,7 @@ class BlueprintActivity : AppCompatActivity() {
         // Прослушка кнопки GET добавления блока
         variableView.btnGet.setOnClickListener {
             val variableGetter = program.getVariableGetter(variableView.variableName)
-            val blockView = BlockView(this)
-            createBlock(blockView, variableGetter, VariableGetterBlockType.PREFIX_NAME)
+            val blockView = createBlock(variableGetter, VariableGetterBlockType.PREFIX_NAME)
 
             // Цвет заголовка
             val colorName = "colorVariable${variableGetter.variableType}"
@@ -398,46 +340,168 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Прослушка кнопки SET добавления блока
         variableView.btnSet.setOnClickListener {
-            //TODO: сделать добавление блоков SET
+            val variableSetter = program.getVariableSetter(variableView.variableName)
+            val blockView = createBlock(variableSetter, VariableSetterBlockType.PREFIX_NAME)
+
+            // Цвет заголовка
+            val colorName = "colorVariable${variableSetter.variableType}"
+            blockView.header.setBackgroundColor(getThemeColor(colorName))
+
+            // Прослушка изменений имени переменной
+            variableView.name.addTextChangedListener { title, _, _, _ ->
+                blockView.pinViews.last().let { it.displayName = title.toString() }
+            }
         }
     }
 
-    private fun createFunctionView() {
-        val functionName = "function"
+    private fun createFunctionView(): FunctionView {
+        val functionName = generateName("func") { !program.hasFunction(it) }
         val functionType = program.createFunction(functionName)
         val functionView = FunctionView(this)
 
         functionView.functionName = functionName
-        binding.listFunction.addView(functionView)
+        functionView.name.setText(functionName)
+        addCreator(functionView)
 
         // Прослушка добавлении вызова функции на поле
-        functionView.btnAdd.setOnClickListener {
-            createBlock(BlockView(this), functionType, functionName)
+        functionView.btnGet.setOnClickListener {
+            createBlock(functionType, functionName)
         }
 
         // Прослушка изменений функции
         functionView.btnEdit.setOnClickListener {
             restoreSource(functionType)
         }
+
+        // Прослушка изменений имени переменной
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(title: Editable) {
+                if (!program.hasFunction(title.toString())) {
+                    program.renameFunction(functionView.functionName, title.toString())
+                    functionView.functionName = title.toString()
+                    return
+                }
+                functionView.name.removeTextChangedListener(this)
+                functionView.name.setText(functionView.functionName)
+                functionView.name.addTextChangedListener(this)
+                Toast.makeText(
+                    this@BlueprintActivity,
+                    "Такая функция уже есть!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        functionView.name.addTextChangedListener(listener)
+
+        // Прослушка добавления параметров функции
+        functionView.creator.plusInputParam.setOnClickListener {
+            val paramView = createParameterView(functionView, VariablePlaces.INPUT_PARAMETERS)
+            functionType.addInput(paramView.variableName, Type.BOOLEAN)
+        }
+
+        // Прослушка добавления результатов функции
+        functionView.creator.plusOutputVar.setOnClickListener {
+            val paramView = createParameterView(functionView, VariablePlaces.OUTPUT_VARIABLES)
+            functionType.addOutput(paramView.variableName, Type.BOOLEAN)
+        }
+
+        return functionView
     }
 
-    private fun createMacrosView() {
-        val macrosName = "macros"
+    private fun createMacrosView(): MacrosView {
+        val macrosName = generateName("macros") { !program.hasMacros(it) }
         val macrosType = program.createMacros(macrosName)
         val macrosView = MacrosView(this)
 
         macrosView.macrosName = macrosName
-        binding.listMacros.addView(macrosView)
+        macrosView.name.setText(macrosName)
+        addCreator(macrosView)
+
+        // Прослушка изменений имени переменной
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(title: Editable) {
+                if (!program.hasFunction(title.toString())) {
+                    program.renameMacros(macrosView.macrosName, title.toString())
+                    macrosView.macrosName = title.toString()
+                    return
+                }
+                macrosView.name.removeTextChangedListener(this)
+                macrosView.name.setText(macrosView.macrosName)
+                macrosView.name.addTextChangedListener(this)
+                Toast.makeText(
+                    this@BlueprintActivity,
+                    "Такой макрос уже есть!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        macrosView.name.addTextChangedListener(listener)
 
         // Прослушка добавлении вызова макроса на поле
-        macrosView.btnAdd.setOnClickListener {
-            createBlock(BlockView(this), macrosType, macrosName)
+        macrosView.btnGet.setOnClickListener {
+            createBlock(macrosType, macrosName)
         }
 
         // Прослушка изменений макроса
         macrosView.btnEdit.setOnClickListener {
             restoreSource(macrosType)
         }
+
+        // Прослушка добавления входных данных макросов
+        macrosView.creator.plusInputParam.setOnClickListener {
+            val paramView = createParameterView(macrosView, VariablePlaces.INPUT_PARAMETERS)
+            macrosType.addInputData(paramView.variableName, Type.BOOLEAN)
+        }
+
+        // Прослушка добавления выходных данных макросов
+        macrosView.creator.plusOutputVar.setOnClickListener {
+            val paramView = createParameterView(macrosView, VariablePlaces.OUTPUT_VARIABLES)
+            macrosType.addOutputData(paramView.variableName, Type.BOOLEAN)
+        }
+
+        return macrosView
+    }
+
+    /**
+     * Метод создания новой переменной в функции/макросе
+     */
+    private fun createParameterView(
+        creatorView: CreatorView,
+        place: VariablePlaces
+    ): VariableView {
+        val variableView = VariableView(this)
+
+        //инициализация creatorView
+        variableView.edit = false
+        variableView.isVar = true
+
+        //дефолтное название
+        variableView.variableName = "param"
+        variableView.name.setText(variableView.variableName)
+
+        variableView.name.width = 200
+        variableView.btnAddDel = true
+        variableView.initComponents()
+
+        //проверка куда добавлять
+        when (place) {
+            VariablePlaces.INPUT_PARAMETERS -> {
+                creatorView.listParameters.addView(variableView)
+            }
+
+            VariablePlaces.OUTPUT_VARIABLES -> {
+                creatorView.creator.listOutputVar.addView(variableView)
+            }
+        }
+        return variableView
     }
 
     /**
@@ -448,13 +512,23 @@ class BlueprintActivity : AppCompatActivity() {
         // в нашей программе присутствуют прерывания
         Thread {
             val compiler = BlueprintCompiler()
-            val interpreter = compiler.prepareInterpreter(program, console)
-            val node = compiler.compile(program)
+            val interpreter: Interpreter
+            val node: NodeExecutable?
+
+            try {
+                interpreter = compiler.prepareInterpreter(program, console)
+                node = compiler.compile(program)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                console.sendStringToUser("Ошибка компиляции")
+                return@Thread
+            }
 
             try {
                 interpreter.execute(node)
             } catch (e: Throwable) {
                 e.printStackTrace()
+                console.sendStringToUser("Ошибка исполнения")
             }
         }.start()
     }

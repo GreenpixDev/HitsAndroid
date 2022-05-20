@@ -144,7 +144,11 @@ class PinView @JvmOverloads constructor(
 
                         //Если поле ввода пустое, то будем отправлять значения по умолчанию
                         if (inputData != "") {
-                            activity.program.setValue(currentPin, Type.FLOAT, inputData.toDouble())
+                            activity.currentSource.setValue(
+                                currentPin,
+                                Type.FLOAT,
+                                inputData.toDouble()
+                            )
                         } else {
                             activity.currentSource.setValue(currentPin, Type.FLOAT, 0.0)
                         }
@@ -371,8 +375,8 @@ class PinView @JvmOverloads constructor(
         edgeView.setEndPoint(withPinViewCenter)
         hideField(withPinView)
 
-        edgeViews.add(edgeView)
-        withPinView.edgeViews.add(edgeView)
+        _edgeViews.add(edgeView)
+        withPinView._edgeViews.add(edgeView)
 
         activity.codeField.addView(edgeView)
         return edgeView

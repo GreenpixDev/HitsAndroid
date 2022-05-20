@@ -18,6 +18,7 @@ import ru.hits.android.axolot.interpreter.node.NodeConstant
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionEnd
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionInvoke
+import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionParameter
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionReturned
 import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosDependency
 import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosInput
@@ -153,14 +154,12 @@ class BlueprintCompiler : Compiler {
 
         // Инициализация всех узлов Invoke и Returned для функций
         nodes
-            .mapKeys { it.key.type }
-            .mapValues { it.value.values }
-            .filterIsInstance<FunctionType, Collection<Node>>()
-            .forEach { nodeList ->
-                val node = nodeList.value.filterIsInstance<NodeFunctionInvoke>().first()
-                node.function = functions[nodeList.key]!!
+            .filterKeys { it.type is FunctionType }
+            .forEach { block ->
+                val node = block.value.values.filterIsInstance<NodeFunctionInvoke>().first()
+                node.function = functions[block.key.type as FunctionType]!!
 
-                nodeList.value.filterIsInstance<NodeFunctionReturned>().forEach {
+                block.value.values.filterIsInstance<NodeFunctionReturned>().forEach {
                     it.nodeInvoke = node
                 }
             }
@@ -170,12 +169,12 @@ class BlueprintCompiler : Compiler {
          */
 
         // Инициализация первой половины узлов InterpretedMacros
-        nodes.forEach { e ->
+        nodes.filterKeys { it.type is MacrosType }.forEach { e ->
             e.value.filterIsInstance<DeclaredAutonomicPin, NodeMacrosInput>().forEach {
-                macros[e.key]!!.inputExecutable[it.key.name] = it.value
+                macros[e.key]?.inputExecutable?.set(it.key.name, it.value)
             }
             e.value.filterIsInstance<DeclaredAutonomicPin, NodeMacrosDependency>().forEach {
-                macros[e.key]!!.output[it.key.name] = it.value
+                macros[e.key]?.output?.set(it.key.name, it.value)
             }
         }
 
@@ -209,18 +208,9 @@ class BlueprintCompiler : Compiler {
         functions: Map<FunctionType, InterpretedFunction>
     ) {
         val result = compileSource(source, functions)
+        val interpretedFunction = functions[source]!!
         val nodes = result.first
         val adjacent = result.second
-
-        // Инициализация всех узлов End
-        nodes
-            .mapKeys { it.key.type }
-            .mapValues { it.value.values }
-            .filterIsInstance<FunctionEndType, Collection<Node>>()
-            .forEach { nodeList ->
-                val node = nodeList.value.filterIsInstance<NodeFunctionEnd>().first()
-                node.function = functions[nodeList.key.functionType]!!
-            }
 
         // Инициализация всех узлов Begin
         adjacent
@@ -231,9 +221,23 @@ class BlueprintCompiler : Compiler {
                 require(executable is NodeExecutable?) {
                     "begin block of ${e.key.type.fullName} not executable"
                 }
-                functions[(e.key.type as FunctionBeginType).functionType]?.inputExecutable =
-                    executable
+                interpretedFunction.inputExecutable = executable
             }
+        nodes.forEach { block ->
+            block.value
+                .filterIsInstance<DeclaredAutonomicPin, NodeFunctionParameter>()
+                .forEach {
+                    interpretedFunction.input[it.key.name] = it.value
+                }
+        }
+
+        // Инициализация всех узлов End
+        nodes.forEach { block ->
+            val node = block.value.values
+                .filterIsInstance<NodeFunctionEnd>()
+                .firstOrNull()
+            node?.function = interpretedFunction
+        }
     }
 
     /**
@@ -266,7 +270,7 @@ class BlueprintCompiler : Compiler {
             .filter { it.key.type is MacrosBeginType }
             .forEach { block ->
                 block.value.forEach { pin ->
-                    var collection = macros.inputExecutable.values
+                    val collection = macros.inputExecutable.values
                     pin.key.type.handle(collection, pin.value)
                 }
             }
@@ -274,7 +278,7 @@ class BlueprintCompiler : Compiler {
             .filter { it.key.type is MacrosEndType }
             .forEach { block ->
                 block.value.forEach { pin ->
-                    var collection = macros.output.values
+                    val collection = macros.output.values
                     pin.key.type.handle(collection, pin.value)
                 }
             }

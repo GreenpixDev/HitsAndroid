@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.activity_blueprint.*
 class VariableView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-) : CreatorView(context, attrs), BlueprintView {
+) : CreatorView(context, attrs) {
 
     lateinit var variableName: String
 

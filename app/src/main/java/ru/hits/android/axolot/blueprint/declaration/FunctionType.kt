@@ -22,6 +22,7 @@ class FunctionType(
     }
 
     lateinit var beginBlock: AxolotBlock
+    val invocationBlocks = mutableListOf<AxolotBlock>()
 
     val beginType = FunctionBeginType(this)
     val endType = FunctionEndType(this)
@@ -48,6 +49,12 @@ class FunctionType(
         )
     )
 
+    override fun createBlock(): AxolotBlock {
+        val block = super<BlockType>.createBlock()
+        invocationBlocks.add(block)
+        return block
+    }
+
     fun addInput(parameterName: String, type: VariableType<*>) {
         declaredPins.add(DeclaredSingleInputDataPin(
             handler = { target, node ->
@@ -59,6 +66,9 @@ class FunctionType(
             lazyType = { type }
         ))
         beginType.addParameter(parameterName, type)
+
+        beginBlock.update()
+        invocationBlocks.forEach { it.update() }
     }
 
     fun addOutput(resultName: String, type: VariableType<*>) {
@@ -68,5 +78,8 @@ class FunctionType(
             lazyType = { type }
         ))
         endType.addResult(resultName, type)
+
+        beginBlock.update()
+        invocationBlocks.forEach { it.update() }
     }
 }
