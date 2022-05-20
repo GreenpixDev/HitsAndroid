@@ -84,6 +84,10 @@ class BlueprintActivity : AppCompatActivity() {
         binding.consoleView.initConsole(console)
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -91,6 +95,10 @@ class BlueprintActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             binding.zoomLayout.zoomTo(binding.zoomLayout.getMaxZoom() / 2, false)
         }, 0)
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 
     /**
@@ -116,10 +124,13 @@ class BlueprintActivity : AppCompatActivity() {
         }
 
         // Запуск программы
-        binding.ToStartCode.setOnClickListener { startProgram() }
+        binding.toStartCode.setOnClickListener {
+            binding.consoleView.openConsole()
+            startProgram()
+        }
 
         // Переключение на страницу с настройками
-        binding.ToPageSettings.setOnClickListener {
+        binding.toPageSettings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 

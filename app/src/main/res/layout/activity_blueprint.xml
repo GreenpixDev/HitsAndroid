@@ -210,9 +210,9 @@
         android:layout_marginEnd="20dp"
         android:text="@string/modeDelete"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/ToStartCode"
-        app:layout_constraintEnd_toStartOf="@+id/ToStartCode"
-        app:layout_constraintTop_toTopOf="@id/ToStartCode"
+        app:layout_constraintBottom_toBottomOf="@+id/toStartCode"
+        app:layout_constraintEnd_toStartOf="@+id/toStartCode"
+        app:layout_constraintTop_toTopOf="@id/toStartCode"
         tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
 
     <ImageButton
@@ -231,7 +231,7 @@
 
 
     <ImageView
-        android:id="@+id/ToPageSettings"
+        android:id="@+id/toPageSettings"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginEnd="20dp"
@@ -247,7 +247,7 @@
         app:srcCompat="@drawable/ic_settings_icon" />
 
     <ImageView
-        android:id="@+id/ToStartCode"
+        android:id="@+id/toStartCode"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginTop="20dp"
@@ -268,9 +268,9 @@
         android:layout_height="30dp"
         android:layout_marginEnd="20dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/ToPageSettings"
-        app:layout_constraintEnd_toStartOf="@+id/ToPageSettings"
-        app:layout_constraintTop_toTopOf="@+id/ToPageSettings"
+        app:layout_constraintBottom_toBottomOf="@+id/toPageSettings"
+        app:layout_constraintEnd_toStartOf="@+id/toPageSettings"
+        app:layout_constraintTop_toTopOf="@+id/toPageSettings"
         app:srcCompat="@drawable/ic_save_icon" />
 
     <ImageView
