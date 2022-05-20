@@ -9,23 +9,31 @@ class MathTest {
     fun test() {
         val mathInterpreter = MathInterpreterImpl()
         val variables: MutableMap<String, Double> = mutableMapOf()
-        variables["a"] = 1.0
-        variables["c"] = 2.0
-        variables["b"] = -1.0
-        variables["d"] = -1.0
-        variables["ab"] = 1.0
-        variables["ba"] = 1.0
-        variables["abc"] = 1.0
-
-        val delta = 0.000000001
 
         val a = 1.0
         val c = 2.0
         val b = -1.0
-        val d = -1.0
-        val ab = 1.0
-        val ba = 1.0
-        val abc = 1.0
+        val d = -2.0
+        val ab = 3.0
+        val ba = 4.0
+        val abc = 5.0
+
+        variables["a"] = a
+        variables["c"] = c
+        variables["b"] = b
+        variables["d"] = d
+        variables["ab"] = ab
+        variables["ba"] = ba
+        variables["abc"] = abc
+
+        val delta = 0.000000001
+
+        Assert.assertEquals(
+            Double.NaN,
+            mathInterpreter.calcExpression("0/0", variables),
+            delta
+        )
+
         Assert.assertEquals(
             -123.23 + 213.2,
             mathInterpreter.calcExpression("-123.23+213.2", variables),
