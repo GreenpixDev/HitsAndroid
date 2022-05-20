@@ -24,8 +24,10 @@ import ru.hits.android.axolot.compiler.BlueprintCompiler
 import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
 import ru.hits.android.axolot.exception.AxolotException
+import ru.hits.android.axolot.save.SaveService
 import ru.hits.android.axolot.util.*
 import ru.hits.android.axolot.view.*
+import java.io.File
 import java.util.*
 
 /**
@@ -42,12 +44,14 @@ class BlueprintActivity : AppCompatActivity() {
     private var menuIsVisible = true
     var consoleIsVisible = true
 
-    val program = AxolotProgram.create()
+    var program = AxolotProgram.create()
     val console = Console {
         Handler(Looper.getMainLooper()).post {
             it.invoke()
         }
     }
+
+    private val saveService = SaveService()
 
     /**
      * для понимания куда добавлять variablesView
@@ -55,6 +59,24 @@ class BlueprintActivity : AppCompatActivity() {
     enum class VariablePlaces {
         INPUT_PARAMETERS,
         OUTPUT_VARIABLES
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            val selectedFile = data?.data
+
+            val path = selectedFile?.path + "/" + File(selectedFile?.path).name.toString()
+            println(path + "ASASASASASAS")
+            saveService.saveProject(program, path!!)
+        }
+        if (requestCode == 2 && resultCode == RESULT_OK) {
+            val selectedFile = data?.data
+            val path = selectedFile?.path + "/" + File(selectedFile?.path).name.toString()
+            println(path + "LAOALAOA")
+            program = saveService.loadProject(path!!)
+        }
     }
 
     @SuppressLint("ResourceType")
@@ -137,12 +159,21 @@ class BlueprintActivity : AppCompatActivity() {
             addCreatorForFuncAndMacros(view)
         }
 
-        binding.save.setOnClickListener{
-            //TODO добавить прослушку
+        binding.save.setOnClickListener {
+            val intent = Intent()
+                .setType("*/*")
+                .setAction(Intent.ACTION_CREATE_DOCUMENT)
+
+            startActivityForResult(Intent.createChooser(intent, "Select a file"), 1)
+
         }
 
-        binding.open.setOnClickListener{
-            //TODO добавить прослушку
+        binding.open.setOnClickListener {
+            val intent = Intent()
+                .setType("*/*")
+                .setAction(Intent.ACTION_GET_CONTENT)
+
+            startActivityForResult(Intent.createChooser(intent, "Select a file"), 2)
         }
     }
 

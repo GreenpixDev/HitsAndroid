@@ -8,6 +8,7 @@ import ru.hits.android.axolot.blueprint.element.pin.PinToOne
 import ru.hits.android.axolot.blueprint.element.pin.impl.InputDataPin
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.compiler.BlueprintCompiler
+import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.interpreter.BlueprintInterpreter
 import ru.hits.android.axolot.interpreter.scope.GlobalScope
 import ru.hits.android.axolot.interpreter.type.Type
@@ -41,7 +42,9 @@ class SaveServiceTest {
 
         val node = compiler.compile(newProgram)
         val scope = GlobalScope()
-        val interpreter = BlueprintInterpreter(scope)
+        val interpreter = BlueprintInterpreter(scope, Console {
+            it.invoke()
+        })
 
         interpreter.execute(node)
     }
