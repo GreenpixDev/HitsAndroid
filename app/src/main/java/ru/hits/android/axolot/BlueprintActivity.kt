@@ -13,12 +13,10 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import kotlinx.android.synthetic.main.block_item.view.*
+import kotlinx.android.synthetic.main.activity_blueprint.*
 import kotlinx.android.synthetic.main.creator_for_func_item.view.*
 import kotlinx.android.synthetic.main.creator_item.view.*
-import ru.hits.android.axolot.blueprint.declaration.BlockType
-import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
-import ru.hits.android.axolot.blueprint.declaration.VariableSetterBlockType
+import ru.hits.android.axolot.blueprint.declaration.*
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.element.AxolotSource
 import ru.hits.android.axolot.blueprint.element.pin.PinToOne
@@ -151,6 +149,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         val blockViews = source.blocks
             .map { addBlock(it, it.type.fullName) }
+            .onEach { it.update() }
 
         val pinViews = blockViews
             .flatMap { it.pinViews }
@@ -225,16 +224,7 @@ class BlueprintActivity : AppCompatActivity() {
             blockView.position = block.position!!
         }
 
-        // Задаем цвет заголовку
-        for (it in blockTitleToColor) {
-            if (it.key matches name) {
-                blockView.header.setBackgroundColor(it.value)
-                break
-            }
-        }
-
-        // Переименовываем блок
-        blockView.displayName = getLocalizedString(name)
+        blockView.update()
 
         // Добавляем все пины
         blockView.block.contacts.forEach { blockView.createPinView(it) }
@@ -289,6 +279,14 @@ class BlueprintActivity : AppCompatActivity() {
                 if (!program.hasVariable(title.toString())) {
                     program.renameVariable(variableView.variableName, title.toString())
                     variableView.variableName = title.toString()
+
+                    findBlockView<VariableGetterBlockType>()
+                        .filter { (it.block.type as VariableGetterBlockType).variableName == variableView.variableName }
+                        .forEach { it.update() }
+
+                    findBlockView<VariableSetterBlockType>()
+                        .filter { (it.block.type as VariableSetterBlockType).variableName == variableView.variableName }
+                        .forEach { it.update() }
                     return
                 }
                 variableView.name.removeTextChangedListener(this)
@@ -309,17 +307,14 @@ class BlueprintActivity : AppCompatActivity() {
                 .lowercase(Locale.getDefault())]
                 ?.let { type ->
                     program.retypeVariable(variableView.variableName, type)
-                    val newColorName = "colorVariable${type}"
 
-                    blockViews.filter { it.block.type is VariableGetterBlockType }
-                        .filter {
-                            (it.block.type as VariableGetterBlockType).variableName ==
-                                    variableView.variableName
-                        }
-                        .forEach { blockView ->
-                            blockView.header.setBackgroundColor(getThemeColor(newColorName))
-                            blockView.pinViews.forEach { it.update() }
-                        }
+                    findBlockView<VariableGetterBlockType>()
+                        .filter { (it.block.type as VariableGetterBlockType).variableName == variableView.variableName }
+                        .forEach { it.update() }
+
+                    findBlockView<VariableSetterBlockType>()
+                        .filter { (it.block.type as VariableSetterBlockType).variableName == variableView.variableName }
+                        .forEach { it.update() }
                 }
         }
 
@@ -327,30 +322,12 @@ class BlueprintActivity : AppCompatActivity() {
         variableView.btnGet.setOnClickListener {
             val variableGetter = program.getVariableGetter(variableView.variableName)
             val blockView = createBlock(variableGetter, VariableGetterBlockType.PREFIX_NAME)
-
-            // Цвет заголовка
-            val colorName = "colorVariable${variableGetter.variableType}"
-            blockView.header.setBackgroundColor(getThemeColor(colorName))
-
-            // Прослушка изменений имени переменной
-            variableView.name.addTextChangedListener { title, _, _, _ ->
-                blockView.pinViews.forEach { it.displayName = title.toString() }
-            }
         }
 
         // Прослушка кнопки SET добавления блока
         variableView.btnSet.setOnClickListener {
             val variableSetter = program.getVariableSetter(variableView.variableName)
             val blockView = createBlock(variableSetter, VariableSetterBlockType.PREFIX_NAME)
-
-            // Цвет заголовка
-            val colorName = "colorVariable${variableSetter.variableType}"
-            blockView.header.setBackgroundColor(getThemeColor(colorName))
-
-            // Прослушка изменений имени переменной
-            variableView.name.addTextChangedListener { title, _, _, _ ->
-                blockView.pinViews.last().let { it.displayName = title.toString() }
-            }
         }
     }
 
@@ -363,16 +340,6 @@ class BlueprintActivity : AppCompatActivity() {
         functionView.name.setText(functionName)
         addCreator(functionView)
 
-        // Прослушка добавлении вызова функции на поле
-        functionView.btnGet.setOnClickListener {
-            createBlock(functionType, functionName)
-        }
-
-        // Прослушка изменений функции
-        functionView.btnEdit.setOnClickListener {
-            restoreSource(functionType)
-        }
-
         // Прослушка изменений имени переменной
         val listener = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -383,6 +350,13 @@ class BlueprintActivity : AppCompatActivity() {
                 if (!program.hasFunction(title.toString())) {
                     program.renameFunction(functionView.functionName, title.toString())
                     functionView.functionName = title.toString()
+
+                    findBlockView<FunctionType>()
+                        .filter { it.block.type == functionType }
+                        .forEach { it.update() }
+                    findBlockView<FunctionBeginType>()
+                        .filter { it.block.type == functionType.beginType }
+                        .forEach { it.update() }
                     return
                 }
                 functionView.name.removeTextChangedListener(this)
@@ -401,12 +375,34 @@ class BlueprintActivity : AppCompatActivity() {
         functionView.creator.plusInputParam.setOnClickListener {
             val paramView = createParameterView(functionView, VariablePlaces.INPUT_PARAMETERS)
             functionType.addInput(paramView.variableName, Type.BOOLEAN)
+
+            findBlockView<FunctionType>()
+                .filter { it.block.type == functionType }
+                .forEach { it.update() }
+            findBlockView<FunctionBeginType>()
+                .filter { it.block.type == functionType.beginType }
+                .forEach { it.update() }
         }
 
         // Прослушка добавления результатов функции
         functionView.creator.plusOutputVar.setOnClickListener {
             val paramView = createParameterView(functionView, VariablePlaces.OUTPUT_VARIABLES)
             functionType.addOutput(paramView.variableName, Type.BOOLEAN)
+
+            findBlockView<FunctionType>()
+                .filter { it.block.type == functionType }
+                .forEach { it.update() }
+            findBlockView<FunctionEndType>()
+                .filter { it.block.type == functionType.endType }
+                .forEach { it.update() }
+        }
+
+        // Прослушка добавлении вызова функции на поле
+        functionView.btnGet.setOnClickListener { createBlock(functionType, functionName) }
+
+        // Прослушка изменений функции
+        functionView.btnEdit.setOnClickListener {
+            restoreSource(functionType)
         }
 
         return functionView
@@ -431,6 +427,10 @@ class BlueprintActivity : AppCompatActivity() {
                 if (!program.hasFunction(title.toString())) {
                     program.renameMacros(macrosView.macrosName, title.toString())
                     macrosView.macrosName = title.toString()
+
+                    findBlockView<MacrosType>()
+                        .filter { it.block.type == macrosType }
+                        .forEach { it.update() }
                     return
                 }
                 macrosView.name.removeTextChangedListener(this)
@@ -445,26 +445,38 @@ class BlueprintActivity : AppCompatActivity() {
         }
         macrosView.name.addTextChangedListener(listener)
 
-        // Прослушка добавлении вызова макроса на поле
-        macrosView.btnGet.setOnClickListener {
-            createBlock(macrosType, macrosName)
-        }
-
-        // Прослушка изменений макроса
-        macrosView.btnEdit.setOnClickListener {
-            restoreSource(macrosType)
-        }
-
         // Прослушка добавления входных данных макросов
         macrosView.creator.plusInputParam.setOnClickListener {
             val paramView = createParameterView(macrosView, VariablePlaces.INPUT_PARAMETERS)
             macrosType.addInputData(paramView.variableName, Type.BOOLEAN)
+
+            findBlockView<MacrosType>()
+                .filter { it.block.type == macrosType }
+                .forEach { it.update() }
+            findBlockView<MacrosBeginType>()
+                .filter { it.block.type == macrosType.beginType }
+                .forEach { it.update() }
         }
 
         // Прослушка добавления выходных данных макросов
         macrosView.creator.plusOutputVar.setOnClickListener {
             val paramView = createParameterView(macrosView, VariablePlaces.OUTPUT_VARIABLES)
             macrosType.addOutputData(paramView.variableName, Type.BOOLEAN)
+
+            findBlockView<MacrosType>()
+                .filter { it.block.type == macrosType }
+                .forEach { it.update() }
+            findBlockView<MacrosEndType>()
+                .filter { it.block.type == macrosType.beginType }
+                .forEach { it.update() }
+        }
+
+        // Прослушка добавлении вызова макроса на поле
+        macrosView.btnGet.setOnClickListener { createBlock(macrosType, macrosName) }
+
+        // Прослушка изменений макроса
+        macrosView.btnEdit.setOnClickListener {
+            restoreSource(macrosType)
         }
 
         return macrosView
@@ -531,6 +543,13 @@ class BlueprintActivity : AppCompatActivity() {
                 console.sendStringToUser("Ошибка исполнения")
             }
         }.start()
+    }
+
+    private inline fun <reified T> findBlockView(): List<BlockView> {
+        return (0 until codeField.childCount)
+            .map { codeField.getChildAt(it) }
+            .filterIsInstance<BlockView>()
+            .filter { it.block.type is T }
     }
 
     /**

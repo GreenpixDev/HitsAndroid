@@ -78,7 +78,7 @@ class PinView @JvmOverloads constructor(
      * Обновить пин
      */
     fun update() {
-
+        displayName = pin.name
     }
 
     /**

@@ -1,10 +1,14 @@
 package ru.hits.android.axolot.blueprint.declaration
 
+import android.content.Context
+import ru.hits.android.axolot.R
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputFlowPin
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionEnd
 import ru.hits.android.axolot.interpreter.type.VariableType
+import ru.hits.android.axolot.util.getLocalizedString
+import ru.hits.android.axolot.util.getThemeColor
 
 /**
  * Декларация конца функции
@@ -25,6 +29,10 @@ class FunctionEndType(
         )
     )
 
+    override fun getDisplayName(context: Context): String {
+        return context.getLocalizedString("function_end")
+    }
+
     fun addResult(resultName: String, type: VariableType<*>) {
         declaredPins.add(DeclaredSingleInputDataPin(
             handler = { target, node ->
@@ -36,4 +44,9 @@ class FunctionEndType(
             lazyType = { type }
         ))
     }
+
+    override fun getDisplayColor(context: Context): Int {
+        return context.getThemeColor(R.attr.colorBlockHeaderFunction)
+    }
+
 }

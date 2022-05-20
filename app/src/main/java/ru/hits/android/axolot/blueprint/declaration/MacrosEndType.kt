@@ -1,5 +1,7 @@
 package ru.hits.android.axolot.blueprint.declaration
 
+import android.content.Context
+import ru.hits.android.axolot.R
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputFlowPin
@@ -7,6 +9,8 @@ import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
 import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosDependency
 import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosOutput
 import ru.hits.android.axolot.interpreter.type.VariableType
+import ru.hits.android.axolot.util.getLocalizedString
+import ru.hits.android.axolot.util.getThemeColor
 
 /**
  * Декларация конца макроса
@@ -22,6 +26,10 @@ class MacrosEndType(
         get() = "${MacrosType.PREFIX_NAME}.end_$simpleName"
 
     override val declaredPins = mutableListOf<DeclaredPin>()
+
+    override fun getDisplayName(context: Context): String {
+        return context.getLocalizedString("macros_output")
+    }
 
     fun addFlow(name: String): DeclaredSingleInputFlowPin {
         val pin = DeclaredSingleInputFlowPin(
@@ -45,6 +53,10 @@ class MacrosEndType(
         )
         declaredPins.add(pin)
         return pin
+    }
+
+    override fun getDisplayColor(context: Context): Int {
+        return context.getThemeColor(R.attr.colorBlockHeaderMacros)
     }
 
 }

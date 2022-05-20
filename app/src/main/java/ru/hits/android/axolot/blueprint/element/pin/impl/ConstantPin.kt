@@ -12,7 +12,7 @@ class ConstantPin(
     override val owner: AxolotOwner
 ) : DataPin, PinToMany, OutputPin {
 
-    override val name = ""
+    override var name = ""
 
     override var adjacent = mutableListOf<PinToOne>()
 

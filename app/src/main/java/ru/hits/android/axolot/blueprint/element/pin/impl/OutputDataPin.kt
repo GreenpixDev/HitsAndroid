@@ -7,7 +7,7 @@ import ru.hits.android.axolot.blueprint.element.pin.*
 class OutputDataPin @JvmOverloads constructor(
     override val owner: AxolotOwner,
     override val type: DeclaredPin,
-    override val name: String = ""
+    override var name: String = ""
 ) : DataPin, PinToMany, OutputPin, TypedPin {
 
     override var adjacent = mutableListOf<PinToOne>()

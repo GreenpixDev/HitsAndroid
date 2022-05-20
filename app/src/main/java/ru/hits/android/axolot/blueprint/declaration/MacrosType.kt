@@ -1,11 +1,14 @@
 package ru.hits.android.axolot.blueprint.declaration
 
+import android.content.Context
+import ru.hits.android.axolot.R
 import ru.hits.android.axolot.blueprint.declaration.pin.*
 import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosDependency
 import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosInput
 import ru.hits.android.axolot.interpreter.type.VariableType
+import ru.hits.android.axolot.util.getThemeColor
 
 /**
  * Декларация макроса
@@ -37,6 +40,10 @@ class MacrosType(
         get() = "$PREFIX_NAME.$simpleName"
 
     override val declaredPins = mutableListOf<DeclaredPin>()
+
+    override fun getDisplayName(context: Context): String {
+        return macrosName
+    }
 
     override fun createBlock(): AxolotBlock {
         val block = super<BlockType>.createBlock()
@@ -105,6 +112,10 @@ class MacrosType(
         beginBlock.update()
         endBlock.update()
         invocationBlocks.forEach { it.update() }
+    }
+
+    override fun getDisplayColor(context: Context): Int {
+        return context.getThemeColor(R.attr.colorBlockHeaderMacros)
     }
 
 }

@@ -1,5 +1,7 @@
 package ru.hits.android.axolot.blueprint.declaration
 
+import android.content.Context
+import ru.hits.android.axolot.R
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputFlowPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleOutputDataPin
@@ -9,6 +11,7 @@ import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionInvoke
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionReturned
 import ru.hits.android.axolot.interpreter.type.VariableType
+import ru.hits.android.axolot.util.getThemeColor
 
 /**
  * Декларация функции
@@ -35,6 +38,10 @@ class FunctionType(
 
     override val fullName: String
         get() = "$PREFIX_NAME.$simpleName"
+
+    override fun getDisplayName(context: Context): String {
+        return functionName
+    }
 
     override val declaredPins = mutableListOf(
         DeclaredSingleInputFlowPin(
@@ -82,4 +89,9 @@ class FunctionType(
         beginBlock.update()
         invocationBlocks.forEach { it.update() }
     }
+
+    override fun getDisplayColor(context: Context): Int {
+        return context.getThemeColor(R.attr.colorBlockHeaderFunction)
+    }
+
 }

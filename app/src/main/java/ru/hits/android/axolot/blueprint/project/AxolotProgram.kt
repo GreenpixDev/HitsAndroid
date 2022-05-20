@@ -3,6 +3,7 @@ package ru.hits.android.axolot.blueprint.project
 import ru.hits.android.axolot.blueprint.declaration.*
 import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
+import ru.hits.android.axolot.blueprint.element.pin.OutputPin
 import ru.hits.android.axolot.blueprint.project.libs.AxolotDefaultLibrary
 import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.exception.AxolotException
@@ -80,6 +81,15 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
         blockTypes["${VariableGetterBlockType.PREFIX_NAME}.$newName"] = variableGetter
         blockTypes.remove("${VariableSetterBlockType.PREFIX_NAME}.$variableName")
         blockTypes["${VariableSetterBlockType.PREFIX_NAME}.$newName"] = variableSetter
+
+        findBlockByType(variableGetter)
+            .flatMap { it.contacts }
+            .forEach { it.name = newName }
+
+        findBlockByType(variableSetter)
+            .flatMap { it.contacts }
+            .filterIsInstance<OutputPin>()
+            .forEach { it.name = newName }
     }
 
     /**
@@ -175,6 +185,13 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
 
         registerBlock(macrosType)
         return macrosType
+    }
+
+    /**
+     * Найти блоки определенного типа
+     */
+    fun findBlockByType(type: BlockType): List<AxolotBlock> {
+        return blocks.filter { it.type == type }
     }
 
     companion object {

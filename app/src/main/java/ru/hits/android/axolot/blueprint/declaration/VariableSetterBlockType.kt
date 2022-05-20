@@ -1,5 +1,6 @@
 package ru.hits.android.axolot.blueprint.declaration
 
+import android.content.Context
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputFlowPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleOutputDataPin
@@ -7,6 +8,8 @@ import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleOutputFlow
 import ru.hits.android.axolot.interpreter.node.executable.NodeSetVariable
 import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
 import ru.hits.android.axolot.interpreter.type.VariableType
+import ru.hits.android.axolot.util.getLocalizedString
+import ru.hits.android.axolot.util.getThemeColor
 
 /**
  * Декларация макроса
@@ -52,5 +55,13 @@ class VariableSetterBlockType(
             lazyType = { variableType }
         )
     )
+
+    override fun getDisplayName(context: Context): String {
+        return context.getLocalizedString(PREFIX_NAME)
+    }
+
+    override fun getDisplayColor(context: Context): Int {
+        return context.getThemeColor("colorVariable${variableType}")
+    }
 
 }

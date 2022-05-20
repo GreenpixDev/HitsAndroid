@@ -7,7 +7,7 @@ import ru.hits.android.axolot.blueprint.element.pin.*
 class OutputFlowPin @JvmOverloads constructor(
     override val owner: AxolotOwner,
     override val type: DeclaredPin,
-    override val name: String = ""
+    override var name: String = ""
 ) : FlowPin, PinToOne, OutputPin, TypedPin {
 
     override var adjacent: PinToMany? = null

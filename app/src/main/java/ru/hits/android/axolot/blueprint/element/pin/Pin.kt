@@ -6,7 +6,7 @@ interface Pin {
 
     val adjacentPins: Collection<Pin>
 
-    val name: String
+    var name: String
 
     val owner: AxolotOwner
 
