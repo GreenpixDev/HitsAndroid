@@ -222,12 +222,6 @@ class BlueprintActivity : AppCompatActivity() {
         // Переименовываем блок
         blockView.displayName = getLocalizedString(name)
 
-        blockView.myListener = {
-
-            program.deleteBlock(blockView.block)
-            blockViews.remove(blockView)
-            blockView.visibility = View.INVISIBLE
-        }
 
         // Если это главный блок - указываем это в программе.
         // Если главный блок уже был - кинет ошибку AxolotException
@@ -240,7 +234,27 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Добавляем готовый блок на поле
         binding.codeField.addView(blockView)
+
+        //добавление в массив
         blockViews.add(blockView)
+
+
+        blockView.myListener = {
+            val isChecked = binding.modeDelete.isChecked
+
+            //включен режим удаления
+            if (isChecked && blockView.block.type != AxolotNativeLibrary.BLOCK_MAIN) {
+                program.deleteBlock(blockView.block)
+                blockViews.remove(blockView)
+                binding.codeField.removeView(blockView)
+
+                for (i in blockView._pinViews) {
+                    i._edgeViews.clear()
+                    //как-то удалить линии
+                }
+            }
+        }
+
     }
 
     /**

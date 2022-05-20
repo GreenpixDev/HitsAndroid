@@ -24,17 +24,13 @@ import ru.hits.android.axolot.util.position
 class BlockView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defstyleAttr: Int = 0,
-    defstyleRes: Int = 0
-) : ConstraintLayout(context, attrs, defstyleAttr, defstyleRes), BlueprintView {
-
-    val delete: Boolean = true
+) : ConstraintLayout(context, attrs), BlueprintView {
 
     var myListener: () -> Unit = {}
 
     private val blockBinding = BlockItemBinding.inflate(LayoutInflater.from(context), this)
 
-    private val _pinViews = mutableListOf<PinView>()
+    val _pinViews = mutableListOf<PinView>()
 
     private var offset = Vec2f.ZERO
 
@@ -125,11 +121,8 @@ class BlockView @JvmOverloads constructor(
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                if (delete) {
-                    myListener.invoke()
-                } else {
-                    offset = event.position
-                }
+                myListener.invoke()
+                offset = event.position
             }
             MotionEvent.ACTION_MOVE -> {
                 val to = pointer - offset

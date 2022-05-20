@@ -29,13 +29,11 @@ import ru.hits.android.axolot.util.*
 class PinView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defstyleAttr: Int = 0,
-    defstyleRes: Int = 0
-) : LinearLayout(context, attrs, defstyleAttr, defstyleRes), BlueprintView {
+) : LinearLayout(context, attrs), BlueprintView {
 
     private val binding = PinItemBinding.inflate(LayoutInflater.from(context), this)
 
-    private val _edgeViews = mutableListOf<EdgeView>()
+    val _edgeViews = mutableListOf<EdgeView>()
 
     lateinit var pin: Pin
 
@@ -347,5 +345,9 @@ class PinView @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    fun removeEdge(edge: EdgeView) {
+        _edgeViews.remove(edge)
     }
 }
