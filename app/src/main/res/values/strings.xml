@@ -81,6 +81,13 @@
     <string name="native.branch">If Else</string>
     <string name="native.print">Print String</string>
 
+    <string name="native.regexMatch">Regex Match</string>
+    <string name="native.regexFind">Regex Find</string>
+
+    <string name="native.async">Async</string>
+
+    <string name="native.sumStrings">string + string</string>
+
     <string name="native.math.boolean.or">OR</string>
     <string name="native.math.boolean.and">AND</string>
     <string name="native.math.boolean.not">NOT</string>

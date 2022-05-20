@@ -9,7 +9,7 @@ interface NodeService<T> {
     fun invoke(node: Node, context: InterpreterContext): T
 
     fun createIllegalException(node: Node) : IllegalArgumentException{
-        return IllegalArgumentException("Неверный тип ноды ${node::class}")
+        return IllegalArgumentException("Неверный тип ноды ${node::class}. Грусть, печаль, тоска :(")
     }
 
 }
