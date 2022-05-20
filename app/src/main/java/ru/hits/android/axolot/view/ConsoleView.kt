@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
+import org.w3c.dom.Text
 import ru.hits.android.axolot.BlueprintActivity
 import ru.hits.android.axolot.R
 import ru.hits.android.axolot.blueprint.FrontendConsole
@@ -50,6 +51,10 @@ class ConsoleView @JvmOverloads constructor(
             addTextViewToConsole(inputString)
             console.send(inputString)
         }
+
+        binding.refreshConsole.setOnClickListener {
+            clearConsole()
+        }
     }
 
     /**
@@ -84,5 +89,13 @@ class ConsoleView @JvmOverloads constructor(
 
         binding.linearLayoutConsole.addView(textView)   //добавили TextView
         consoleLines.add(textView)                      //добавили в массив со всеми TextView
+    }
+
+    /**
+     * Очистка консоли, а именно: удаляются все TextView (линии), пересоздается список, который хранил эти TextView
+     */
+    fun clearConsole() {
+        binding.linearLayoutConsole.removeAllViews()
+        consoleLines = mutableListOf()
     }
 }

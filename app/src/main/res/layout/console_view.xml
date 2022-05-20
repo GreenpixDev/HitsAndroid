@@ -65,4 +65,17 @@
         app:layout_constraintTop_toBottomOf="@id/consoleScrollView"
         app:layout_constraintVertical_bias="0"
         app:srcCompat="@drawable/ic_send_icon" />
+
+    <ImageView
+        android:id="@+id/refreshConsole"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/consoleView"
+        app:layout_constraintEnd_toEndOf="@+id/consoleView"
+        app:layout_constraintTop_toTopOf="@+id/consoleView"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/ic__refresh" />
 </merge>
