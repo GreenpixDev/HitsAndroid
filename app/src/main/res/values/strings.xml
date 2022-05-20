@@ -17,7 +17,7 @@
     <string name="Ivan">Иван</string>
 
     <string name="title_information_activity">Справка по взаимодействию с CodeBlock</string>
-    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In auctor suscipit augue fermentum varius. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam eu sapien placerat, vestibulum est vel, varius arcu. Maecenas pharetra velit ut ornare porta. Donec tristique sapien ut posuere pulvinar. Nunc volutpat quam enim, a porttitor dolor tincidunt ut. Duis vel dui eget libero fermentum feugiat. Phasellus in diam congue, bibendum velit non, tincidunt nisi. Morbi scelerisque ullamcorper nisl sit amet blandit. Vestibulum imperdiet pretium felis in venenatis. Duis ac massa dui. Nulla rhoncus leo quis eros lobortis convallis. Donec vitae pretium quam.</string>
+    <string name="lorem">Данное приложение - приложение для обучению программированию. Оно является иде для языка axolot. Так же оно умеет запускать программы на данном языке программирования. Язык устроен довольно просто. Добавляйте блоки, соеденяйте поля откуда и куда пойдут данные. И учитесь программировать.</string>
 
     <string name="settings">Настройки</string>
     <string name="back_to_main">Вернуться на главную</string>

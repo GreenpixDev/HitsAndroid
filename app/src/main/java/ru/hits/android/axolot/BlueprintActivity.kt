@@ -769,6 +769,10 @@ class BlueprintActivity : AppCompatActivity() {
     private fun startProgram() {
         // Запускаем это всё в отдельном потоке, потому что
         // в нашей программе присутствуют прерывания
+
+        //некрасиво, но зато работает
+        binding.consoleView.clearConsole()
+
         Thread {
             val compiler = BlueprintCompiler()
             val interpreter: Interpreter

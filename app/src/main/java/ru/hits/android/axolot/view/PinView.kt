@@ -124,8 +124,8 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
                         val inputData = inputDataBlock.toString()
 
-                        //Если поле ввода пустое, то будем отправлять значения по умолчанию
-                        if (inputData != "") {
+                        //Если поле ввода пустое или равно "-", то будем отправлять значения по умолчанию
+                        if (inputData != "" && inputData != "-") {
                             activity.currentSource.setValue(currentPin, Type.INT, inputData.toInt())
                         } else {
                             activity.currentSource.setValue(currentPin, Type.INT, 0)
@@ -142,13 +142,9 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
                         val inputData = inputDataBlock.toString()
 
-                        //Если поле ввода пустое, то будем отправлять значения по умолчанию
-                        if (inputData != "") {
-                            activity.currentSource.setValue(
-                                currentPin,
-                                Type.FLOAT,
-                                inputData.toDouble()
-                            )
+                        //Если поле ввода пустое или равно "-" или начинается с ".", то будем отправлять значения по умолчанию
+                        if (inputData != "" && inputData != "-" && inputData[0] != '.' && inputData[0] != '-') {
+                            activity.currentSource.setValue(currentPin, Type.FLOAT, inputData.toDouble())
                         } else {
                             activity.currentSource.setValue(currentPin, Type.FLOAT, 0.0)
                         }
@@ -405,12 +401,5 @@ class PinView @JvmOverloads constructor(
                 Type.STRING -> binding.inputField.setText(constant.value.toString())
             }
         }
-    }
-
-    /**
-     * Удалить вью
-     */
-    fun remove() {
-
     }
 }
