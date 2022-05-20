@@ -5,7 +5,9 @@ import ru.hits.android.axolot.blueprint.declaration.pin.*
 import ru.hits.android.axolot.blueprint.project.AxolotLibrary
 import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
-import ru.hits.android.axolot.interpreter.node.executable.NodeRegexMatch
+import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexFind
+import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexMatch
+import ru.hits.android.axolot.interpreter.node.executable.string.NodeStringConcatenation
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
@@ -37,6 +39,26 @@ class AxolotNativeLibrary : AxolotLibrary() {
         // Главный блок программы, с которого всё начинается
         registerBlock(BLOCK_MAIN)
 
+        //string + string
+        registerBlock(
+            NativeBlockType(
+                "sumStrings",
+                DeclaredVarargInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeStringConcatenation>()
+                            .first().add(node)
+                    },
+                    type = Type.STRING,
+                    minArgs = 2
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeIntSum() },
+                    type = Type.STRING
+                )
+            )
+        )
+
         // Регулярные выражения match
         registerBlock(
             NativeBlockType(
@@ -45,6 +67,7 @@ class AxolotNativeLibrary : AxolotLibrary() {
                     handler = { target, node ->
                         target
                             .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexMatch.TEXT] = node
                     },
                     name = "text",
                     type = Type.STRING
@@ -53,13 +76,14 @@ class AxolotNativeLibrary : AxolotLibrary() {
                     handler = { target, node ->
                         target
                             .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexMatch.REGEX_TEXT] = node
                     },
                     name = "regex",
                     type = Type.STRING
                 ),
                 DeclaredSingleOutputDataPin(
                     nodeFabric = { NodeRegexMatch() },
-                    type = Type.STRING
+                    type = Type.BOOLEAN
                 )
             )
         )
@@ -72,10 +96,28 @@ class AxolotNativeLibrary : AxolotLibrary() {
                     handler = { target, node ->
                         target
                             .filterIsInstance<NodeRegexMatch>()
-                            .first().regexMatchText = node
+                            .first().dependencies[NodeRegexFind.TEXT] = node
                     },
                     name = "text",
                     type = Type.STRING
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexFind.REGEX_TEXT] = node
+                    },
+                    name = "regex",
+                    type = Type.STRING
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexFind.START_INDEX] = node
+                    },
+                    name = "start index",
+                    type = Type.INT
                 ),
                 DeclaredSingleOutputDataPin(
                     nodeFabric = { NodeRegexMatch() },

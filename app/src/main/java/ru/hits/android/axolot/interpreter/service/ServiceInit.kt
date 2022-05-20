@@ -7,6 +7,9 @@ import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
 import ru.hits.android.axolot.interpreter.node.executable.NodeSetVariable
 import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayAssignElement
 import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayResize
+import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexFind
+import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexMatch
+import ru.hits.android.axolot.interpreter.node.executable.string.NodeStringConcatenation
 import ru.hits.android.axolot.interpreter.node.flowcontrol.*
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
@@ -28,6 +31,9 @@ import ru.hits.android.axolot.interpreter.service.impl.executable.NodePrintStrin
 import ru.hits.android.axolot.interpreter.service.impl.executable.NodeSetVariableService
 import ru.hits.android.axolot.interpreter.service.impl.executable.array.NodeArrayAssignElementService
 import ru.hits.android.axolot.interpreter.service.impl.executable.array.NodeArrayResizeService
+import ru.hits.android.axolot.interpreter.service.impl.executable.regex.NodeRegexFindService
+import ru.hits.android.axolot.interpreter.service.impl.executable.regex.NodeRegexMatchService
+import ru.hits.android.axolot.interpreter.service.impl.executable.string.NodeStringConcantenationService
 import ru.hits.android.axolot.interpreter.service.impl.flowcontrol.*
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeCastService
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeGetVariableService
@@ -48,6 +54,10 @@ class ServiceInit(private val nodeHandlerService: NodeHandlerService, val consol
 
     fun intiHandler(): Map<KClass<*>, NodeService<*>> {
         val map = hashMapOf<KClass<*>, NodeService<*>>()
+
+        //------------------------ Regex
+        map[NodeRegexMatch::class] = NodeRegexMatchService(nodeHandlerService)
+        map[NodeRegexFind::class] = NodeRegexFindService(nodeHandlerService)
 
         //------------------------ NodeAsync
         map[NodeAsync::class] = NodeAsyncService()
@@ -73,6 +83,9 @@ class ServiceInit(private val nodeHandlerService: NodeHandlerService, val consol
         map[NodeFunctionInvoke::class] = NodeFunctionInvokeService(nodeHandlerService)
         map[NodeFunctionReturned::class] = NodeFunctionReturnedService()
         map[NodeConstant::class] = NodeConstantService()
+
+        //------------------------ Math for string
+        map[NodeStringConcatenation::class] = NodeStringConcantenationService(nodeHandlerService)
 
         //------------------------ Math for boolean
         val nodeBooleanService = NodeBooleanService(nodeHandlerService)
