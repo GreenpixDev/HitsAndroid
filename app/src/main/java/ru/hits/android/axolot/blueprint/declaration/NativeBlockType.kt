@@ -37,6 +37,6 @@ open class NativeBlockType(
                 return context.getThemeColor(it.value)
             }
         }
-        return 0
+        return context.getThemeColor(R.attr.colorBlockHeaderDefault)
     }
 }

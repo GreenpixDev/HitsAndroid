@@ -11,8 +11,9 @@ import ru.hits.android.axolot.interpreter.node.executable.string.NodeStringConca
 import ru.hits.android.axolot.interpreter.node.executable.thread.NodeSleep
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
-import ru.hits.android.axolot.interpreter.node.function.NodeMath
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
+import ru.hits.android.axolot.interpreter.node.function.NodeInput
+import ru.hits.android.axolot.interpreter.node.function.NodeMath
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNot
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanOr
@@ -69,7 +70,19 @@ class AxolotNativeLibrary : AxolotLibrary() {
         // Главный блок программы, с которого всё начинается
         registerBlock(BLOCK_MAIN)
 
-        //string + string
+        // input
+        registerBlock(
+            NativeBlockType(
+                "input",
+
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeInput() },
+                    type = Type.STRING
+                )
+            )
+        )
+
+        // string + string
         registerBlock(
             NativeBlockType(
                 "sumStrings",

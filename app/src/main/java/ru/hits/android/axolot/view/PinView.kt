@@ -344,7 +344,8 @@ class PinView @JvmOverloads constructor(
                                 inputPinView.crossIcon.visibility = INVISIBLE
                             }
 
-                            else -> throw IllegalStateException("Что-то не так (какая-то проблема с видимостью константы у входящего пина Boolean)")
+                            // Раньше тут был баг
+                            //else -> throw IllegalStateException("Что-то не так (какая-то проблема с видимостью константы у входящего пина Boolean)")
                         }
                     }
 
