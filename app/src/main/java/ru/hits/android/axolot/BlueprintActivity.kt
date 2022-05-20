@@ -44,6 +44,7 @@ class BlueprintActivity : AppCompatActivity() {
 
     private var menuIsVisible = true
     var consoleIsVisible = true
+    var informationIsVisible = true
 
     val program = AxolotProgram.create()
     val console = Console {

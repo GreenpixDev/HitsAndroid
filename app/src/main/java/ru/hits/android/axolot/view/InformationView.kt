@@ -10,10 +10,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import ru.hits.android.axolot.BlueprintActivity
 import ru.hits.android.axolot.R
-import ru.hits.android.axolot.blueprint.FrontendConsole
 import ru.hits.android.axolot.databinding.ConsoleViewBinding
+import ru.hits.android.axolot.databinding.InformationItemBinding
 
-class ConsoleView @JvmOverloads constructor(
+class InformationView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
 ) : ConstraintLayout(context, attrs) {
@@ -23,48 +23,34 @@ class ConsoleView @JvmOverloads constructor(
     private val activity: BlueprintActivity
         get() = context as BlueprintActivity
 
-    private lateinit var console: FrontendConsole
+    private lateinit var information: InformationItemBinding
 
     init {
-        addEvents()
+
     }
 
-    fun initConsole(console: FrontendConsole) {
-        this.console = console
-        this.console.setOnReceive {
-            addTextViewToConsole(it)
-        }
-    }
-
-    /**
-     * Добавляем листенер (пока что только на кнопку отправки)
-     */
-    private fun addEvents() {
-        //добавление TextView в консоль
-        binding.imageViewSend.setOnClickListener {
-            val inputString = binding.consoleInput.text.toString()
-            binding.consoleInput.setText("")
-
-            addTextViewToConsole(inputString)
-            console.send(inputString)
-        }
+    fun initInformation(information: InformationItemBinding) {
+        this.information = information
+//        this.information.setOnReceive {
+//            addTextViewToConsole(it)
+//        }
     }
 
     /**
      * Метод, который открывает консоль, при этом скрывая боковое меню
      */
-    fun openConsole() {
-        activity.closeMenu()
-        visibility = View.VISIBLE
-        activity.consoleIsVisible = true
-    }
+//    fun openInformation() {
+//        activity.consoleView.openConsole()
+//        visibility = View.VISIBLE
+//        activity.informationIsVisible = true
+//    }
 
     /**
      * Скрывает консоль, не трогая боковое меню
      */
-    fun closeConsole() {
+    fun closeInformation() {
         visibility = View.GONE
-        activity.consoleIsVisible = false
+        activity.informationIsVisible = false
     }
 
     /**

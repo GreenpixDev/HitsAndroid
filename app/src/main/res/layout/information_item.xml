@@ -6,9 +6,8 @@
     android:layout_height="match_parent"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-
     <View
-        android:id="@+id/consoleView"
+        android:id="@+id/infoView"
         android:layout_width="400dp"
         android:layout_height="300dp"
         android:background="@drawable/console_rectangle"
@@ -19,9 +18,11 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <ScrollView
-        android:id="@+id/consoleScrollView"
+        android:id="@+id/infoScrollView"
         android:layout_width="350dp"
-        android:layout_height="250dp"
+        android:layout_height="270dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:contentDescription="@string/console_scroll_view_description"
         app:layout_constraintBottom_toBottomOf="@+id/imageViewConsole"
@@ -36,35 +37,4 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
-
-    <EditText
-        android:id="@+id/consoleInput"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:inputType="textMultiLine"
-        android:cursorVisible="false"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        android:fontFamily="@font/montserrat_light"
-        android:paddingStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@id/consoleView"
-        app:layout_constraintEnd_toEndOf="@id/consoleScrollView"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/consoleScrollView"
-        app:layout_constraintTop_toBottomOf="@id/consoleScrollView"
-        tools:ignore="RtlSymmetry,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
-    <ImageView
-        android:id="@+id/imageViewSend"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@id/consoleView"
-        app:layout_constraintEnd_toEndOf="@id/consoleScrollView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/consoleInput"
-        app:layout_constraintTop_toBottomOf="@id/consoleScrollView"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_send_icon" />
 </merge>
