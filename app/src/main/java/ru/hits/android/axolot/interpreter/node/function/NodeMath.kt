@@ -21,7 +21,7 @@ class NodeMath : NodeFunction() {
 
     override operator fun invoke(context: InterpreterContext): Variable {
         val string = dependencies[STRING]!!.invoke(context)[Type.STRING]
-        throw IllegalArgumentException("Как мы сюда попали?")
+        throw UnsupportedOperationException("Не поддерживается")
     }
 
 }

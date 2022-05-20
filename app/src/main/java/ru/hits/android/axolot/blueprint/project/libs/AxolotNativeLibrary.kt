@@ -1,14 +1,12 @@
 package ru.hits.android.axolot.blueprint.project.libs
 
 import ru.hits.android.axolot.blueprint.declaration.NativeBlockType
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputDataPin
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleInputFlowPin
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredSingleOutputFlowPin
-import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
+import ru.hits.android.axolot.blueprint.declaration.pin.*
 import ru.hits.android.axolot.blueprint.project.AxolotLibrary
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
+import ru.hits.android.axolot.interpreter.node.function.NodeMath
 import ru.hits.android.axolot.interpreter.type.Type
 
 /**
@@ -32,25 +30,47 @@ class AxolotNativeLibrary : AxolotLibrary() {
         // Главный блок программы, с которого всё начинается
         registerNative(BLOCK_MAIN)
 
+        registerNative(
+            NativeBlockType(
+                "math",
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeMath>()
+                            .first().init(node)
+                    },
+                    name = "expression",
+                    type = Type.STRING
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeMath() },
+                    name = "result",
+                    type = Type.FLOAT
+                )
+            )
+        )
+
         // Ветвление (условие IF)
-        registerNative(NativeBlockType("branch",
-            DeclaredSingleInputFlowPin(
-                nodeFabric = { NodeBranch() },
-            ),
-            DeclaredSingleInputDataPin(
-                handler = { target, node ->
-                    target
-                        .filterIsInstance<NodeBranch>()
-                        .first().init(node)
-                },
-                name = "condition",
-                type = Type.BOOLEAN
-            ),
-            DeclaredSingleOutputFlowPin(
-                handler = { target, node ->
-                    target
-                        .filterIsInstance<NodeBranch>()
-                        .first().trueNode = node
+        registerNative(
+            NativeBlockType(
+                "branch",
+                DeclaredSingleInputFlowPin(
+                    nodeFabric = { NodeBranch() },
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeBranch>()
+                            .first().init(node)
+                    },
+                    name = "condition",
+                    type = Type.BOOLEAN
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeBranch>()
+                            .first().trueNode = node
                 },
                 name = "true"
             ),
