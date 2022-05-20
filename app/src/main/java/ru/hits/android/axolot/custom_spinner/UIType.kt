@@ -22,7 +22,8 @@ object UITypes {
         Type.BOOLEAN.toString(),
         Type.INT.toString(),
         Type.FLOAT.toString(),
-        Type.STRING.toString()
+        Type.STRING.toString(),
+        "Execute"
     )
 
     var list: List<UIType> = images.indices.map {
