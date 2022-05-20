@@ -11,7 +11,7 @@ data class UIType(val image: Int, val name: String) {
 
 object UITypes {
 
-    private val images = intArrayOf(
+    val images = mutableListOf(
         R.drawable.ic_boolean_variable,
         R.drawable.ic_int_variable,
         R.drawable.ic_float_variable,

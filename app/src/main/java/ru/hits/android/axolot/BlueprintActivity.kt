@@ -274,7 +274,7 @@ class BlueprintActivity : AppCompatActivity() {
         program.createVariable(variableView.variableName)
 
         // Добавляем в меню
-        variableView.name.width = 160
+        variableView.name.width = 100
         variableView.initComponents()
         variableView.addViewMenu()
 

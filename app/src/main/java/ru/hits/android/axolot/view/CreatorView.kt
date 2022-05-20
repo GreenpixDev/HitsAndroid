@@ -45,7 +45,7 @@ abstract class CreatorView @JvmOverloads constructor(
         if (btnAddDel) binding.btnGet.visibility = GONE
     }
 
-    private fun setCustomSpinner() {
+    fun setCustomSpinner() {
         val adapter = CustomAdapter(context, UITypes.list)
         binding.typeVariable.adapter = adapter
     }
