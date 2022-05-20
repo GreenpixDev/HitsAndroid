@@ -11,7 +11,7 @@ class NodeCastService(private val nodeHandlerService: NodeHandlerService) : Node
 
     override fun invoke(node: Node, context: InterpreterContext): Variable {
         if (node is NodeCast) {
-            val input = nodeHandlerService.invoke(node[NodeCast.INPUT], context);
+            val input = nodeHandlerService.invoke(node[NodeCast.INPUT], context)
             return Variable(node.cast, node.cast.cast(input))
         }
         throw createIllegalException(node)

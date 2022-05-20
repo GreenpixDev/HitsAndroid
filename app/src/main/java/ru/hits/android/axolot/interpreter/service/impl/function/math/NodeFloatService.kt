@@ -24,6 +24,7 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                 val result = input?.let { abs(it) }
                 return Variable(Type.FLOAT, result)
             }
+
             is NodeFloatDiv -> {
                 val first = nodeHandlerService.invoke(
                     node.dependencies[NodeFloatDiv.FIRST]!!,
@@ -35,6 +36,7 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                 )[Type.FLOAT]!!
                 return Variable(Type.FLOAT, first / second)
             }
+
             is NodeFloatEqual -> {
                 val first = nodeHandlerService.invoke(
                     node.dependencies[NodeFloatEqual.FIRST]!!,
@@ -46,6 +48,7 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                 )[Type.FLOAT]!!
                 return Variable(Type.BOOLEAN, first == second)
             }
+
             is NodeFloatLess -> {
                 val first = nodeHandlerService.invoke(
                     node.dependencies[NodeFloatLess.FIRST]!!,
@@ -57,6 +60,7 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                 )[Type.FLOAT]!!
                 return Variable(Type.BOOLEAN, first < second)
             }
+
             is NodeFloatLessOrEqual -> {
                 val first = nodeHandlerService.invoke(
                     node.dependencies[NodeFloatLessOrEqual.FIRST]!!,
@@ -68,6 +72,7 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                 )[Type.FLOAT]!!
                 return Variable(Type.BOOLEAN, first <= second)
             }
+
             is NodeFloatMax -> {
                 var max = Double.POSITIVE_INFINITY
                 for (i in node.dependencies.values.indices) {
@@ -77,6 +82,7 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                 }
                 return Variable(Type.FLOAT, max)
             }
+
             is NodeFloatMin -> {
                 var min = Double.POSITIVE_INFINITY
                 for (i in node.dependencies.values.indices) {
@@ -86,17 +92,21 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                 }
                 return Variable(Type.FLOAT, min)
             }
+
             is NodeFloatMod -> {
                 val first = nodeHandlerService.invoke(
                     node.dependencies[NodeFloatMod.FIRST]!!,
                     context
                 )[Type.FLOAT]!!
+
                 val second = nodeHandlerService.invoke(
                     node.dependencies[NodeFloatMod.SECOND]!!,
                     context
                 )[Type.FLOAT]!!
+
                 return Variable(Type.FLOAT, first % second)
             }
+
             is NodeFloatMore -> {
                 val first = nodeHandlerService.invoke(
                     node.dependencies[NodeFloatMore.FIRST]!!,
@@ -106,8 +116,10 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                     node.dependencies[NodeFloatMore.SECOND]!!,
                     context
                 )[Type.FLOAT]!!
+
                 return Variable(Type.BOOLEAN, first > second)
             }
+
             is NodeFloatMoreOrEqual -> {
                 val first = nodeHandlerService.invoke(
                     node.dependencies[NodeFloatMoreOrEqual.FIRST]!!,
@@ -117,8 +129,10 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                     node.dependencies[NodeFloatMoreOrEqual.SECOND]!!,
                     context
                 )[Type.FLOAT]!!
+
                 return Variable(Type.BOOLEAN, first >= second)
             }
+
             is NodeFloatMul -> {
                 var mul = 0.0
                 for (i in node.dependencies.values.indices) {
@@ -126,8 +140,10 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                         nodeHandlerService.invoke(node.dependencies[i]!!, context)[Type.FLOAT]
                     input?.let { mul *= input }
                 }
+
                 return Variable(Type.FLOAT, mul)
             }
+
             is NodeFloatNotEqual -> {
                 val first = nodeHandlerService.invoke(
                     node.dependencies[NodeFloatNotEqual.FIRST]!!,
@@ -137,8 +153,10 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                     node.dependencies[NodeFloatNotEqual.SECOND]!!,
                     context
                 )[Type.FLOAT]!!
+
                 return Variable(Type.BOOLEAN, first != second)
             }
+
             is NodeFloatSub -> {
                 val first = nodeHandlerService.invoke(
                     node.dependencies[NodeFloatSub.FIRST]!!,
@@ -148,8 +166,10 @@ class NodeFloatService(private val nodeHandlerService: NodeHandlerService) : Nod
                     node.dependencies[NodeFloatSub.SECOND]!!,
                     context
                 )[Type.FLOAT]!!
+
                 return Variable(Type.FLOAT, first - second)
             }
+
             is NodeFloatSum -> {
                 var sum = 0.0
                 for (i in node.dependencies.values.indices) {

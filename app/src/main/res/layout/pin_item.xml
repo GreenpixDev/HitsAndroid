@@ -30,6 +30,7 @@
     <EditText
         android:id="@+id/inputField"
         android:visibility="gone"
+        android:layout_width="wrap_content"
         android:background="@drawable/edit_text_style"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"

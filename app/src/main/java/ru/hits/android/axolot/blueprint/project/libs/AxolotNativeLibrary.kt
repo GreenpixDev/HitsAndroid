@@ -5,9 +5,13 @@ import ru.hits.android.axolot.blueprint.declaration.pin.*
 import ru.hits.android.axolot.blueprint.project.AxolotLibrary
 import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
+import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexFind
+import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexMatch
+import ru.hits.android.axolot.interpreter.node.executable.string.NodeStringConcatenation
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
 import ru.hits.android.axolot.interpreter.node.function.NodeInput
+import ru.hits.android.axolot.interpreter.node.function.NodeMath
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanNot
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanOr
@@ -25,7 +29,9 @@ import ru.hits.android.axolot.interpreter.type.Type
 class AxolotNativeLibrary : AxolotLibrary() {
 
     companion object {
+
         val BLOCK_MAIN = NativeBlockType("main", DeclaredSingleOutputFlowPin({ _, _ -> }))
+
     }
 
     init {
@@ -48,6 +54,93 @@ class AxolotNativeLibrary : AxolotLibrary() {
             )
         )
 
+        //string + string
+        registerBlock(
+            NativeBlockType(
+                "sumStrings",
+                DeclaredVarargInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeStringConcatenation>()
+                            .first().add(node)
+                    },
+                    type = Type.STRING,
+                    minArgs = 2
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeStringConcatenation() },
+                    type = Type.STRING
+                )
+            )
+        )
+
+        // Регулярные выражения match
+        registerBlock(
+            NativeBlockType(
+                "regexMatch",
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexMatch.TEXT] = node
+                    },
+                    name = "text",
+                    type = Type.STRING
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexMatch.REGEX_TEXT] = node
+                    },
+                    name = "regex",
+                    type = Type.STRING
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeRegexMatch() },
+                    type = Type.BOOLEAN
+                )
+            )
+        )
+
+        // Регулярные выражения find
+        registerBlock(
+            NativeBlockType(
+                "regexFind",
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexFind.TEXT] = node
+                    },
+                    name = "text",
+                    type = Type.STRING
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexFind.REGEX_TEXT] = node
+                    },
+                    name = "regex",
+                    type = Type.STRING
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexFind.START_INDEX] = node
+                    },
+                    name = "start index",
+                    type = Type.INT
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeRegexMatch() },
+                    type = Type.STRING
+                )
+            )
+        )
+
         // Узел ассинхронности
         registerBlock(
             NativeBlockType(
@@ -62,6 +155,26 @@ class AxolotNativeLibrary : AxolotLibrary() {
                             .first().nextNode = node
                     },
                     name = "async"
+                )
+            )
+        )
+
+        registerBlock(
+            NativeBlockType(
+                "math",
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeMath>()
+                            .first().init(node)
+                    },
+                    name = "expression",
+                    type = Type.STRING
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeMath() },
+                    name = "result",
+                    type = Type.FLOAT
                 )
             )
         )

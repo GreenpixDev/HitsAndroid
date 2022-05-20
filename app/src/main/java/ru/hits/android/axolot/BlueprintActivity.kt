@@ -196,7 +196,6 @@ class BlueprintActivity : AppCompatActivity() {
         type: BlockType,
         name: String
     ) {
-
         // Инициализация
         blockView.block = type.createBlock()
 
@@ -233,6 +232,8 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Добавляем готовый блок на поле
         binding.codeField.addView(blockView)
+
+        //добавляем в массив блоков
         blockViews.add(blockView)
     }
 
