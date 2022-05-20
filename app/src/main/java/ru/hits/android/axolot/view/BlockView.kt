@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
 import kotlinx.android.synthetic.main.activity_blueprint.*
-import kotlinx.android.synthetic.main.block_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargInputDataPin
 import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredVarargOutputFlowPin
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
+import ru.hits.android.axolot.blueprint.element.pin.OutputPin
 import ru.hits.android.axolot.blueprint.element.pin.Pin
 import ru.hits.android.axolot.databinding.BlockItemBinding
 import ru.hits.android.axolot.util.Vec2f
@@ -28,7 +28,7 @@ class BlockView @JvmOverloads constructor(
     defstyleRes: Int = 0
 ) : ConstraintLayout(context, attrs, defstyleAttr, defstyleRes), BlueprintView {
 
-    private val binding = BlockItemBinding.inflate(LayoutInflater.from(context), this)
+    private val blockBinding = BlockItemBinding.inflate(LayoutInflater.from(context), this)
 
     private val _pinViews = mutableListOf<PinView>()
 
@@ -51,9 +51,9 @@ class BlockView @JvmOverloads constructor(
      * Отображаемое название блока в заголовке
      */
     var displayName: String
-        get() = binding.title.text.toString()
+        get() = blockBinding.title.text.toString()
         set(value) {
-            binding.title.text = value
+            blockBinding.title.text = value
         }
 
     /**
@@ -70,6 +70,12 @@ class BlockView @JvmOverloads constructor(
         _pinViews.add(pinView)
         pinView.addViewTo(this, indexGetter)
         return pinView
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        pinViews
+            .filter { it.pin is OutputPin }
+            .forEach { it.move(Vec2f(w - oldw, h - oldh)) }
     }
 
     /**
@@ -96,7 +102,7 @@ class BlockView @JvmOverloads constructor(
                         createPinView(pin) { it - 1 }
                     }
                 }
-                binding.body.linearLayoutLeft.addView(addNodeView)
+                blockBinding.linearLayoutLeft.addView(addNodeView)
             }
 
             // Если это выходной пин
@@ -109,7 +115,7 @@ class BlockView @JvmOverloads constructor(
                         createPinView(pin) { it - 1 }
                     }
                 }
-                binding.body.linearLayoutRight.addView(addNodeView)
+                blockBinding.linearLayoutRight.addView(addNodeView)
             }
         }
     }

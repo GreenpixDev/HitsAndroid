@@ -6,11 +6,15 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
-import android.widget.TextView
+import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import kotlinx.android.synthetic.main.block_item.view.*
+import kotlinx.android.synthetic.main.creator_for_func_item.view.*
 import kotlinx.android.synthetic.main.creator_item.view.*
 import ru.hits.android.axolot.blueprint.declaration.BlockType
 import ru.hits.android.axolot.blueprint.declaration.VariableGetterBlockType
@@ -25,10 +29,7 @@ import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.databinding.ActivityBlueprintBinding
 import ru.hits.android.axolot.exception.AxolotException
 import ru.hits.android.axolot.util.*
-import ru.hits.android.axolot.view.BlockView
-import ru.hits.android.axolot.view.FunctionView
-import ru.hits.android.axolot.view.MacrosView
-import ru.hits.android.axolot.view.VariableView
+import ru.hits.android.axolot.view.*
 import java.util.*
 
 /**
@@ -46,7 +47,19 @@ class BlueprintActivity : AppCompatActivity() {
     var consoleIsVisible = true
 
     private val program = AxolotProgram.create()
-    val console = Console()
+    val console = Console {
+        Handler(Looper.getMainLooper()).post {
+            it.invoke()
+        }
+    }
+
+    /**
+     * для понимания куда добавлять variablesView
+     */
+    enum class VariablePlaces {
+        INPUT_PARAMETERS,
+        OUTPUT_VARIABLES
+    }
 
     var currentSource: AxolotSource = program
 
@@ -118,13 +131,36 @@ class BlueprintActivity : AppCompatActivity() {
         binding.plusVariable.setOnClickListener { createVariableView() }
 
         // Создание новой функции
-        binding.plusFunction.setOnClickListener { createFunctionView() }
+        binding.plusFunction.setOnClickListener {
+            val view = CreatorFunctionView(this)
+            addCreatorForFuncAndMacros(view)
+        }
 
         // Создание нового макроса
-        binding.plusMacros.setOnClickListener { createMacrosView() }
+        binding.plusMacros.setOnClickListener {
+            val view = CreatorMacrosView(this)
+            addCreatorForFuncAndMacros(view)
+        }
+    }
 
-        // Обратно в Main программы
-        binding.goToMain.setOnClickListener { restoreSource(program) }
+    /**
+     * Метод создания атрибутов и выходных переменных для функций и макросов
+     */
+    private fun addCreatorForFuncAndMacros(view: CreatorView) {
+
+        view.creator.addView(CreatorForFunctionView(this))
+        view.typeExpression = false
+        view.initComponents()
+
+        view.addViewMenu()
+
+        view.creator.plusInputParam.setOnClickListener {
+            createParameterView(view, VariablePlaces.INPUT_PARAMETERS)
+        }
+
+        view.creator.plusOutputVar.setOnClickListener {
+            createParameterView(view, VariablePlaces.OUTPUT_VARIABLES)
+        }
     }
 
     /**
@@ -156,20 +192,23 @@ class BlueprintActivity : AppCompatActivity() {
     /**
      * Метод создания всех вьюшек нативных типов блоков
      */
+    @SuppressLint("UseCompatLoadingForDrawables", "ResourceAsColor")
     private fun createBlockTypeViews() {
         program.blockTypes.values.forEach {
             val nameBlock = getLocalizedString(it.fullName)
-            val textView = TextView(this)
+            val typeBlock = Button(this)
 
-            textView.text = nameBlock
-            textView.setTextColor(Color.BLACK)
-            textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-            textView.textSize = 20f
-            textView.typeface = ResourcesCompat.getFont(this, R.font.montserrat_regular)
+            typeBlock.text = nameBlock
+            typeBlock.setTextColor(Color.WHITE)
+            typeBlock.setBackgroundColor(R.color.bg_btn_menu)
+            typeBlock.textAlignment = View.TEXT_ALIGNMENT_CENTER
+            typeBlock.textSize = 15f
+            typeBlock.background = resources.getDrawable(R.drawable.border_style)
+            typeBlock.typeface = ResourcesCompat.getFont(this, R.font.montserrat_light)
 
-            binding.listBlocks.addView(textView)
+            binding.listBlocks.addView(typeBlock)
 
-            textView.setOnClickListener { _ ->
+            typeBlock.setOnClickListener { _ ->
                 try {
                     createBlock(BlockView(this), it, it.fullName)
                 } catch (e: AxolotException) {
@@ -244,27 +283,85 @@ class BlueprintActivity : AppCompatActivity() {
     }
 
     /**
+     * Метод создания новой переменной в функции/макросе
+     */
+    private fun createParameterView(
+        creatorView: CreatorView,
+        place: VariablePlaces
+    ) {
+        val variableView = VariableView(this)
+
+        //инициализация creatorView
+        variableView.edit = false
+        variableView.isVar = true
+
+        //дефолтное название
+        variableView.variableName = "param"
+        variableView.name.setText(variableView.variableName)
+
+        variableView.name.width = 200
+        variableView.btnAddDel = true
+        variableView.initComponents()
+
+        //проверка куда добавлять
+        when (place) {
+            VariablePlaces.INPUT_PARAMETERS -> {
+                creatorView.listParameters.addView(variableView)
+            }
+
+            VariablePlaces.OUTPUT_VARIABLES -> {
+                creatorView.creator.listOutputVar.addView(variableView)
+            }
+        }
+    }
+
+    /**
      * Метод создания новой переменной в меню
-     * TODO Рома из будущего, сделай переменные с привязкой к компилятору
      */
     private fun createVariableView() {
         val variableView = VariableView(this)
 
+        //инициализация creatorView
         variableView.edit = false
-        variableView.initComponents()
-        variableView.variableName = "variable"
+        variableView.isVar = true
+
+        //дефолтное название
+        variableView.variableName = program.generateVariableName()
+        variableView.name.setText(variableView.variableName)
 
         program.createVariable(variableView.variableName)
-        binding.listVariables.addView(variableView)
+
+        // Добавляем в меню
+        variableView.name.width = 160
+        variableView.initComponents()
+        variableView.addViewMenu()
 
         // Прослушка изменений имени переменной
-        variableView.name.addTextChangedListener { title, _, _, _ ->
-            program.renameVariable(variableView.variableName, title.toString())
-            variableView.variableName = title.toString()
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(title: Editable) {
+                if (!program.hasVariable(title.toString())) {
+                    program.renameVariable(variableView.variableName, title.toString())
+                    variableView.variableName = title.toString()
+                    return
+                }
+                variableView.name.removeTextChangedListener(this)
+                variableView.name.setText(variableView.variableName)
+                variableView.name.addTextChangedListener(this)
+                Toast.makeText(
+                    this@BlueprintActivity,
+                    "Такая переменная уже есть!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
+        variableView.name.addTextChangedListener(listener)
 
         // Прослушка изменений типа переменной
-        variableView.type.addItemSelectedListener { parent, _, _, _ ->
+        variableView.typeVariable.addItemSelectedListener { parent, _, _, _ ->
             program.variableTypes[parent.selectedItem.toString()
                 .lowercase(Locale.getDefault())]
                 ?.let { type ->
@@ -283,8 +380,8 @@ class BlueprintActivity : AppCompatActivity() {
                 }
         }
 
-        // Прослушка кнопка добавления блока
-        variableView.btnAdd.setOnClickListener {
+        // Прослушка кнопки GET добавления блока
+        variableView.btnGet.setOnClickListener {
             val variableGetter = program.getVariableGetter(variableView.variableName)
             val blockView = BlockView(this)
             createBlock(blockView, variableGetter, VariableGetterBlockType.PREFIX_NAME)
@@ -297,6 +394,11 @@ class BlueprintActivity : AppCompatActivity() {
             variableView.name.addTextChangedListener { title, _, _, _ ->
                 blockView.pinViews.forEach { it.displayName = title.toString() }
             }
+        }
+
+        // Прослушка кнопки SET добавления блока
+        variableView.btnSet.setOnClickListener {
+            //TODO: сделать добавление блоков SET
         }
     }
 
@@ -338,16 +440,23 @@ class BlueprintActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Запуск нашей БОМБЕЗНОЙ программы
+     */
     private fun startProgram() {
-        val compiler = BlueprintCompiler()
-        val interpreter = compiler.prepareInterpreter(program, console)
-        val node = compiler.compile(program)
+        // Запускаем это всё в отдельном потоке, потому что
+        // в нашей программе присутствуют прерывания
+        Thread {
+            val compiler = BlueprintCompiler()
+            val interpreter = compiler.prepareInterpreter(program, console)
+            val node = compiler.compile(program)
 
-        try {
-            interpreter.execute(node)
-        } catch (e: Throwable) {
-            e.printStackTrace()
-        }
+            try {
+                interpreter.execute(node)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+            }
+        }.start()
     }
 
     /**

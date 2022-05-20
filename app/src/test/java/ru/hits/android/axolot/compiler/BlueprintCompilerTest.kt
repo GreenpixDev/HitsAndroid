@@ -95,7 +95,9 @@ class BlueprintCompilerTest {
 
         val node = compiler.compile(program)
         val scope = GlobalScope()
-        val interpreter = BlueprintInterpreter(scope, Console())
+        val interpreter = BlueprintInterpreter(scope, Console {
+            it.invoke()
+        })
 
         interpreter.execute(node)
     }
