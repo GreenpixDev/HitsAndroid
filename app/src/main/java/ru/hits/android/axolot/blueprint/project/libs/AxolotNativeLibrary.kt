@@ -3,6 +3,7 @@ package ru.hits.android.axolot.blueprint.project.libs
 import ru.hits.android.axolot.blueprint.declaration.NativeBlockType
 import ru.hits.android.axolot.blueprint.declaration.pin.*
 import ru.hits.android.axolot.blueprint.project.AxolotLibrary
+import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
@@ -34,6 +35,24 @@ class AxolotNativeLibrary : AxolotLibrary() {
 
         // Главный блок программы, с которого всё начинается
         registerBlock(BLOCK_MAIN)
+
+        // Узел ассинхронности
+        registerBlock(
+            NativeBlockType(
+                "async",
+                DeclaredSingleInputFlowPin(
+                    nodeFabric = { NodeAsync() },
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeAsync>()
+                            .first().nextNode = node
+                    },
+                    name = "async"
+                )
+            )
+        )
 
         // Ветвление (условие IF)
         registerBlock(
@@ -83,20 +102,23 @@ class AxolotNativeLibrary : AxolotLibrary() {
                 lazyName = { "then-$it" },
                 minArgs = 1
             )
-        ))
+        )
+        )
 
         // Вывод в консоль
-        registerBlock(NativeBlockType("print",
-            DeclaredSingleInputFlowPin(
-                nodeFabric = { NodePrintString() }
-            ),
-            DeclaredSingleInputDataPin(
-                handler = { target, node ->
-                    target
-                        .filterIsInstance<NodePrintString>()
-                        .first().init(node)
-                },
-                name = "text",
+        registerBlock(
+            NativeBlockType(
+                "print",
+                DeclaredSingleInputFlowPin(
+                    nodeFabric = { NodePrintString() }
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodePrintString>()
+                            .first().init(node)
+                    },
+                    name = "text",
                 type = Type.STRING
             ),
             DeclaredSingleOutputFlowPin(
