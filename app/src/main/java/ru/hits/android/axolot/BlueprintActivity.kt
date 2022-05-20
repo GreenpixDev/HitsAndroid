@@ -21,6 +21,8 @@ import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.blueprint.element.AxolotSource
 import ru.hits.android.axolot.blueprint.element.pin.PinToOne
 import ru.hits.android.axolot.blueprint.element.pin.impl.ConstantPin
+import ru.hits.android.axolot.blueprint.element.pin.impl.InputDataPin
+import ru.hits.android.axolot.blueprint.element.pin.impl.OutputDataPin
 import ru.hits.android.axolot.blueprint.project.AxolotProgram
 import ru.hits.android.axolot.compiler.BlueprintCompiler
 import ru.hits.android.axolot.console.Console
@@ -139,6 +141,14 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Возвращение в main
         binding.goToMain.setOnClickListener { restoreSource(program) }
+
+        // Добавление return блока для функций
+        binding.returnBlock.setOnClickListener {
+            if (currentSource is FunctionType) {
+                val type = (currentSource as FunctionType).endType
+                addBlock(currentSource.createBlock(type))
+            }
+        }
     }
 
     /**
@@ -148,7 +158,7 @@ class BlueprintActivity : AppCompatActivity() {
         binding.codeField.removeViews(0, binding.codeField.childCount)
 
         val blockViews = source.blocks
-            .map { addBlock(it, it.type.fullName) }
+            .map { addBlock(it) }
             .onEach { it.update() }
 
         val pinViews = blockViews
@@ -189,7 +199,7 @@ class BlueprintActivity : AppCompatActivity() {
 
             typeBlock.setOnClickListener { _ ->
                 try {
-                    createBlock(it, it.fullName)
+                    createBlock(it)
                 } catch (e: AxolotException) {
                     // nothing
                 }
@@ -202,16 +212,15 @@ class BlueprintActivity : AppCompatActivity() {
      */
     @SuppressLint("ClickableViewAccessibility")
     private fun createBlock(
-        type: BlockType,
-        name: String
+        type: BlockType
     ): BlockView {
-        return addBlock(currentSource.createBlock(type), name)
+        return addBlock(currentSource.createBlock(type))
     }
 
     /**
      * Добавить блок на поле
      */
-    private fun addBlock(block: AxolotBlock, name: String): BlockView {
+    private fun addBlock(block: AxolotBlock): BlockView {
         val blockView = BlockView(this)
         blockView.block = block
 
@@ -224,13 +233,13 @@ class BlueprintActivity : AppCompatActivity() {
             blockView.position = block.position!!
         }
 
-        blockView.update()
-
         // Добавляем все пины
-        blockView.block.contacts.forEach { blockView.createPinView(it) }
+        block.contacts.forEach { blockView.createPinView(it) }
 
         // Добавляем плюсики для всех vararg пинов
-        blockView.block.type.declaredPins.forEach { blockView.createAddPinView(it) }
+        block.type.declaredPins.forEach { blockView.createAddPinView(it) }
+
+        blockView.update()
 
         // Добавляем готовый блок на поле
         binding.codeField.addView(blockView)
@@ -279,14 +288,7 @@ class BlueprintActivity : AppCompatActivity() {
                 if (!program.hasVariable(title.toString())) {
                     program.renameVariable(variableView.variableName, title.toString())
                     variableView.variableName = title.toString()
-
-                    findBlockView<VariableGetterBlockType>()
-                        .filter { (it.block.type as VariableGetterBlockType).variableName == variableView.variableName }
-                        .forEach { it.update() }
-
-                    findBlockView<VariableSetterBlockType>()
-                        .filter { (it.block.type as VariableSetterBlockType).variableName == variableView.variableName }
-                        .forEach { it.update() }
+                    updateVariable(variableView.variableName)
                     return
                 }
                 variableView.name.removeTextChangedListener(this)
@@ -307,27 +309,20 @@ class BlueprintActivity : AppCompatActivity() {
                 .lowercase(Locale.getDefault())]
                 ?.let { type ->
                     program.retypeVariable(variableView.variableName, type)
-
-                    findBlockView<VariableGetterBlockType>()
-                        .filter { (it.block.type as VariableGetterBlockType).variableName == variableView.variableName }
-                        .forEach { it.update() }
-
-                    findBlockView<VariableSetterBlockType>()
-                        .filter { (it.block.type as VariableSetterBlockType).variableName == variableView.variableName }
-                        .forEach { it.update() }
+                    updateVariable(variableView.variableName)
                 }
         }
 
         // Прослушка кнопки GET добавления блока
         variableView.btnGet.setOnClickListener {
             val variableGetter = program.getVariableGetter(variableView.variableName)
-            val blockView = createBlock(variableGetter, VariableGetterBlockType.PREFIX_NAME)
+            createBlock(variableGetter)
         }
 
         // Прослушка кнопки SET добавления блока
         variableView.btnSet.setOnClickListener {
             val variableSetter = program.getVariableSetter(variableView.variableName)
-            val blockView = createBlock(variableSetter, VariableSetterBlockType.PREFIX_NAME)
+            createBlock(variableSetter)
         }
     }
 
@@ -350,13 +345,7 @@ class BlueprintActivity : AppCompatActivity() {
                 if (!program.hasFunction(title.toString())) {
                     program.renameFunction(functionView.functionName, title.toString())
                     functionView.functionName = title.toString()
-
-                    findBlockView<FunctionType>()
-                        .filter { it.block.type == functionType }
-                        .forEach { it.update() }
-                    findBlockView<FunctionBeginType>()
-                        .filter { it.block.type == functionType.beginType }
-                        .forEach { it.update() }
+                    updateFunction(functionType)
                     return
                 }
                 functionView.name.removeTextChangedListener(this)
@@ -373,32 +362,20 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Прослушка добавления параметров функции
         functionView.creator.plusInputParam.setOnClickListener {
-            val paramView = createParameterView(functionView, VariablePlaces.INPUT_PARAMETERS)
+            val paramView = createFunctionInputView(functionType, functionView)
             functionType.addInput(paramView.variableName, Type.BOOLEAN)
-
-            findBlockView<FunctionType>()
-                .filter { it.block.type == functionType }
-                .forEach { it.update() }
-            findBlockView<FunctionBeginType>()
-                .filter { it.block.type == functionType.beginType }
-                .forEach { it.update() }
+            updateFunction(functionType)
         }
 
         // Прослушка добавления результатов функции
         functionView.creator.plusOutputVar.setOnClickListener {
-            val paramView = createParameterView(functionView, VariablePlaces.OUTPUT_VARIABLES)
+            val paramView = createFunctionOutputView(functionType, functionView)
             functionType.addOutput(paramView.variableName, Type.BOOLEAN)
-
-            findBlockView<FunctionType>()
-                .filter { it.block.type == functionType }
-                .forEach { it.update() }
-            findBlockView<FunctionEndType>()
-                .filter { it.block.type == functionType.endType }
-                .forEach { it.update() }
+            updateFunction(functionType)
         }
 
         // Прослушка добавлении вызова функции на поле
-        functionView.btnGet.setOnClickListener { createBlock(functionType, functionName) }
+        functionView.btnGet.setOnClickListener { createBlock(functionType) }
 
         // Прослушка изменений функции
         functionView.btnEdit.setOnClickListener {
@@ -447,37 +424,23 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Прослушка добавления входных данных макросов
         macrosView.creator.plusInputParam.setOnClickListener {
-            val paramView = createParameterView(macrosView, VariablePlaces.INPUT_PARAMETERS)
+            /*val paramView = createMacrosInputView(macrosView, VariablePlaces.INPUT_PARAMETERS)
             macrosType.addInputData(paramView.variableName, Type.BOOLEAN)
-
-            findBlockView<MacrosType>()
-                .filter { it.block.type == macrosType }
-                .forEach { it.update() }
-            findBlockView<MacrosBeginType>()
-                .filter { it.block.type == macrosType.beginType }
-                .forEach { it.update() }
+            updateMacros(macrosType)*/
         }
 
         // Прослушка добавления выходных данных макросов
         macrosView.creator.plusOutputVar.setOnClickListener {
-            val paramView = createParameterView(macrosView, VariablePlaces.OUTPUT_VARIABLES)
+            /*val paramView = createMacrosOutputView(macrosView, VariablePlaces.OUTPUT_VARIABLES)
             macrosType.addOutputData(paramView.variableName, Type.BOOLEAN)
-
-            findBlockView<MacrosType>()
-                .filter { it.block.type == macrosType }
-                .forEach { it.update() }
-            findBlockView<MacrosEndType>()
-                .filter { it.block.type == macrosType.beginType }
-                .forEach { it.update() }
+            updateMacros(macrosType)*/
         }
 
         // Прослушка добавлении вызова макроса на поле
-        macrosView.btnGet.setOnClickListener { createBlock(macrosType, macrosName) }
+        macrosView.btnGet.setOnClickListener { createBlock(macrosType) }
 
         // Прослушка изменений макроса
-        macrosView.btnEdit.setOnClickListener {
-            restoreSource(macrosType)
-        }
+        macrosView.btnEdit.setOnClickListener { restoreSource(macrosType) }
 
         return macrosView
     }
@@ -486,34 +449,198 @@ class BlueprintActivity : AppCompatActivity() {
      * Метод создания новой переменной в функции/макросе
      */
     private fun createParameterView(
+        name: String,
         creatorView: CreatorView,
         place: VariablePlaces
     ): VariableView {
-        val variableView = VariableView(this)
+        val parameterView = VariableView(this)
 
         //инициализация creatorView
-        variableView.edit = false
-        variableView.isVar = true
+        parameterView.edit = false
+        parameterView.isVar = true
 
         //дефолтное название
-        variableView.variableName = "param"
-        variableView.name.setText(variableView.variableName)
+        parameterView.variableName = name
+        parameterView.name.setText(parameterView.variableName)
 
-        variableView.name.width = 200
-        variableView.btnAddDel = true
-        variableView.initComponents()
+        parameterView.name.width = 200
+        parameterView.btnAddDel = true
+        parameterView.initComponents()
 
         //проверка куда добавлять
         when (place) {
             VariablePlaces.INPUT_PARAMETERS -> {
-                creatorView.listParameters.addView(variableView)
+                creatorView.listParameters.addView(parameterView)
             }
 
             VariablePlaces.OUTPUT_VARIABLES -> {
-                creatorView.creator.listOutputVar.addView(variableView)
+                creatorView.creator.listOutputVar.addView(parameterView)
             }
         }
-        return variableView
+        return parameterView
+    }
+
+    /**
+     * Метод создания входного параметра в функции
+     */
+    private fun createFunctionInputView(
+        function: FunctionType,
+        creatorView: CreatorView
+    ): VariableView {
+        val parameterView = createParameterView(generateName("param") {
+            !function.hasInput(it)
+        }, creatorView, VariablePlaces.INPUT_PARAMETERS)
+
+        // Прослушка изменений имени переменной
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(title: Editable) {
+                if (!function.hasInput(title.toString())) {
+                    function.renameInput(parameterView.variableName, title.toString())
+
+                    program.findAllBlockByType(function)
+                        .flatMap { it.contacts }
+                        .filterIsInstance<InputDataPin>()
+                        .filter { it.name == parameterView.variableName }
+                        .forEach { it.name = title.toString() }
+                    program.findAllBlockByType(function.beginType)
+                        .flatMap { it.contacts }
+                        .filterIsInstance<OutputDataPin>()
+                        .filter { it.name == parameterView.variableName }
+                        .forEach { it.name = title.toString() }
+
+                    parameterView.variableName = title.toString()
+                    updateFunction(function)
+                    return
+                }
+                parameterView.name.removeTextChangedListener(this)
+                parameterView.name.setText(parameterView.variableName)
+                parameterView.name.addTextChangedListener(this)
+                Toast.makeText(
+                    this@BlueprintActivity,
+                    "Такой параметр уже есть!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        parameterView.name.addTextChangedListener(listener)
+
+        // Прослушка изменений типа переменной
+        parameterView.typeVariable.addItemSelectedListener { parent, _, _, _ ->
+            program.variableTypes[parent.selectedItem.toString()
+                .lowercase(Locale.getDefault())]
+                ?.let { type ->
+                    function.retypeInput(parameterView.variableName, type)
+                    updateFunction(function)
+                }
+        }
+        return parameterView
+    }
+
+    /**
+     * Метод создания выходного параметра в функции
+     */
+    private fun createFunctionOutputView(
+        function: FunctionType,
+        creatorView: CreatorView
+    ): VariableView {
+        val parameterView = createParameterView(generateName("param") {
+            !function.hasOutput(it)
+        }, creatorView, VariablePlaces.INPUT_PARAMETERS)
+
+        // Прослушка изменений имени переменной
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(title: Editable) {
+                if (!function.hasOutput(title.toString())) {
+                    function.renameOutput(parameterView.variableName, title.toString())
+
+                    program.findAllBlockByType(function)
+                        .flatMap { it.contacts }
+                        .filterIsInstance<OutputDataPin>()
+                        .filter { it.name == parameterView.variableName }
+                        .forEach { it.name = title.toString() }
+                    program.findAllBlockByType(function.endType)
+                        .flatMap { it.contacts }
+                        .filterIsInstance<InputDataPin>()
+                        .filter { it.name == parameterView.variableName }
+                        .forEach { it.name = title.toString() }
+
+                    parameterView.variableName = title.toString()
+                    updateFunction(function)
+                    return
+                }
+                parameterView.name.removeTextChangedListener(this)
+                parameterView.name.setText(parameterView.variableName)
+                parameterView.name.addTextChangedListener(this)
+                Toast.makeText(
+                    this@BlueprintActivity,
+                    "Такой параметр уже есть!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        parameterView.name.addTextChangedListener(listener)
+
+        // Прослушка изменений типа переменной
+        parameterView.typeVariable.addItemSelectedListener { parent, _, _, _ ->
+            program.variableTypes[parent.selectedItem.toString()
+                .lowercase(Locale.getDefault())]
+                ?.let { type ->
+                    function.retypeOutput(parameterView.variableName, type)
+                    updateFunction(function)
+                }
+        }
+        return parameterView
+    }
+
+    /**
+     * Обновить переменную с названием [variableName]
+     */
+    private fun updateVariable(variableName: String) {
+        findBlockView<VariableGetterBlockType>()
+            .filter { (it.block.type as VariableGetterBlockType).variableName == variableName }
+            .forEach { it.update() }
+
+        findBlockView<VariableSetterBlockType>()
+            .filter { (it.block.type as VariableSetterBlockType).variableName == variableName }
+            .forEach { it.update() }
+    }
+
+    /**
+     * Обновить все блоки функции [function]
+     */
+    private fun updateFunction(function: FunctionType) {
+        findBlockView<FunctionType>()
+            .filter { it.block.type == function }
+            .forEach { it.update() }
+        findBlockView<FunctionBeginType>()
+            .filter { it.block.type == function.beginType }
+            .forEach { it.update() }
+        findBlockView<FunctionEndType>()
+            .filter { it.block.type == function.endType }
+            .forEach { it.update() }
+    }
+
+    /**
+     * Обновить все блоки макроса [macros]
+     */
+    private fun updateMacros(macros: MacrosType) {
+        findBlockView<MacrosType>()
+            .filter { it.block.type == macros }
+            .forEach { it.update() }
+        findBlockView<MacrosBeginType>()
+            .filter { it.block.type == macros.beginType }
+            .forEach { it.update() }
+        findBlockView<MacrosEndType>()
+            .filter { it.block.type == macros.endType }
+            .forEach { it.update() }
     }
 
     /**

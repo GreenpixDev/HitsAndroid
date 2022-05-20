@@ -30,12 +30,14 @@ class FunctionBeginType(
         return functionType.getDisplayName(context)
     }
 
-    fun addParameter(parameterName: String, type: VariableType<*>) {
-        declaredPins.add(DeclaredSingleOutputDataPin(
-            nodeFabric = { NodeFunctionParameter() },
-            lazyName = { parameterName },
-            lazyType = { type }
-        ))
+    fun addParameter(lazyName: () -> String, lazyType: () -> VariableType<*>) {
+        declaredPins.add(
+            DeclaredSingleOutputDataPin(
+                nodeFabric = { NodeFunctionParameter() },
+                lazyName = lazyName,
+                lazyType = lazyType
+            )
+        )
     }
 
     override fun getDisplayColor(context: Context): Int {

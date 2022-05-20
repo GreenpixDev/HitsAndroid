@@ -76,6 +76,14 @@ class BlockView @JvmOverloads constructor(
      * Обновить блок
      */
     fun update() {
+        // Добавляем новые пины
+        block.contacts
+            .filter { pin ->
+                !_pinViews.any { it.pin == pin }
+            }
+            .forEach { createPinView(it) }
+
+        // Визуал
         header.setBackgroundColor(block.type.getDisplayColor(activity))
         displayName = block.type.getDisplayName(activity)
         _pinViews.forEach { it.update() }

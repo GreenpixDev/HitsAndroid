@@ -41,4 +41,9 @@ interface AxolotSource {
      */
     fun disconnect(pin: Pin)
 
+    /**
+     * Найти блоки определенного типа
+     */
+    fun findBlockByType(type: BlockType): List<AxolotBlock>
+
 }

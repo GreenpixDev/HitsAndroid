@@ -19,6 +19,10 @@ open class AxolotBaseSource : AxolotSource {
         blocks.add(block)
     }
 
+    override fun findBlockByType(type: BlockType): List<AxolotBlock> {
+        return blocks.filter { it.type == type }
+    }
+
     override fun createBlock(blockType: BlockType): AxolotBlock {
         val block = blockType.createBlock()
 

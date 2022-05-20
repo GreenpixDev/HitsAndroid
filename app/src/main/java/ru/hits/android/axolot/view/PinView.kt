@@ -405,4 +405,11 @@ class PinView @JvmOverloads constructor(
             }
         }
     }
+
+    /**
+     * Удалить вью
+     */
+    fun remove() {
+
+    }
 }

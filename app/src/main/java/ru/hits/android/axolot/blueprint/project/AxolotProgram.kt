@@ -3,12 +3,14 @@ package ru.hits.android.axolot.blueprint.project
 import ru.hits.android.axolot.blueprint.declaration.*
 import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
+import ru.hits.android.axolot.blueprint.element.AxolotSource
 import ru.hits.android.axolot.blueprint.element.pin.OutputPin
 import ru.hits.android.axolot.blueprint.project.libs.AxolotDefaultLibrary
 import ru.hits.android.axolot.blueprint.project.libs.AxolotNativeLibrary
 import ru.hits.android.axolot.exception.AxolotException
 import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.interpreter.type.VariableType
+import ru.hits.android.axolot.util.filterIsInstance
 
 /**
  * Класс исполняемой программы на языке Axolot.
@@ -82,11 +84,11 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
         blockTypes.remove("${VariableSetterBlockType.PREFIX_NAME}.$variableName")
         blockTypes["${VariableSetterBlockType.PREFIX_NAME}.$newName"] = variableSetter
 
-        findBlockByType(variableGetter)
+        findAllBlockByType(variableGetter)
             .flatMap { it.contacts }
             .forEach { it.name = newName }
 
-        findBlockByType(variableSetter)
+        findAllBlockByType(variableSetter)
             .flatMap { it.contacts }
             .filterIsInstance<OutputPin>()
             .forEach { it.name = newName }
@@ -188,10 +190,14 @@ class AxolotProgram private constructor() : AxolotBaseSource(), AxolotProject {
     }
 
     /**
-     * Найти блоки определенного типа
+     * Получить все все все блоки типа [type]
      */
-    fun findBlockByType(type: BlockType): List<AxolotBlock> {
-        return blocks.filter { it.type == type }
+    fun findAllBlockByType(type: BlockType): List<AxolotBlock> {
+        val list = findBlockByType(type).toMutableList()
+        blockTypes
+            .filterIsInstance<String, AxolotSource>()
+            .forEach { list.addAll(it.value.findBlockByType(type)) }
+        return list
     }
 
     companion object {

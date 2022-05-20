@@ -19,6 +19,7 @@ class MacrosType(
 
     companion object {
         const val PREFIX_NAME = "macros"
+        private var counter = 0L
     }
 
     lateinit var beginBlock: AxolotBlock
@@ -28,10 +29,10 @@ class MacrosType(
     val beginType = MacrosBeginType(this)
     val endType = MacrosEndType(this)
 
-    val inputFlow = mutableSetOf<String>()
-    val outputFlow = mutableSetOf<String>()
-    val inputData = mutableMapOf<String, VariableType<*>>()
-    val outputData = mutableMapOf<String, VariableType<*>>()
+    private val inputNames = mutableMapOf<Long, String>()
+    private val outputNames = mutableMapOf<Long, String>()
+    private val inputTypes = mutableMapOf<Long, VariableType<*>>()
+    private val outputTypes = mutableMapOf<Long, VariableType<*>>()
 
     override val simpleName: String
         get() = macrosName
@@ -65,6 +66,7 @@ class MacrosType(
     }
 
     fun addInputData(inputName: String, type: VariableType<*>) {
+        val identifier = counter++
         val pin = DeclaredSingleInputDataPin(
             handler = { target, node ->
                 target
@@ -83,6 +85,7 @@ class MacrosType(
     }
 
     fun addOutputFlow(outputName: String) {
+        val identifier = counter++
         val pin = DeclaredSingleOutputFlowPin(
             handler = { target, node ->
                 target
@@ -101,6 +104,7 @@ class MacrosType(
     }
 
     fun addOutputData(outputName: String, type: VariableType<*>) {
+        val identifier = counter++
         val pin = DeclaredSingleOutputDataPin(
             nodeFabric = { NodeMacrosDependency(outputName) },
             lazyName = { outputName },
