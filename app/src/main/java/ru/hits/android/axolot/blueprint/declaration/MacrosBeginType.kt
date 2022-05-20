@@ -45,11 +45,14 @@ class MacrosBeginType(
         return pin
     }
 
-    fun addData(name: String, type: VariableType<*>): DeclaredSingleOutputDataPin {
+    fun addData(
+        lazyName: () -> String,
+        lazyType: () -> VariableType<*>
+    ): DeclaredSingleOutputDataPin {
         val pin = DeclaredSingleOutputDataPin(
-            nodeFabric = { NodeMacrosDependency(name) },
-            lazyName = { name },
-            lazyType = { type }
+            nodeFabric = { NodeMacrosDependency(lazyName.invoke()) },
+            lazyName = lazyName,
+            lazyType = lazyType
         )
         declaredPins.add(pin)
         return pin

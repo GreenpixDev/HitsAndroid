@@ -90,7 +90,7 @@ class FunctionType(
     fun addOutput(resultName: String, type: VariableType<*>) {
         val identifier = counter++
         val pin = DeclaredSingleOutputDataPin(
-            nodeFabric = { NodeFunctionReturned(resultName) },
+            nodeFabric = { NodeFunctionReturned(outputNames[identifier]!!) },
             lazyName = { outputNames[identifier]!! },
             lazyType = { outputTypes[identifier]!! }
         )

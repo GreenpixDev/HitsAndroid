@@ -71,13 +71,16 @@ class MacrosType(
             handler = { target, node ->
                 target
                     .filterIsInstance<NodeMacrosDependency>()
-                    .find { it.name == inputName }?.init(node)
+                    .find { it.name == inputNames[identifier]!! }?.init(node)
             },
-            lazyName = { inputName },
-            lazyType = { type }
+            lazyName = { inputNames[identifier]!! },
+            lazyType = { inputTypes[identifier]!! }
         )
+        inputNames[identifier] = inputName
+        inputTypes[identifier] = type
+
         declaredPins.add(pin)
-        beginType.addData(inputName, type)
+        beginType.addData({ inputNames[identifier]!! }, { inputTypes[identifier]!! })
 
         beginBlock.update()
         endBlock.update()
@@ -106,16 +109,51 @@ class MacrosType(
     fun addOutputData(outputName: String, type: VariableType<*>) {
         val identifier = counter++
         val pin = DeclaredSingleOutputDataPin(
-            nodeFabric = { NodeMacrosDependency(outputName) },
-            lazyName = { outputName },
-            lazyType = { type }
+            nodeFabric = { NodeMacrosDependency(outputNames[identifier]!!) },
+            lazyName = { outputNames[identifier]!! },
+            lazyType = { outputTypes[identifier]!! }
         )
+        outputNames[identifier] = outputName
+        outputTypes[identifier] = type
+
         declaredPins.add(pin)
-        endType.addData(outputName, type)
+        endType.addData({ outputNames[identifier]!! }, { outputTypes[identifier]!! })
 
         beginBlock.update()
         endBlock.update()
         invocationBlocks.forEach { it.update() }
+    }
+
+    fun hasInput(name: String): Boolean {
+        return inputNames.any { it.value == name }
+    }
+
+    fun renameInput(name: String, newName: String) {
+        inputNames
+            .filter { it.value == name }
+            .onEach { inputNames[it.key] = newName }
+    }
+
+    fun retypeInput(name: String, newType: VariableType<*>) {
+        inputNames
+            .filter { it.value == name }
+            .onEach { inputTypes[it.key] = newType }
+    }
+
+    fun hasOutput(name: String): Boolean {
+        return outputNames.any { it.value == name }
+    }
+
+    fun renameOutput(name: String, newName: String) {
+        outputNames
+            .filter { it.value == name }
+            .onEach { outputNames[it.key] = newName }
+    }
+
+    fun retypeOutput(name: String, newType: VariableType<*>) {
+        outputNames
+            .filter { it.value == name }
+            .onEach { outputTypes[it.key] = newType }
     }
 
     override fun getDisplayColor(context: Context): Int {

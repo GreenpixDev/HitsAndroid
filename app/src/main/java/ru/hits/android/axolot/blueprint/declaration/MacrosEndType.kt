@@ -40,16 +40,19 @@ class MacrosEndType(
         return pin
     }
 
-    fun addData(name: String, type: VariableType<*>): DeclaredSingleInputDataPin {
+    fun addData(
+        lazyName: () -> String,
+        lazyType: () -> VariableType<*>
+    ): DeclaredSingleInputDataPin {
         val pin = DeclaredSingleInputDataPin(
             handler = { target, node ->
                 target
                     .filterIsInstance<NodeMacrosDependency>()
-                    .find { it.name == name }
+                    .find { it.name == lazyName.invoke() }
                     ?.let { it.init(node) }
             },
-            lazyName = { name },
-            lazyType = { type }
+            lazyName = lazyName,
+            lazyType = lazyType
         )
         declaredPins.add(pin)
         return pin

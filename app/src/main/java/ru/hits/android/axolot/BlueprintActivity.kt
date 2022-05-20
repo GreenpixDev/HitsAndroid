@@ -424,16 +424,16 @@ class BlueprintActivity : AppCompatActivity() {
 
         // Прослушка добавления входных данных макросов
         macrosView.creator.plusInputParam.setOnClickListener {
-            /*val paramView = createMacrosInputView(macrosView, VariablePlaces.INPUT_PARAMETERS)
+            val paramView = createMacrosInputView(macrosType, macrosView)
             macrosType.addInputData(paramView.variableName, Type.BOOLEAN)
-            updateMacros(macrosType)*/
+            updateMacros(macrosType)
         }
 
         // Прослушка добавления выходных данных макросов
         macrosView.creator.plusOutputVar.setOnClickListener {
-            /*val paramView = createMacrosOutputView(macrosView, VariablePlaces.OUTPUT_VARIABLES)
+            val paramView = createMacrosOutputView(macrosType, macrosView)
             macrosType.addOutputData(paramView.variableName, Type.BOOLEAN)
-            updateMacros(macrosType)*/
+            updateMacros(macrosType)
         }
 
         // Прослушка добавлении вызова макроса на поле
@@ -595,6 +595,126 @@ class BlueprintActivity : AppCompatActivity() {
                 ?.let { type ->
                     function.retypeOutput(parameterView.variableName, type)
                     updateFunction(function)
+                }
+        }
+        return parameterView
+    }
+
+    /**
+     * Метод создания входного параметра в макроса
+     */
+    private fun createMacrosInputView(
+        macros: MacrosType,
+        creatorView: CreatorView
+    ): VariableView {
+        val parameterView = createParameterView(generateName("param") {
+            !macros.hasInput(it)
+        }, creatorView, VariablePlaces.INPUT_PARAMETERS)
+
+        // Прослушка изменений имени переменной
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(title: Editable) {
+                if (!macros.hasInput(title.toString())) {
+                    macros.renameInput(parameterView.variableName, title.toString())
+
+                    program.findAllBlockByType(macros)
+                        .flatMap { it.contacts }
+                        .filterIsInstance<InputDataPin>()
+                        .filter { it.name == parameterView.variableName }
+                        .forEach { it.name = title.toString() }
+                    program.findAllBlockByType(macros.beginType)
+                        .flatMap { it.contacts }
+                        .filterIsInstance<OutputDataPin>()
+                        .filter { it.name == parameterView.variableName }
+                        .forEach { it.name = title.toString() }
+
+                    parameterView.variableName = title.toString()
+                    updateMacros(macros)
+                    return
+                }
+                parameterView.name.removeTextChangedListener(this)
+                parameterView.name.setText(parameterView.variableName)
+                parameterView.name.addTextChangedListener(this)
+                Toast.makeText(
+                    this@BlueprintActivity,
+                    "Такой параметр уже есть!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        parameterView.name.addTextChangedListener(listener)
+
+        // Прослушка изменений типа переменной
+        parameterView.typeVariable.addItemSelectedListener { parent, _, _, _ ->
+            program.variableTypes[parent.selectedItem.toString()
+                .lowercase(Locale.getDefault())]
+                ?.let { type ->
+                    macros.retypeInput(parameterView.variableName, type)
+                    updateMacros(macros)
+                }
+        }
+        return parameterView
+    }
+
+    /**
+     * Метод создания выходного параметра в макроса
+     */
+    private fun createMacrosOutputView(
+        macros: MacrosType,
+        creatorView: CreatorView
+    ): VariableView {
+        val parameterView = createParameterView(generateName("param") {
+            !macros.hasOutput(it)
+        }, creatorView, VariablePlaces.INPUT_PARAMETERS)
+
+        // Прослушка изменений имени переменной
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(title: Editable) {
+                if (!macros.hasOutput(title.toString())) {
+                    macros.renameOutput(parameterView.variableName, title.toString())
+
+                    program.findAllBlockByType(macros)
+                        .flatMap { it.contacts }
+                        .filterIsInstance<OutputDataPin>()
+                        .filter { it.name == parameterView.variableName }
+                        .forEach { it.name = title.toString() }
+                    program.findAllBlockByType(macros.endType)
+                        .flatMap { it.contacts }
+                        .filterIsInstance<InputDataPin>()
+                        .filter { it.name == parameterView.variableName }
+                        .forEach { it.name = title.toString() }
+
+                    parameterView.variableName = title.toString()
+                    updateMacros(macros)
+                    return
+                }
+                parameterView.name.removeTextChangedListener(this)
+                parameterView.name.setText(parameterView.variableName)
+                parameterView.name.addTextChangedListener(this)
+                Toast.makeText(
+                    this@BlueprintActivity,
+                    "Такой параметр уже есть!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        parameterView.name.addTextChangedListener(listener)
+
+        // Прослушка изменений типа переменной
+        parameterView.typeVariable.addItemSelectedListener { parent, _, _, _ ->
+            program.variableTypes[parent.selectedItem.toString()
+                .lowercase(Locale.getDefault())]
+                ?.let { type ->
+                    macros.retypeOutput(parameterView.variableName, type)
+                    updateMacros(macros)
                 }
         }
         return parameterView
