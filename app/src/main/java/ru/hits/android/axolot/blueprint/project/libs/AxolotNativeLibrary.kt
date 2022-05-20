@@ -5,6 +5,7 @@ import ru.hits.android.axolot.blueprint.declaration.pin.*
 import ru.hits.android.axolot.blueprint.project.AxolotLibrary
 import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
+import ru.hits.android.axolot.interpreter.node.executable.NodeRegexMatch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
 import ru.hits.android.axolot.interpreter.node.function.math.bool.NodeBooleanAnd
@@ -35,6 +36,53 @@ class AxolotNativeLibrary : AxolotLibrary() {
 
         // Главный блок программы, с которого всё начинается
         registerBlock(BLOCK_MAIN)
+
+        // Регулярные выражения match
+        registerBlock(
+            NativeBlockType(
+                "regexMatch",
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                    },
+                    name = "text",
+                    type = Type.STRING
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                    },
+                    name = "regex",
+                    type = Type.STRING
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeRegexMatch() },
+                    type = Type.STRING
+                )
+            )
+        )
+
+        // Регулярные выражения find
+        registerBlock(
+            NativeBlockType(
+                "regexFind",
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().regexMatchText = node
+                    },
+                    name = "text",
+                    type = Type.STRING
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeRegexMatch() },
+                    type = Type.STRING
+                )
+            )
+        )
 
         // Узел ассинхронности
         registerBlock(
