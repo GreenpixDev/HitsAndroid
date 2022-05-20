@@ -36,6 +36,17 @@ class AxolotNativeLibrary : AxolotLibrary() {
         // Главный блок программы, с которого всё начинается
         registerBlock(BLOCK_MAIN)
 
+        registerBlock(
+            NativeBlockType(
+                "input",
+
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeBooleanNot() },
+                    type = Type.BOOLEAN
+                )
+            )
+        )
+
         // Узел ассинхронности
         registerBlock(
             NativeBlockType(
