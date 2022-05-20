@@ -1,6 +1,7 @@
 package ru.hits.android.axolot.interpreter
 
 import org.junit.Test
+import ru.hits.android.axolot.console.Console
 import ru.hits.android.axolot.interpreter.element.InterpretedFunction
 import ru.hits.android.axolot.interpreter.element.InterpretedMacros
 import ru.hits.android.axolot.interpreter.node.NodeConstant
@@ -14,6 +15,7 @@ import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeForLoopIndex
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
+import ru.hits.android.axolot.interpreter.node.function.NodeInput
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayGetElement
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArraySize
 import ru.hits.android.axolot.interpreter.node.function.custom.NodeFunctionEnd
@@ -35,7 +37,9 @@ class BlueprintInterpreterTest {
     @Test
     fun firstTest() {
         val scope = GlobalScope()
-        val interpreter = BlueprintInterpreter(scope)
+        val interpreter = BlueprintInterpreter(scope, Console {
+            it.invoke()
+        })
 
         scope.declareVariable("test", Type.INT, 2)
 
@@ -86,7 +90,9 @@ class BlueprintInterpreterTest {
     @Test
     fun printTest() {
         val scope = GlobalScope()
-        val interpreter = BlueprintInterpreter(scope)
+        val interpreter = BlueprintInterpreter(scope, Console {
+            it.invoke()
+        })
         scope.declareVariable("str", Type.STRING, "hello")
 
         val nodeGetVariable = NodeGetVariable("str")
@@ -98,9 +104,31 @@ class BlueprintInterpreterTest {
     }
 
     @Test
+    fun printTest2() {
+        val scope = GlobalScope()
+        val console = Console {
+            it.invoke()
+        }
+        console.send("hi")
+        val interpreter = BlueprintInterpreter(scope, console)
+        val consoleInput = NodeInput()
+        scope.declareVariable("str", Type.STRING, "hello")
+        val nodeSetVariable = NodeSetVariable("str")
+        nodeSetVariable.init(consoleInput)
+        val nodeGetVariable = NodeGetVariable("str")
+
+        val printNode = NodePrintString()
+        printNode.init(nodeGetVariable)
+        nodeSetVariable.nextNode = printNode
+        interpreter.execute(nodeSetVariable)
+    }
+
+    @Test
     fun whileMacrosTest() {
         val scope = GlobalScope()
-        val interpreter = BlueprintInterpreter(scope)
+        val interpreter = BlueprintInterpreter(scope, Console {
+            it.invoke()
+        })
         scope.declareVariable("counter", Type.INT, 0)
 
         /*
@@ -196,7 +224,9 @@ class BlueprintInterpreterTest {
     @Test
     fun forMacrosTest() {
         val scope = GlobalScope()
-        val interpreter = BlueprintInterpreter(scope)
+        val interpreter = BlueprintInterpreter(scope, Console {
+            it.invoke()
+        })
 
         /*
          Делаем макрос
@@ -206,9 +236,11 @@ class BlueprintInterpreterTest {
         /*
          Используем его
          */
-        val printStart = NodePrintString()                      // Нода вывода в консоль начала программы
+        val printStart =
+            NodePrintString()                      // Нода вывода в консоль начала программы
         val printLoopBody = NodePrintString()                   // Нода вывода в консоль итерации
-        val printCompleted = NodePrintString()                  // Нода вывода в консоль завершения цикла
+        val printCompleted =
+            NodePrintString()                  // Нода вывода в консоль завершения цикла
         val intToString = NodeCast(Type.STRING)                 // Нода int -> string
 
         ////
@@ -262,7 +294,9 @@ class BlueprintInterpreterTest {
     @Test
     fun forWithBreakMacrosTest() {
         val scope = GlobalScope()
-        val interpreter = BlueprintInterpreter(scope)
+        val interpreter = BlueprintInterpreter(scope, Console {
+            it.invoke()
+        })
 
         /*
          Делаем макрос
@@ -390,7 +424,9 @@ class BlueprintInterpreterTest {
     @Test
     fun fibonacciFunctionTest() {
         val scope = GlobalScope()
-        val interpreter = BlueprintInterpreter(scope)
+        val interpreter = BlueprintInterpreter(scope, Console {
+            it.invoke()
+        })
 
         /*
          Делаем функцию
@@ -478,7 +514,9 @@ class BlueprintInterpreterTest {
     @Test
     fun arrayTest() {
         val scope = GlobalScope()
-        val interpreter = BlueprintInterpreter(scope)
+        val interpreter = BlueprintInterpreter(scope, Console {
+            it.invoke()
+        })
         scope.declareVariable("array", Variable.arrayVariable(Type.STRING, 1))
 
         /*

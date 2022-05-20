@@ -1,6 +1,7 @@
 package ru.hits.android.axolot.interpreter.service
 
 import ru.hits.android.axolot.interpreter.node.NodeConstant
+import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
 import ru.hits.android.axolot.interpreter.node.executable.NodeSetVariable
 import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayAssignElement
@@ -8,6 +9,7 @@ import ru.hits.android.axolot.interpreter.node.executable.array.NodeArrayResize
 import ru.hits.android.axolot.interpreter.node.flowcontrol.*
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.NodeGetVariable
+import ru.hits.android.axolot.interpreter.node.function.NodeInput
 import ru.hits.android.axolot.interpreter.node.function.NodeMath
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayFindElement
 import ru.hits.android.axolot.interpreter.node.function.array.NodeArrayGetElement
@@ -21,6 +23,7 @@ import ru.hits.android.axolot.interpreter.node.function.math.integer.*
 import ru.hits.android.axolot.interpreter.node.function.math.real.*
 import ru.hits.android.axolot.interpreter.node.function.math.trig.*
 import ru.hits.android.axolot.interpreter.node.macros.*
+import ru.hits.android.axolot.interpreter.service.impl.executable.NodeAsyncService
 import ru.hits.android.axolot.interpreter.service.impl.executable.NodePrintStringService
 import ru.hits.android.axolot.interpreter.service.impl.executable.NodeSetVariableService
 import ru.hits.android.axolot.interpreter.service.impl.executable.array.NodeArrayAssignElementService
@@ -28,6 +31,7 @@ import ru.hits.android.axolot.interpreter.service.impl.executable.array.NodeArra
 import ru.hits.android.axolot.interpreter.service.impl.flowcontrol.*
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeCastService
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeGetVariableService
+import ru.hits.android.axolot.interpreter.service.impl.function.NodeInputService
 import ru.hits.android.axolot.interpreter.service.impl.function.NodeMathService
 import ru.hits.android.axolot.interpreter.service.impl.function.array.NodeArrayService
 import ru.hits.android.axolot.interpreter.service.impl.function.custom.NodeFunctionEndService
@@ -42,10 +46,13 @@ import ru.hits.android.axolot.interpreter.service.impl.macros.*
 import ru.hits.android.axolot.math.MathInterpreterImpl
 import kotlin.reflect.KClass
 
-class ServiceInit(private val nodeHandlerService: NodeHandlerService) {
+class ServiceInit(private val nodeHandlerService: NodeHandlerService, val console: Console) {
 
     fun intiHandler(): Map<KClass<*>, NodeService<*>> {
         val map = hashMapOf<KClass<*>, NodeService<*>>()
+
+        //------------------------ NodeAsync
+        map[NodeAsync::class] = NodeAsyncService()
 
         //------------------------ Macros
         map[NodeAssignVariable::class] = NodeAssignVariableService(nodeHandlerService)
@@ -137,6 +144,8 @@ class ServiceInit(private val nodeHandlerService: NodeHandlerService) {
         map[NodeArrayAssignElement::class] = NodeArrayAssignElementService(nodeHandlerService)
         map[NodeSetVariable::class] = NodeSetVariableService(nodeHandlerService)
         map[NodeArrayResize::class] = NodeArrayResizeService(nodeHandlerService)
+        map[NodePrintString::class] = NodePrintStringService(nodeHandlerService, console)
+        map[NodeInput::class] = NodeInputService(console)
         map[NodePrintString::class] = NodePrintStringService(nodeHandlerService)
 
         map[NodeMath::class] = NodeMathService(nodeHandlerService, MathInterpreterImpl())

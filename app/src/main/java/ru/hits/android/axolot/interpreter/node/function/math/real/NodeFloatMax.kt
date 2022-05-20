@@ -15,6 +15,10 @@ class NodeFloatMax : NodeFunction() {
         }
     }
 
+    fun add(input: NodeDependency) {
+        dependencies[dependencies.size] = input
+    }
+
     override operator fun invoke(context: InterpreterContext): Variable {
         var max = Double.POSITIVE_INFINITY
         for (i in dependencies.values.indices) {

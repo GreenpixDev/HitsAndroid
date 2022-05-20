@@ -5,6 +5,9 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 
 class ArrayType(val elementType: VariableType<*>) : VariableType<Array<Variable>> {
 
+    override val defaultValue: Array<Variable>?
+        get() = null
+
     @Suppress("unchecked_cast")
     override fun cast(variable: Variable): Array<Variable> {
         return variable.value as Array<Variable>

@@ -13,9 +13,19 @@ interface AxolotProject {
 
     val blockTypes: MutableMap<String, BlockType>
 
+    /**
+     * Добавить библиотеку [library] к проекту
+     */
     fun addLibrary(library: AxolotLibrary) {
         blockTypes.putAll(library.blockTypes)
         variableTypes.putAll(library.variableTypes)
+    }
+
+    /**
+     * Регистрация типа блока [blockType]
+     */
+    fun registerBlock(blockType: BlockType) {
+        blockTypes[blockType.fullName] = blockType
     }
 
 }

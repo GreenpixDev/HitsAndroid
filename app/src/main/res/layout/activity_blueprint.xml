@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/blueprintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_main"
-    android:id="@+id/blueprintLayout"
     android:visibility="visible"
-    tools:openDrawer="start"
-    tools:context=".BlueprintActivity">
+    tools:context=".BlueprintActivity"
+    tools:openDrawer="start">
 
     <com.otaliastudios.zoom.ZoomLayout
         android:id="@+id/zoomLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
-        app:transformation="centerInside"
-        app:transformationGravity="auto"
         app:alignment="center"
-        app:overScrollHorizontal="true"
-        app:overScrollVertical="true"
-        app:overPinchable="true"
-        app:horizontalPanEnabled="true"
-        app:verticalPanEnabled="true"
-        app:zoomEnabled="true"
+        app:animationDuration="280"
         app:flingEnabled="true"
-        app:scrollEnabled="true"
-        app:oneFingerScrollEnabled="true"
-        app:twoFingersScrollEnabled="true"
-        app:threeFingersScrollEnabled="true"
-        app:minZoom="10"
-        app:minZoomType="zoom"
+        app:hasClickableChildren="true"
+        app:horizontalPanEnabled="true"
         app:maxZoom="750"
         app:maxZoomType="zoom"
-        app:animationDuration="280"
-        app:hasClickableChildren="true"
+        app:minZoom="10"
+        app:minZoomType="zoom"
+        app:oneFingerScrollEnabled="true"
+        app:overPinchable="true"
+        app:overScrollHorizontal="true"
+        app:overScrollVertical="true"
+        app:scrollEnabled="true"
+        app:threeFingersScrollEnabled="true"
+        app:transformation="centerInside"
+        app:transformationGravity="auto"
+        app:twoFingersScrollEnabled="true"
+        app:verticalPanEnabled="true"
+        app:zoomEnabled="true"
         tools:ignore="MissingClass,MissingConstraints">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/codeField"
-            android:background="@drawable/ic_launcher_background"
-            android:clipChildren="false"
             android:layout_width="100000dp"
-            android:layout_height="100000dp"/>
+            android:layout_height="100000dp"
+            android:clipChildren="false">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.otaliastudios.zoom.ZoomLayout>
 
@@ -52,15 +52,14 @@
         android:id="@+id/menu"
         android:layout_width="255dp"
         android:layout_height="0dp"
-        android:background="@color/buttons"
+        android:background="@color/bg_menu"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" >
-    </View>
+        app:layout_constraintVertical_bias="0.0" />
 
     <ScrollView
         android:id="@+id/scrollViewMenu"
@@ -86,17 +85,21 @@
                 android:id="@+id/listBlocks"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/titleBlocks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:text="Blocks"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:paddingBottom="5dp"
+                    android:textColor="@color/titleBlocks"
+                    android:text="@string/listBlocks"
+                    android:fontFamily="@font/montserrat_alternates_semibold"
+                    android:textSize="20sp"
+                    style="@style/textViewStyle" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -106,29 +109,27 @@
                 android:orientation="vertical">
 
                 <TableRow
-                    tools:ignore="ExtraText"
                     android:id="@+id/tableRowFunction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    tools:ignore="ExtraText">
 
                     <TextView
                         android:id="@+id/titleFunction"
+                        style="@style/textViewStyle"
+                        android:textColor="@color/titleFunction"
+                        android:fontFamily="@font/montserrat_alternates_semibold"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="@string/titleFunctions"
                         android:layout_weight="1"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:paddingTop="5dp"
+                        android:paddingBottom="10dp"
+                        android:text="@string/titleFunctions" />
 
                     <ImageButton
                         android:id="@+id/plusFunction"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        style="@style/btnPlusForMenu"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="3dp"
                         android:background="@drawable/ic_plus" />
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -147,21 +148,20 @@
 
                     <TextView
                         android:id="@+id/titleMacros"
+                        style="@style/textViewStyle"
+                        android:textColor="@color/titleMacros"
+                        android:fontFamily="@font/montserrat_alternates_semibold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="Макросы"
                         android:layout_weight="1"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:paddingTop="5dp"
+                        android:paddingBottom="10dp"
+                        android:text="Макросы" />
 
                     <ImageButton
                         android:id="@+id/plusMacros"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        style="@style/btnPlusForMenu"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="3dp"
                         android:background="@drawable/ic_plus" />
                 </TableRow>
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -181,21 +181,20 @@
 
                     <TextView
                         android:id="@+id/titleVariables"
+                        style="@style/textViewStyle"
+                        android:textColor="@color/titleVariable"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="@string/titleVariable"
                         android:layout_weight="1"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:textSize="20sp" />
+                        android:fontFamily="@font/montserrat_alternates_semibold"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/titleVariable" />
 
                     <ImageButton
                         android:id="@+id/plusVariable"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        style="@style/btnPlusForMenu"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="3dp"
                         android:background="@drawable/ic_plus" />
 
                 </TableRow>
@@ -204,11 +203,23 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
 
+    <Switch
+        android:id="@+id/modeDelete"
+        android:layout_width="114dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="@string/modeDelete"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/ToStartCode"
+        app:layout_constraintEnd_toStartOf="@+id/ToStartCode"
+        app:layout_constraintTop_toTopOf="@id/ToStartCode"
+        tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
+
     <ImageButton
         android:id="@+id/showMenu"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/button_shape_circle_fill"
+        android:background="@drawable/circle_fill"
         android:contentDescription="@string/show_and_not_show_toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -223,28 +234,62 @@
         android:id="@+id/ToPageSettings"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:contentDescription="@string/settings_icon_description"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.956"
+        app:layout_constraintVertical_bias="1"
         app:srcCompat="@drawable/ic_settings_icon" />
 
     <ImageView
         android:id="@+id/ToStartCode"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:contentDescription="@string/play_icon_description"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.043"
+        app:layout_constraintVertical_bias="0"
         app:srcCompat="@drawable/ic_play_icon" />
+
+    <ImageView
+        android:id="@+id/openSaveView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="20dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/ToPageSettings"
+        app:layout_constraintEnd_toStartOf="@+id/ToPageSettings"
+        app:layout_constraintTop_toTopOf="@+id/ToPageSettings"
+        app:srcCompat="@drawable/ic_save_icon" />
+
+    <ImageView
+        android:id="@+id/showConsole"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="20dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/openSaveView"
+        app:layout_constraintEnd_toStartOf="@+id/openSaveView"
+        app:layout_constraintTop_toTopOf="@+id/openSaveView"
+        app:srcCompat="@drawable/ic_console_icon" />
+
+    <ru.hits.android.axolot.view.ConsoleView
+        android:id="@+id/consoleView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/showConsole"
+        app:layout_constraintEnd_toStartOf="@id/showConsole"
+        app:layout_constraintStart_toStartOf="@id/menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

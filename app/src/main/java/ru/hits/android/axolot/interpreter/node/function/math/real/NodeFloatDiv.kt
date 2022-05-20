@@ -8,18 +8,19 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 
 class NodeFloatDiv : NodeFunction() {
 
-    fun init(vararg input: NodeDependency) {
-        for (i in input.indices) {
-            dependencies[i] = input[i]
-        }
+    companion object {
+        const val FIRST = 0
+        const val SECOND = 1
+    }
+
+    fun init(first: NodeDependency, second: NodeDependency) {
+        dependencies[FIRST] = first
+        dependencies[SECOND] = second
     }
 
     override operator fun invoke(context: InterpreterContext): Variable {
-        var sum = 0.0
-        for (i in dependencies.values.indices) {
-            val input = dependencies[i]!!.invoke(context)[Type.FLOAT]
-            input?.let { sum /= input }
-        }
-        return Variable(Type.FLOAT, sum)
+        val first = dependencies[FIRST]!!.invoke(context)[Type.FLOAT]!!
+        val second = dependencies[SECOND]!!.invoke(context)[Type.FLOAT]!!
+        return Variable(Type.FLOAT, first / second)
     }
 }

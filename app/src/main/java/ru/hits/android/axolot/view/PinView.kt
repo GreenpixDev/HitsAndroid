@@ -2,6 +2,8 @@ package ru.hits.android.axolot.view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
+import android.text.InputType.*
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -10,12 +12,14 @@ import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.activity_blueprint.*
 import kotlinx.android.synthetic.main.block_item.view.*
 import kotlinx.android.synthetic.main.pin_item.view.*
-import ru.hits.android.axolot.blueprint.element.pin.InputPin
-import ru.hits.android.axolot.blueprint.element.pin.OutputPin
-import ru.hits.android.axolot.blueprint.element.pin.Pin
+import ru.hits.android.axolot.R
+import ru.hits.android.axolot.blueprint.declaration.pin.DeclaredDataPin
+import ru.hits.android.axolot.blueprint.element.pin.*
+import ru.hits.android.axolot.blueprint.element.pin.impl.InputDataPin
 import ru.hits.android.axolot.databinding.PinItemBinding
 import ru.hits.android.axolot.exception.AxolotPinException
 import ru.hits.android.axolot.exception.AxolotPinOneAdjacentException
+import ru.hits.android.axolot.interpreter.type.Type
 import ru.hits.android.axolot.util.*
 
 /**
@@ -31,12 +35,49 @@ class PinView @JvmOverloads constructor(
 
     private val binding = PinItemBinding.inflate(LayoutInflater.from(context), this)
 
-    private val edgeViews = mutableListOf<EdgeView>()
+    private val _edgeViews = mutableListOf<EdgeView>()
 
     lateinit var pin: Pin
 
+    val edgeViews: List<EdgeView>
+        get() = _edgeViews
+
     init {
         binding.contact.setOnTouchListener(this::onTouchEvent)
+    }
+
+    /**
+     * Получить цвет узла
+     */
+    private val color: Int
+        get() {
+            if (pin is FlowPin) {
+                return context.getColor(R.color.colorFlowControl)
+            }
+            if (pin is TypedPin) {
+                val pinType = (pin as TypedPin).type
+                if (pinType is DeclaredDataPin) {
+                    val colorName = "colorVariable${pinType.type}"
+                    return context.getThemeColor(colorName)
+                }
+            }
+            return Color.WHITE
+        }
+
+    /**
+     * Отображаемое название пина
+     */
+    var displayName: String
+        get() = binding.description.text.toString()
+        set(value) {
+            binding.description.text = value
+        }
+
+    /**
+     * Обновить пин
+     */
+    fun update() {
+
     }
 
     /**
@@ -57,13 +98,106 @@ class PinView @JvmOverloads constructor(
             else -> throw IllegalArgumentException("Pin must be InputPin or OutputPin")
         }
         layout.addView(this, indexGetter.invoke(layout.childCount))
+        processInputField()
+    }
+
+    /**
+     * В разметке указано, что все поля ввода и картинки для bool имеют тип gone.
+     * То есть они свернуты, не занимают места в разметке.
+     * Для пина конкретного типа мы сделаем видимым нужное поле, а после того, как
+     * это поле станет ненужным (произойдет соединение этого пина), мы сделаем его
+     * invisible (он станет невидимым, но продолжит занимать место)
+     */
+    private fun processInputField() {
+
+        val currentPin = pin
+
+        if (currentPin is InputDataPin) {
+
+            when ((currentPin.type as DeclaredDataPin).type) {
+                Type.INT -> {
+                    binding.inputField.visibility = View.VISIBLE
+                    binding.inputField.inputType = TYPE_CLASS_NUMBER + TYPE_NUMBER_FLAG_SIGNED
+                    binding.inputField.setText("0")
+
+                    binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
+                        val inputData = inputDataBlock.toString()
+
+                        //Если поле ввода пустое, то будем отправлять значения по умолчанию
+                        if (inputData != "") {
+                            activity.program.setValue(currentPin, Type.INT, inputData.toInt())
+                        } else {
+                            activity.program.setValue(currentPin, Type.INT, 0)
+                        }
+                    }
+                }
+
+                Type.FLOAT -> {
+                    binding.inputField.visibility = View.VISIBLE
+                    binding.inputField.inputType =
+                        TYPE_CLASS_NUMBER + TYPE_NUMBER_FLAG_DECIMAL + TYPE_NUMBER_FLAG_SIGNED
+                    binding.inputField.setText("0.0")
+
+                    binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
+                        val inputData = inputDataBlock.toString()
+
+                        //Если поле ввода пустое, то будем отправлять значения по умолчанию
+                        if (inputData != "") {
+                            activity.program.setValue(currentPin, Type.FLOAT, inputData.toDouble())
+                        } else {
+                            activity.program.setValue(currentPin, Type.FLOAT, 0.0)
+                        }
+
+                    }
+                }
+
+                Type.BOOLEAN -> {
+                    binding.crossIcon.visibility = VISIBLE
+
+                    binding.crossIcon.setOnClickListener {
+                        if (binding.crossIcon.visibility == View.VISIBLE) {
+                            binding.crossIcon.visibility = GONE
+                            binding.tickIcon.visibility = VISIBLE
+                        }
+
+                        activity.program.setValue(currentPin, Type.BOOLEAN, value = true)
+                    }
+
+                    binding.tickIcon.setOnClickListener {
+                        if (binding.tickIcon.visibility == View.VISIBLE) {
+                            binding.tickIcon.visibility = GONE
+                            binding.crossIcon.visibility = VISIBLE
+
+                            activity.program.setValue(currentPin, Type.BOOLEAN, value = false)
+                        }
+                    }
+                }
+
+                Type.STRING -> {
+                    binding.inputField.inputType = TYPE_CLASS_TEXT
+                    binding.inputField.visibility = VISIBLE
+
+                    binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
+                        val inputData = inputDataBlock.toString()
+
+                        activity.program.setValue(currentPin, Type.STRING, inputData)
+                    }
+                }
+
+                //если не надо для интерпретатора - убрать
+                else -> {
+                    binding.inputField.inputType = TYPE_NULL
+                }
+            }
+
+        }
     }
 
     /**
      * Сдвинуть конечную точку на ребре на [delta] относительно прошлой позиции
      */
     fun move(delta: Vec2f) {
-        edgeViews.forEach {
+        _edgeViews.forEach {
             when (pin) {
                 is InputPin -> it.points[it.points.size - 1] += delta
                 is OutputPin -> it.points[0] += delta
@@ -99,24 +233,25 @@ class PinView @JvmOverloads constructor(
                 val edgeView = EdgeView(context)
 
                 edgeView.position = center
+                edgeView.paintBrush.color = color
 
                 edgeView.points.add(Vec2f.ZERO)
                 edgeView.points.add(Vec2f.ZERO)
 
-                edgeViews.add(edgeView)
+                _edgeViews.add(edgeView)
                 activity.codeField.addView(edgeView)
             }
 
             // Когда двигаем пальцем - отрисовываем каждый кадр
             MotionEvent.ACTION_MOVE -> {
-                val edgeView = edgeViews.last()
+                val edgeView = _edgeViews.last()
                 edgeView.setEndPoint(pointer)
                 edgeView.invalidate()
             }
 
             // Когда отжимаем палец - либо удаляем линию, либо сохраняем её и соединяем пины
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                val edgeView = edgeViews.last()
+                val edgeView = _edgeViews.last()
                 val parent =
                     activity.codeField.findViewAt(pointer) { it !is EdgeView }?.parent
 
@@ -131,7 +266,7 @@ class PinView @JvmOverloads constructor(
                         return true
                     }
                 }
-                edgeViews.removeLast()
+                _edgeViews.removeLast()
                 activity.codeField.removeView(edgeView)
             }
         }
@@ -145,19 +280,22 @@ class PinView @JvmOverloads constructor(
     private fun connectWith(pinView: PinView, edgeView: EdgeView): Boolean {
         return try {
             sourceCode.connect(pin, pinView.pin)
-            pinView.edgeViews.add(edgeView)
+            pinView._edgeViews.add(edgeView)
+            //после соединения нужно спрятать поля, если мы соединили константы
+            hideField(pinView)
+
             true
         }
         // Если попытались соединить PinToOne ко второму пину - убираем первое соединение
         catch (e: AxolotPinOneAdjacentException) {
             if (e.pin == pin) {
                 e.pin.adjacent = null
-                activity.codeField.removeView(edgeViews.removeAt(edgeViews.size - 2))
+                activity.codeField.removeView(_edgeViews.removeAt(_edgeViews.size - 2))
                 return connectWith(pinView, edgeView)
             }
             if (e.pin == pinView.pin) {
                 e.pin.adjacent = null
-                activity.codeField.removeView(pinView.edgeViews.removeLast())
+                activity.codeField.removeView(pinView._edgeViews.removeLast())
                 return connectWith(pinView, edgeView)
             }
             false
@@ -165,6 +303,49 @@ class PinView @JvmOverloads constructor(
         // Иные
         catch (e: AxolotPinException) {
             false
+        }
+    }
+
+    /**
+     * Прячем все поля для соединенных пинов.
+     * Если это был пин типа Boolean, то картинка становится невидимой.
+     */
+    private fun hideField(pinView: PinView) {
+        val inputPinView: PinView
+        val inputPin: Pin
+
+        if (this.pin is InputPin) {
+            inputPinView = this
+            inputPin = this.pin
+        } else {
+            inputPinView = pinView
+            inputPin = pinView.pin
+        }
+
+        if (inputPin is DataPin && inputPin is InputPin) {
+            if (inputPin is TypedPin) {
+                when ((inputPin.type as DeclaredDataPin).type) {
+                    Type.INT, Type.FLOAT, Type.STRING -> {
+                        inputPinView.inputField.visibility = INVISIBLE
+                    }
+
+                    Type.BOOLEAN -> {
+                        when {
+                            inputPinView.tickIcon.visibility == VISIBLE -> {
+                                inputPinView.tickIcon.visibility = INVISIBLE
+                            }
+
+                            inputPinView.crossIcon.visibility == VISIBLE -> {
+                                inputPinView.crossIcon.visibility = INVISIBLE
+                            }
+
+                            else -> throw IllegalStateException("Что-то не так (какая-то проблема с видимостью константы у входящего пина Boolean)")
+                        }
+                    }
+
+                    else -> throw IllegalStateException("Что-то не так (сокрытие поля у входящего пина)")
+                }
+            }
         }
     }
 }

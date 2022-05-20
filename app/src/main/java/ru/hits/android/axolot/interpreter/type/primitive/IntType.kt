@@ -4,6 +4,9 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 
 class IntType : NumberType<Int>() {
 
+    override val defaultValue: Int
+        get() = 0
+
     override fun cast(variable: Variable): Int {
         if (variable.type is NumberType<*>) {
             return (variable.value as Number).toInt()
