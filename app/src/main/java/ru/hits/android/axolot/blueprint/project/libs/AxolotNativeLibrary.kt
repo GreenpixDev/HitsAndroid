@@ -53,7 +53,7 @@ class AxolotNativeLibrary : AxolotLibrary() {
                     minArgs = 2
                 ),
                 DeclaredSingleOutputDataPin(
-                    nodeFabric = { NodeIntSum() },
+                    nodeFabric = { NodeStringConcatenation() },
                     type = Type.STRING
                 )
             )

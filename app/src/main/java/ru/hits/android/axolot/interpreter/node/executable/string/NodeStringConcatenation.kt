@@ -7,6 +7,12 @@ import ru.hits.android.axolot.interpreter.variable.Variable
 
 class NodeStringConcatenation : NodeFunction() {
 
+    fun init(vararg input: NodeDependency) {
+        for (i in input.indices) {
+            dependencies[i] = input[i]
+        }
+    }
+
     fun add(input: NodeDependency) {
         dependencies[dependencies.size] = input
     }

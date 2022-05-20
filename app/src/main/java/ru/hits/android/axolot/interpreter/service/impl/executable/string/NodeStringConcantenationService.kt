@@ -17,7 +17,7 @@ class NodeStringConcantenationService(private val handlerService: NodeHandlerSer
 
             for (i in node.dependencies.values.indices) {
                 val input =
-                    handlerService.invoke(node.dependencies[i]!!, context)[Type.FLOAT]
+                    handlerService.invoke(node.dependencies[i]!!, context)[Type.STRING]
                 input?.let { sum += input }
             }
 
