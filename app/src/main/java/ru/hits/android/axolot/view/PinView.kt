@@ -123,8 +123,8 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
                         val inputData = inputDataBlock.toString()
 
-                        //Если поле ввода пустое, то будем отправлять значения по умолчанию
-                        if (inputData != "") {
+                        //Если поле ввода пустое или равно "-", то будем отправлять значения по умолчанию
+                        if (inputData != "" && inputData != "-") {
                             activity.program.setValue(currentPin, Type.INT, inputData.toInt())
                         } else {
                             activity.program.setValue(currentPin, Type.INT, 0)
@@ -141,8 +141,8 @@ class PinView @JvmOverloads constructor(
                     binding.inputField.addTextChangedListener { inputDataBlock, _, _, _ ->
                         val inputData = inputDataBlock.toString()
 
-                        //Если поле ввода пустое, то будем отправлять значения по умолчанию
-                        if (inputData != "") {
+                        //Если поле ввода пустое или равно "-" или начинается с ".", то будем отправлять значения по умолчанию
+                        if (inputData != "" && inputData != "-" && inputData[0] != '.' && inputData[0] != '-') {
                             activity.program.setValue(currentPin, Type.FLOAT, inputData.toDouble())
                         } else {
                             activity.program.setValue(currentPin, Type.FLOAT, 0.0)
@@ -339,7 +339,6 @@ class PinView @JvmOverloads constructor(
                                 inputPinView.crossIcon.visibility = INVISIBLE
                             }
 
-                            else -> throw IllegalStateException("Что-то не так (какая-то проблема с видимостью константы у входящего пина Boolean)")
                         }
                     }
 
