@@ -1,11 +1,13 @@
-package ru.hits.android.axolot.interpreter.node.executable
+package ru.hits.android.axolot.interpreter.node.function
 
 import ru.hits.android.axolot.interpreter.InterpreterContext
 import ru.hits.android.axolot.interpreter.node.NodeDependency
 import ru.hits.android.axolot.interpreter.node.NodeExecutable
+import ru.hits.android.axolot.interpreter.node.NodeFunction
 import ru.hits.android.axolot.interpreter.type.Type
+import ru.hits.android.axolot.interpreter.variable.Variable
 
-class NodePrintString : NodeExecutable() {
+class NodeMath : NodeFunction() {
 
     var nextNode: NodeExecutable? = null
 
@@ -17,9 +19,9 @@ class NodePrintString : NodeExecutable() {
         dependencies[STRING] = string
     }
 
-    override operator fun invoke(context: InterpreterContext): NodeExecutable? {
+    override operator fun invoke(context: InterpreterContext): Variable {
         val string = dependencies[STRING]!!.invoke(context)[Type.STRING]
-
-        return nextNode
+        throw UnsupportedOperationException("Не поддерживается")
     }
+
 }

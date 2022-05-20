@@ -19,7 +19,7 @@ class NodePrintStringService(private val nodeHandlerService: NodeHandlerService,
                 context
             )[Type.STRING]
             console.sendStringToUser(string)
-            println(string)
+
             return node.nextNode
         }
         throw createIllegalException(node)
