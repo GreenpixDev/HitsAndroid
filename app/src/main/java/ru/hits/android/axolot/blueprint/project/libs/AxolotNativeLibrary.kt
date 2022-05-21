@@ -2,6 +2,7 @@ package ru.hits.android.axolot.blueprint.project.libs
 
 import ru.hits.android.axolot.blueprint.declaration.NativeBlockType
 import ru.hits.android.axolot.blueprint.declaration.pin.*
+import ru.hits.android.axolot.blueprint.element.pin.impl.OutputFlowPin
 import ru.hits.android.axolot.blueprint.project.AxolotLibrary
 import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
@@ -10,7 +11,9 @@ import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexMatch
 import ru.hits.android.axolot.interpreter.node.executable.string.NodeStringConcatenation
 import ru.hits.android.axolot.interpreter.node.executable.thread.NodeSleep
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
+import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeForLoop
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
+import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeWhileLoop
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
 import ru.hits.android.axolot.interpreter.node.function.NodeInput
 import ru.hits.android.axolot.interpreter.node.function.NodeMath
@@ -231,15 +234,16 @@ class AxolotNativeLibrary : AxolotLibrary() {
                     },
                     name = "true"
                 ),
-            DeclaredSingleOutputFlowPin(
-                handler = { target, node ->
-                    target
-                        .filterIsInstance<NodeBranch>()
-                        .first().falseNode = node
-                },
-                name = "false"
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeBranch>()
+                            .first().falseNode = node
+                    },
+                    name = "false"
+                )
             )
-        ))
+        )
 
         // Последовательность команд
         registerBlock(NativeBlockType("sequence",
@@ -272,16 +276,16 @@ class AxolotNativeLibrary : AxolotLibrary() {
                             .first().init(node)
                     },
                     name = "text",
-                type = Type.STRING
-            ),
-            DeclaredSingleOutputFlowPin(
-                handler = { target, node ->
-                    target
-                        .filterIsInstance<NodePrintString>()
-                        .first().nextNode = node
-                },
+                    type = Type.STRING
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodePrintString>()
+                            .first().nextNode = node
+                    },
+                )
             )
-        )
         )
 
         // Остановить поток на n миллисекунд
@@ -1177,5 +1181,41 @@ class AxolotNativeLibrary : AxolotLibrary() {
             )
             )
         }
+
+        // цикл - While Loop
+        registerBlock(
+            NativeBlockType(
+                "whileLoop",
+                DeclaredSingleInputFlowPin(
+                    nodeFabric = { NodeWhileLoop() },
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeWhileLoop>()
+                            .first().dependencies[NodeWhileLoop.CONDITION] = node
+                    },
+                    name = "Condition",
+                    type = Type.BOOLEAN
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeForLoop>()
+                            .first().loopBody = node
+                    },
+                    name = "Loop Body"
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeWhileLoop>()
+                            .first().completed = node
+                    },
+                    name = "Completed"
+                )
+            )
+        )
+
     }
 }
