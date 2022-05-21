@@ -30,10 +30,21 @@
     <string name="modeDelete">Режим удаления</string>
 
     <string name="listBlocks">Блоки</string>
+    <string name="defaultNameBlock">block</string>
 
     <string name="console">Это консоль</string>
 
     <string name="variable">variable</string>
+    <string name="AddPin">Add Pin</string>
+    <string name="inputText">Input</string>
+    <string name="outputText">Output</string>
+    <string name="inputExecuteText">Input execute</string>
+    <string name="outputExecuteText">Output execute</string>
+    <string name="descriptionText">description</string>
+
+    <style name="backToMain">Back To Main</style>
+
+    <string name="returnBlock">Return Block</string>
 
     <string name="blockSET">Set</string>
     <string name="blockGet">Get</string>
@@ -43,6 +54,7 @@
     <string name="inputData">Condition</string>
     <string name="outputTrue">True</string>
     <string name="outputFalse">False</string>
+    <string name="titleMacros">Макросы</string>
 
     <string-array name="typeBlock">
         <item>Boolean</item>

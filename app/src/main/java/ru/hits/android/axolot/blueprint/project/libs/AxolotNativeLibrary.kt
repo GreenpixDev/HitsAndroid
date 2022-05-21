@@ -2,6 +2,7 @@ package ru.hits.android.axolot.blueprint.project.libs
 
 import ru.hits.android.axolot.blueprint.declaration.NativeBlockType
 import ru.hits.android.axolot.blueprint.declaration.pin.*
+import ru.hits.android.axolot.blueprint.element.pin.impl.OutputFlowPin
 import ru.hits.android.axolot.blueprint.project.AxolotLibrary
 import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
@@ -10,6 +11,7 @@ import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexMatch
 import ru.hits.android.axolot.interpreter.node.executable.string.NodeStringConcatenation
 import ru.hits.android.axolot.interpreter.node.executable.thread.NodeSleep
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
+import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeForLoop
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeWhileLoop
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
@@ -43,170 +45,34 @@ class AxolotNativeLibrary : AxolotLibrary() {
         variableTypes["float"] = Type.FLOAT
         variableTypes["string"] = Type.STRING
 
-        // Преобразования типов (сделано потупому, потому что у Ромы косяк в архитектуре)
-        for (from in variableTypes) {
-            for (to in variableTypes) {
-                if (from != to) {
-                    registerBlock(
-                        NativeBlockType(
-                            "cast.${from.key}_${to.key}",
-                            DeclaredSingleInputDataPin(
-                                handler = { target, node ->
-                                    target
-                                        .filterIsInstance<NodeCast>()
-                                        .first().init(node)
-                                },
-                                type = from.value
-                            ),
-                            DeclaredSingleOutputDataPin(
-                                nodeFabric = { NodeCast(to.value) },
-                                type = to.value
-                            )
-                        )
-                    )
-                }
-            }
-        }
-
-        // Главный блок программы, с которого всё начинается
-        registerBlock(BLOCK_MAIN)
-
-        // input
+        // Вывод в консоль
         registerBlock(
             NativeBlockType(
-                "input",
-
-                DeclaredSingleOutputDataPin(
-                    nodeFabric = { NodeInput() },
-                    type = Type.STRING
-                )
-            )
-        )
-
-        // string + string
-        registerBlock(
-            NativeBlockType(
-                "sumStrings",
-                DeclaredVarargInputDataPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeStringConcatenation>()
-                            .first().add(node)
-                    },
-                    type = Type.STRING,
-                    minArgs = 2
-                ),
-                DeclaredSingleOutputDataPin(
-                    nodeFabric = { NodeStringConcatenation() },
-                    type = Type.STRING
-                )
-            )
-        )
-
-        // Регулярные выражения match
-        registerBlock(
-            NativeBlockType(
-                "regexMatch",
-                DeclaredSingleInputDataPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeRegexMatch>()
-                            .first().dependencies[NodeRegexMatch.TEXT] = node
-                    },
-                    name = "text",
-                    type = Type.STRING
-                ),
-                DeclaredSingleInputDataPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeRegexMatch>()
-                            .first().dependencies[NodeRegexMatch.REGEX_TEXT] = node
-                    },
-                    name = "regex",
-                    type = Type.STRING
-                ),
-                DeclaredSingleOutputDataPin(
-                    nodeFabric = { NodeRegexMatch() },
-                    type = Type.BOOLEAN
-                )
-            )
-        )
-
-        // Регулярные выражения find
-        registerBlock(
-            NativeBlockType(
-                "regexFind",
-                DeclaredSingleInputDataPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeRegexMatch>()
-                            .first().dependencies[NodeRegexFind.TEXT] = node
-                    },
-                    name = "text",
-                    type = Type.STRING
-                ),
-                DeclaredSingleInputDataPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeRegexMatch>()
-                            .first().dependencies[NodeRegexFind.REGEX_TEXT] = node
-                    },
-                    name = "regex",
-                    type = Type.STRING
-                ),
-                DeclaredSingleInputDataPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeRegexMatch>()
-                            .first().dependencies[NodeRegexFind.START_INDEX] = node
-                    },
-                    name = "start index",
-                    type = Type.INT
-                ),
-                DeclaredSingleOutputDataPin(
-                    nodeFabric = { NodeRegexMatch() },
-                    type = Type.STRING
-                )
-            )
-        )
-
-        // Узел ассинхронности
-        registerBlock(
-            NativeBlockType(
-                "async",
+                "print",
                 DeclaredSingleInputFlowPin(
-                    nodeFabric = { NodeAsync() },
+                    nodeFabric = { NodePrintString() }
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodePrintString>()
+                            .first().init(node)
+                    },
+                    name = "text",
+                    type = Type.STRING
                 ),
                 DeclaredSingleOutputFlowPin(
                     handler = { target, node ->
                         target
-                            .filterIsInstance<NodeAsync>()
+                            .filterIsInstance<NodePrintString>()
                             .first().nextNode = node
                     },
-                    name = "async"
                 )
             )
         )
 
-        registerBlock(
-            NativeBlockType(
-                "math",
-                DeclaredSingleInputDataPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeMath>()
-                            .first().init(node)
-                    },
-                    name = "expression",
-                    type = Type.STRING
-                ),
-                DeclaredSingleOutputDataPin(
-                    nodeFabric = { NodeMath() },
-                    name = "result",
-                    type = Type.FLOAT
-                )
-            )
-        )
+        // Главный блок программы, с которого всё начинается
+        registerBlock(BLOCK_MAIN)
 
         // Ветвление (условие IF)
         registerBlock(
@@ -263,58 +129,86 @@ class AxolotNativeLibrary : AxolotLibrary() {
         // Вывод в консоль
         registerBlock(
             NativeBlockType(
-                "print",
+                "whileLoop",
                 DeclaredSingleInputFlowPin(
-                    nodeFabric = { NodePrintString() }
+                    nodeFabric = { NodeWhileLoop() },
                 ),
                 DeclaredSingleInputDataPin(
                     handler = { target, node ->
                         target
-                            .filterIsInstance<NodePrintString>()
-                            .first().init(node)
+                            .filterIsInstance<NodeWhileLoop>()
+                            .first().dependencies[NodeWhileLoop.CONDITION] = node
                     },
-                    name = "text",
-                    type = Type.STRING
+                    name = "Condition",
+                    type = Type.BOOLEAN
                 ),
                 DeclaredSingleOutputFlowPin(
                     handler = { target, node ->
                         target
-                            .filterIsInstance<NodePrintString>()
-                            .first().nextNode = node
+                            .filterIsInstance<NodeForLoop>()
+                            .first().loopBody = node
                     },
+                    name = "Loop Body"
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeWhileLoop>()
+                            .first().completed = node
+                    },
+                    name = "Completed"
                 )
             )
         )
 
-        // Остановить поток на n миллисекунд
-        registerBlock(NativeBlockType("sleep",
-            DeclaredSingleInputFlowPin(
-                nodeFabric = { NodeSleep() }
-            ),
-            DeclaredSingleInputDataPin(
-                handler = { target, node ->
-                    target
-                        .filterIsInstance<NodeSleep>()
-                        .first().init(node)
-                },
-                name = "delay",
-                type = Type.INT
-            ),
-            DeclaredSingleOutputFlowPin(
-                handler = { target, node ->
-                    target
-                        .filterIsInstance<NodeSleep>()
-                        .first().nextNode = node
-                },
+        // Локальная переменная
+        for (typeVariable in variableTypes) {
+            registerBlock(
+                NativeBlockType(
+                    "localVariable.${typeVariable.key}",
+                    DeclaredSingleOutputDataPin(
+                        nodeFabric = { NodeLocalVariable(typeVariable.value) },
+                        name = "",
+                        type = typeVariable.value
+                    )
+                )
             )
-        )
-        )
+        }
 
-        /*
-         *
-         *
-         *
-         */
+        // Присваивание
+        for (typeVariable in variableTypes) {
+            registerBlock(NativeBlockType("assignVariable.${typeVariable.key}",
+                DeclaredSingleInputFlowPin(
+                    nodeFabric = { NodeAssignVariable() }
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeAssignVariable>()
+                            .first().dependencies[NodeAssignVariable.REFERENCE] = node
+                    },
+                    name = "ref",
+                    type = typeVariable.value
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeAssignVariable>()
+                            .first().dependencies[NodeAssignVariable.VALUE] = node
+                    },
+                    name = "value",
+                    type = typeVariable.value
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeAssignVariable>()
+                            .first().nextNode = node
+                    },
+                )
+            )
+            )
+        }
 
         // not bool
         registerBlock(
@@ -982,11 +876,202 @@ class AxolotNativeLibrary : AxolotLibrary() {
             )
         )
 
+        // Преобразования типов (сделано потупому, потому что у Ромы косяк в архитектуре)
+        for (from in variableTypes) {
+            for (to in variableTypes) {
+                if (from != to) {
+                    registerBlock(
+                        NativeBlockType(
+                            "cast.${from.key}_${to.key}",
+                            DeclaredSingleInputDataPin(
+                                handler = { target, node ->
+                                    target
+                                        .filterIsInstance<NodeCast>()
+                                        .first().init(node)
+                                },
+                                type = from.value
+                            ),
+                            DeclaredSingleOutputDataPin(
+                                nodeFabric = { NodeCast(to.value) },
+                                type = to.value
+                            )
+                        )
+                    )
+                }
+            }
+        }
+
         /*
          *
          *
          *
          */
+
+        // string + string
+        registerBlock(
+            NativeBlockType(
+                "sumStrings",
+                DeclaredVarargInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeStringConcatenation>()
+                            .first().add(node)
+                    },
+                    type = Type.STRING,
+                    minArgs = 2
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeStringConcatenation() },
+                    type = Type.STRING
+                )
+            )
+        )
+
+        registerBlock(
+            NativeBlockType(
+                "math",
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeMath>()
+                            .first().init(node)
+                    },
+                    name = "expression",
+                    type = Type.STRING
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeMath() },
+                    name = "result",
+                    type = Type.FLOAT
+                )
+            )
+        )
+
+        // Регулярные выражения match
+        registerBlock(
+            NativeBlockType(
+                "regexMatch",
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexMatch.TEXT] = node
+                    },
+                    name = "text",
+                    type = Type.STRING
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexMatch.REGEX_TEXT] = node
+                    },
+                    name = "regex",
+                    type = Type.STRING
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeRegexMatch() },
+                    type = Type.BOOLEAN
+                )
+            )
+        )
+
+        // Регулярные выражения find
+        registerBlock(
+            NativeBlockType(
+                "regexFind",
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexFind.TEXT] = node
+                    },
+                    name = "text",
+                    type = Type.STRING
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexFind.REGEX_TEXT] = node
+                    },
+                    name = "regex",
+                    type = Type.STRING
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeRegexMatch>()
+                            .first().dependencies[NodeRegexFind.START_INDEX] = node
+                    },
+                    name = "start index",
+                    type = Type.INT
+                ),
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeRegexMatch() },
+                    type = Type.STRING
+                )
+            )
+        )
+
+        // Последовательность команд
+        registerBlock(NativeBlockType("sequence",
+            DeclaredSingleInputFlowPin(
+                nodeFabric = { NodeSequence() }
+            ),
+            DeclaredVarargOutputFlowPin(
+                handler = { target, node ->
+                    target
+                        .filterIsInstance<NodeSequence>()
+                        .first().then(node)
+                },
+                lazyName = { "then-$it" },
+                minArgs = 1
+            )
+        )
+        )
+
+        // Остановить поток на n миллисекунд
+        registerBlock(NativeBlockType("sleep",
+            DeclaredSingleInputFlowPin(
+                nodeFabric = { NodeSleep() }
+            ),
+            DeclaredSingleInputDataPin(
+                handler = { target, node ->
+                    target
+                        .filterIsInstance<NodeSleep>()
+                        .first().init(node)
+                },
+                name = "delay",
+                type = Type.INT
+            ),
+            DeclaredSingleOutputFlowPin(
+                handler = { target, node ->
+                    target
+                        .filterIsInstance<NodeSleep>()
+                        .first().nextNode = node
+                },
+            )
+        )
+        )
+
+        // Узел ассинхронности
+        registerBlock(
+            NativeBlockType(
+                "async",
+                DeclaredSingleInputFlowPin(
+                    nodeFabric = { NodeAsync() },
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeAsync>()
+                            .first().nextNode = node
+                    },
+                    name = "async"
+                )
+            )
+        )
 
         // log
         registerBlock(
@@ -1125,95 +1210,16 @@ class AxolotNativeLibrary : AxolotLibrary() {
             )
         )
 
-        /*
-         *
-         *
-         *
-         */
-
-        // Локальная переменная
-        for (typeVariable in variableTypes) {
-            registerBlock(
-                NativeBlockType(
-                    "localVariable.${typeVariable.key}",
-                    DeclaredSingleOutputDataPin(
-                        nodeFabric = { NodeLocalVariable(typeVariable.value) },
-                        name = "",
-                        type = typeVariable.value
-                    )
-                )
-            )
-        }
-
-        // Присваивание
-        for (typeVariable in variableTypes) {
-            registerBlock(NativeBlockType("assignVariable.${typeVariable.key}",
-                DeclaredSingleInputFlowPin(
-                    nodeFabric = { NodeAssignVariable() }
-                ),
-                DeclaredSingleInputDataPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeAssignVariable>()
-                            .first().dependencies[NodeAssignVariable.REFERENCE] = node
-                    },
-                    name = "ref",
-                    type = typeVariable.value
-                ),
-                DeclaredSingleInputDataPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeAssignVariable>()
-                            .first().dependencies[NodeAssignVariable.VALUE] = node
-                    },
-                    name = "value",
-                    type = typeVariable.value
-                ),
-                DeclaredSingleOutputFlowPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeAssignVariable>()
-                            .first().nextNode = node
-                    },
-                )
-            )
-            )
-        }
-
-        // цикл - While Loop
+        // input
         registerBlock(
             NativeBlockType(
-                "whileLoop",
-                DeclaredSingleInputFlowPin(
-                    nodeFabric = { NodeWhileLoop() },
-                ),
-                DeclaredSingleInputDataPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeWhileLoop>()
-                            .first().dependencies[NodeWhileLoop.CONDITION] = node
-                    },
-                    name = "Condition",
-                    type = Type.BOOLEAN
-                ),
-                DeclaredSingleOutputFlowPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeWhileLoop>()
-                            .first().loopBody = node
-                    },
-                    name = "Loop Body"
-                ),
-                DeclaredSingleOutputFlowPin(
-                    handler = { target, node ->
-                        target
-                            .filterIsInstance<NodeWhileLoop>()
-                            .first().completed = node
-                    },
-                    name = "Completed"
+                "input",
+
+                DeclaredSingleOutputDataPin(
+                    nodeFabric = { NodeInput() },
+                    type = Type.STRING
                 )
             )
         )
-
     }
 }

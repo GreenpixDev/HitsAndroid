@@ -13,6 +13,7 @@ class FunctionView @JvmOverloads constructor(
 
     init {
         typeExpression = false
+        set = false
         initComponents()
     }
 
