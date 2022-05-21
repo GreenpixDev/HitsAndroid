@@ -21,6 +21,11 @@
     <color name="bg_view_info">#720B0A0A</color>
     <color name="btn_start">#909F4E89</color>
 
+    <color name="bodyTwoLogo">#CFA6C1</color>
+    <color name="bodyLogo">#A5799D</color>
+    <color name="bodyThreeLogo">#A35985</color>
+    <color name="nameLogo">#F4EEEE</color>
+
     <color name="bg_btn_menu_click">#D09C16</color>
     <color name="bg_btn_menu">#B0046B8C</color>
 
