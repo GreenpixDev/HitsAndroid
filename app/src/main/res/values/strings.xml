@@ -54,7 +54,7 @@
     <string name="inputData">Condition</string>
     <string name="outputTrue">True</string>
     <string name="outputFalse">False</string>
-    <string name="titleMacros">False</string>
+    <string name="titleMacros">Макросы</string>
 
     <string-array name="typeBlock">
         <item>Boolean</item>
