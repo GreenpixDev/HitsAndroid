@@ -48,6 +48,7 @@ class BlueprintActivity : AppCompatActivity() {
 
     private var menuIsVisible = true
     var consoleIsVisible = true
+    var informationIsVisible = true
 
     private val program = AxolotProgram.create()
     val console = Console {
@@ -90,6 +91,10 @@ class BlueprintActivity : AppCompatActivity() {
         binding.consoleView.initConsole(console)
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -98,6 +103,10 @@ class BlueprintActivity : AppCompatActivity() {
             binding.zoomLayout.zoomTo(binding.zoomLayout.getMaxZoom() / 2, false)
             restoreSource(program)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 
     /**
@@ -123,10 +132,13 @@ class BlueprintActivity : AppCompatActivity() {
         }
 
         // Запуск программы
-        binding.ToStartCode.setOnClickListener { startProgram() }
+        binding.toStartCode.setOnClickListener {
+            binding.consoleView.openConsole()
+            startProgram()
+        }
 
         // Переключение на страницу с настройками
-        binding.ToPageSettings.setOnClickListener {
+        binding.toPageSettings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 

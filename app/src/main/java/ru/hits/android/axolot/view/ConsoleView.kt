@@ -17,9 +17,7 @@ import ru.hits.android.axolot.databinding.ConsoleViewBinding
 class ConsoleView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
+) : ConstraintLayout(context, attrs) {
 
     private var consoleLines: MutableList<TextView> = mutableListOf()
     private val binding = ConsoleViewBinding.inflate(LayoutInflater.from(context), this)
