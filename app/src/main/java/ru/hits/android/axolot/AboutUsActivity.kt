@@ -1,6 +1,7 @@
 package ru.hits.android.axolot
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.hits.android.axolot.databinding.ActivityAboutUsBinding
@@ -32,6 +33,38 @@ class AboutUsActivity : AppCompatActivity() {
 
         binding.settingsIcon.setOnClickListener() {
             startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
+        binding.btnIvan.setOnClickListener {
+            val browserIntent: Intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://github.com/Vinnichenko-Ivan")
+            )
+            startActivity(browserIntent)
+        }
+
+        binding.btnElena.setOnClickListener {
+            val browserIntent: Intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://github.com/Elena-web")
+            )
+            startActivity(browserIntent)
+        }
+
+        binding.btnKonstantin.setOnClickListener {
+            val browserIntent: Intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://github.com/kosterror")
+            )
+            startActivity(browserIntent)
+        }
+
+        binding.btnRoman.setOnClickListener {
+            val browserIntent: Intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://github.com/GreenpixDev")
+            )
+            startActivity(browserIntent)
         }
     }
 }
