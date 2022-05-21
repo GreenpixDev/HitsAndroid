@@ -981,7 +981,7 @@ class AxolotNativeLibrary : AxolotLibrary() {
                 DeclaredSingleInputDataPin(
                     handler = { target, node ->
                         target
-                            .filterIsInstance<NodeRegexMatch>()
+                            .filterIsInstance<NodeRegexFind>()
                             .first().dependencies[NodeRegexFind.TEXT] = node
                     },
                     name = "text",
@@ -990,7 +990,7 @@ class AxolotNativeLibrary : AxolotLibrary() {
                 DeclaredSingleInputDataPin(
                     handler = { target, node ->
                         target
-                            .filterIsInstance<NodeRegexMatch>()
+                            .filterIsInstance<NodeRegexFind>()
                             .first().dependencies[NodeRegexFind.REGEX_TEXT] = node
                     },
                     name = "regex",
@@ -999,14 +999,14 @@ class AxolotNativeLibrary : AxolotLibrary() {
                 DeclaredSingleInputDataPin(
                     handler = { target, node ->
                         target
-                            .filterIsInstance<NodeRegexMatch>()
+                            .filterIsInstance<NodeRegexFind>()
                             .first().dependencies[NodeRegexFind.START_INDEX] = node
                     },
                     name = "start index",
                     type = Type.INT
                 ),
                 DeclaredSingleOutputDataPin(
-                    nodeFabric = { NodeRegexMatch() },
+                    nodeFabric = { NodeRegexFind() },
                     type = Type.STRING
                 )
             )
