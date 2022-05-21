@@ -64,7 +64,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="fontFamily">@font/montserrat_regular</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textSize">8sp</item>
+        <item name="android:textSize">6sp</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:cursorVisible">false</item>
     </style>
