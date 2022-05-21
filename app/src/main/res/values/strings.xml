@@ -72,6 +72,8 @@
     <string name="hintEditText">Enter name</string>
 
     <string name="function_end">Return</string>
+    <string name="macros_begin">Input</string>
+    <string name="macros_end">Output</string>
     <string name="native.main">Main</string>
     <string name="native.getVariable">Get</string>
     <string name="native.setVariable">Set</string>
@@ -88,6 +90,8 @@
     <string name="native.regexFind">Regex Find</string>
 
     <string name="native.async">Async</string>
+    <string name="native.input">Read</string>
+    <string name="native.math">Expression</string>
 
     <string name="native.sumStrings">string + string</string>
 

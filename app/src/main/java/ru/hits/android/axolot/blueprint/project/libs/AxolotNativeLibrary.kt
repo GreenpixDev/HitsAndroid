@@ -2,7 +2,6 @@ package ru.hits.android.axolot.blueprint.project.libs
 
 import ru.hits.android.axolot.blueprint.declaration.NativeBlockType
 import ru.hits.android.axolot.blueprint.declaration.pin.*
-import ru.hits.android.axolot.blueprint.element.pin.impl.OutputFlowPin
 import ru.hits.android.axolot.blueprint.project.AxolotLibrary
 import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
@@ -11,7 +10,6 @@ import ru.hits.android.axolot.interpreter.node.executable.regex.NodeRegexMatch
 import ru.hits.android.axolot.interpreter.node.executable.string.NodeStringConcatenation
 import ru.hits.android.axolot.interpreter.node.executable.thread.NodeSleep
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeBranch
-import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeForLoop
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeSequence
 import ru.hits.android.axolot.interpreter.node.flowcontrol.NodeWhileLoop
 import ru.hits.android.axolot.interpreter.node.function.NodeCast
@@ -1201,7 +1199,7 @@ class AxolotNativeLibrary : AxolotLibrary() {
                 DeclaredSingleOutputFlowPin(
                     handler = { target, node ->
                         target
-                            .filterIsInstance<NodeForLoop>()
+                            .filterIsInstance<NodeWhileLoop>()
                             .first().loopBody = node
                     },
                     name = "Loop Body"
