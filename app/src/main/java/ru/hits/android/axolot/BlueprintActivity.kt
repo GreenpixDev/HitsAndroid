@@ -207,13 +207,16 @@ class BlueprintActivity : AppCompatActivity() {
             typeBlock.background = resources.getDrawable(R.drawable.border_style)
             typeBlock.typeface = ResourcesCompat.getFont(this, R.font.montserrat_light)
 
-            binding.listBlocks.addView(typeBlock)
+            //не хотим создавать в меню еще один Main, чтобы пользователь не смог его добавить
+            if (nameBlock != "Main") {
+                binding.listBlocks.addView(typeBlock)
 
-            typeBlock.setOnClickListener { _ ->
-                try {
-                    createBlock(it)
-                } catch (e: AxolotException) {
-                    // nothing
+                typeBlock.setOnClickListener { _ ->
+                    try {
+                        createBlock(it)
+                    } catch (e: AxolotException) {
+                        // nothing
+                    }
                 }
             }
         }
