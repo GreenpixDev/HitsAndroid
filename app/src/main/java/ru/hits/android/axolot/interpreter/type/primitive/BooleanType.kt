@@ -8,6 +8,9 @@ class BooleanType : PrimitiveType<Boolean> {
         get() = false
 
     override fun cast(variable: Variable): Boolean {
+        if (variable.type is StringType) {
+            return variable.value.toString().toBoolean()
+        }
         throw TypeCastException("cannot cast type ${variable.type} to ${toString()}")
     }
 

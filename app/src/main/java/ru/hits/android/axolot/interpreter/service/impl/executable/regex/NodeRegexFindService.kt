@@ -19,7 +19,7 @@ class NodeRegexFindService(private val handlerService: NodeHandlerService) : Nod
             val startIndex =
                 handlerService.invoke(node[NodeRegexFind.START_INDEX], context)[Type.INT]!!
 
-            val findRegexText = Regex(regexText).find(text, startIndex)
+            val findRegexText = Regex(regexText).find(text, startIndex)?.groupValues?.firstOrNull()
 
             return Variable(Type.STRING, findRegexText)
 

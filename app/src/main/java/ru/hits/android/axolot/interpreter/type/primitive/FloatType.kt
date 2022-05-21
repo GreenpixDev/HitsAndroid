@@ -11,6 +11,9 @@ class FloatType : NumberType<Double>() {
         if (variable.type is NumberType<*>) {
             return (variable.value as Number).toDouble()
         }
+        if (variable.type is StringType) {
+            return variable.value.toString().toDouble()
+        }
         throw TypeCastException("cannot cast type ${variable.type} to ${toString()}")
     }
 
