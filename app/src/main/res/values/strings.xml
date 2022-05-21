@@ -80,6 +80,7 @@
     <string name="native.sequence">Sequence</string>
     <string name="native.foreach">ForEach</string>
     <string name="native.branch">If Else</string>
+    <string name="native.whileLoop">While Loop</string>
     <string name="native.print">Print String</string>
     <string name="native.sleep">Thread Sleep</string>
 
