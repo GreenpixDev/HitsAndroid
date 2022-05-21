@@ -109,7 +109,24 @@ class AxolotNativeLibrary : AxolotLibrary() {
             )
         )
 
-        // цикл - While Loop
+        // Последовательность команд
+        registerBlock(NativeBlockType("sequence",
+            DeclaredSingleInputFlowPin(
+                nodeFabric = { NodeSequence() }
+            ),
+            DeclaredVarargOutputFlowPin(
+                handler = { target, node ->
+                    target
+                        .filterIsInstance<NodeSequence>()
+                        .first().then(node)
+                },
+                lazyName = { "then-$it" },
+                minArgs = 1
+            )
+        )
+        )
+
+        // Вывод в консоль
         registerBlock(
             NativeBlockType(
                 "whileLoop",
