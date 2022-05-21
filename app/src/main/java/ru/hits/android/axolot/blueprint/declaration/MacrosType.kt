@@ -7,6 +7,7 @@ import ru.hits.android.axolot.blueprint.element.AxolotBaseSource
 import ru.hits.android.axolot.blueprint.element.AxolotBlock
 import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosDependency
 import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosInput
+import ru.hits.android.axolot.interpreter.node.macros.NodeMacrosOutput
 import ru.hits.android.axolot.interpreter.type.VariableType
 import ru.hits.android.axolot.util.getThemeColor
 
@@ -24,7 +25,7 @@ class MacrosType(
 
     lateinit var beginBlock: AxolotBlock
     lateinit var endBlock: AxolotBlock
-    val invocationBlocks = mutableListOf<AxolotBlock>()
+    private val invocationBlocks = mutableListOf<AxolotBlock>()
 
     val beginType = MacrosBeginType(this)
     val endType = MacrosEndType(this)
@@ -53,12 +54,15 @@ class MacrosType(
     }
 
     fun addInputFlow(inputName: String) {
+        val identifier = counter++
         val pin = DeclaredSingleInputFlowPin(
-            nodeFabric = { NodeMacrosInput(inputName) },
-            lazyName = { inputName }
+            nodeFabric = { NodeMacrosInput(inputNames[identifier]!!) },
+            lazyName = { inputNames[identifier]!! }
         )
+        inputNames[identifier] = inputName
+
         declaredPins.add(pin)
-        beginType.addFlow(inputName)
+        beginType.addFlow { inputNames[identifier]!! }
 
         beginBlock.update()
         endBlock.update()
@@ -92,14 +96,16 @@ class MacrosType(
         val pin = DeclaredSingleOutputFlowPin(
             handler = { target, node ->
                 target
-                    .filterIsInstance<NodeMacrosInput>()
-                    .find { it.name == outputName }
+                    .filterIsInstance<NodeMacrosOutput>()
+                    .find { it.name == outputNames[identifier]!! }
                     ?.let { it.nextNode = node }
             },
-            lazyName = { outputName }
+            lazyName = { outputNames[identifier]!! }
         )
+        outputNames[identifier] = outputName
+
         declaredPins.add(pin)
-        endType.addFlow(outputName)
+        endType.addFlow { outputNames[identifier]!! }
 
         beginBlock.update()
         endBlock.update()

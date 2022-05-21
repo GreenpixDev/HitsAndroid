@@ -31,15 +31,15 @@ class MacrosBeginType(
         return context.getLocalizedString("macros_input")
     }
 
-    fun addFlow(name: String): DeclaredSingleOutputFlowPin {
+    fun addFlow(lazyName: () -> String): DeclaredSingleOutputFlowPin {
         val pin = DeclaredSingleOutputFlowPin(
             handler = { target, node ->
                 target
                     .filterIsInstance<NodeMacrosInput>()
-                    .find { it.name == name }
+                    .find { it.name == lazyName.invoke() }
                     ?.let { it.nextNode = node }
             },
-            lazyName = { name }
+            lazyName = lazyName
         )
         declaredPins.add(pin)
         return pin

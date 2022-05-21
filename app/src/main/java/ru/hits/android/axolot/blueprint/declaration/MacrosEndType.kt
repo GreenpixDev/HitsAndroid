@@ -31,10 +31,10 @@ class MacrosEndType(
         return context.getLocalizedString("macros_output")
     }
 
-    fun addFlow(name: String): DeclaredSingleInputFlowPin {
+    fun addFlow(lazyName: () -> String): DeclaredSingleInputFlowPin {
         val pin = DeclaredSingleInputFlowPin(
-            nodeFabric = { NodeMacrosOutput(name) },
-            lazyName = { name }
+            nodeFabric = { NodeMacrosOutput(lazyName.invoke()) },
+            lazyName = lazyName
         )
         declaredPins.add(pin)
         return pin

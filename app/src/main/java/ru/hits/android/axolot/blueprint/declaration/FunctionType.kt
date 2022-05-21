@@ -27,7 +27,7 @@ class FunctionType(
 
     lateinit var beginBlock: AxolotBlock
     val endBlocks = mutableListOf<AxolotBlock>()
-    val invocationBlocks = mutableListOf<AxolotBlock>()
+    private val invocationBlocks = mutableListOf<AxolotBlock>()
 
     val beginType = FunctionBeginType(this)
     val endType = FunctionEndType(this)
