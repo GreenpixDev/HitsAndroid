@@ -250,8 +250,11 @@ class BlueprintActivity : AppCompatActivity() {
     /**
      * Метод создания атрибутов и выходных переменных для функций и макросов
      */
-    private fun addCreator(view: CreatorView) {
-        view.creator.addView(CreatorForFunctionView(this))
+    private fun addCreator(view: CreatorView, isMacros: Boolean) {
+        val creatorForFunctionView = CreatorForFunctionView(this)
+        if (!isMacros) creatorForFunctionView.hideParametersExecuteForFunction()
+
+        view.creator.addView(creatorForFunctionView)
         view.typeExpression = false
         view.initComponents()
         view.addViewMenu()
@@ -333,7 +336,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         functionView.functionName = functionName
         functionView.name.setText(functionName)
-        addCreator(functionView)
+        addCreator(functionView, isMacros = false)
 
         // Прослушка изменений имени переменной
         val listener = object : TextWatcher {
@@ -392,7 +395,7 @@ class BlueprintActivity : AppCompatActivity() {
 
         macrosView.macrosName = macrosName
         macrosView.name.setText(macrosName)
-        addCreator(macrosView)
+        addCreator(macrosView, isMacros = true)
 
         // Прослушка изменений имени переменной
         val listener = object : TextWatcher {
@@ -434,6 +437,17 @@ class BlueprintActivity : AppCompatActivity() {
             val paramView = createMacrosOutputView(macrosType, macrosView)
             macrosType.addOutputData(paramView.variableName, Type.BOOLEAN)
             updateMacros(macrosType)
+        }
+
+        // Прослушка добавления входных execute данных макросов
+        macrosView.creator.plusInputParam.setOnClickListener {
+            //TODO: Рома сделает
+
+        }
+
+        // Прослушка добавления выходных execute данных макросов
+        macrosView.creator.plusOutputVar.setOnClickListener {
+            //TODO: Рома сделает
         }
 
         // Прослушка добавлении вызова макроса на поле
