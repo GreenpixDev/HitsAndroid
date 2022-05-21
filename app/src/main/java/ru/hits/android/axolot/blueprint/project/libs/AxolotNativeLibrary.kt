@@ -2,7 +2,6 @@ package ru.hits.android.axolot.blueprint.project.libs
 
 import ru.hits.android.axolot.blueprint.declaration.NativeBlockType
 import ru.hits.android.axolot.blueprint.declaration.pin.*
-import ru.hits.android.axolot.blueprint.element.pin.impl.OutputFlowPin
 import ru.hits.android.axolot.blueprint.project.AxolotLibrary
 import ru.hits.android.axolot.interpreter.node.executable.NodeAsync
 import ru.hits.android.axolot.interpreter.node.executable.NodePrintString
@@ -244,6 +243,42 @@ class AxolotNativeLibrary : AxolotLibrary() {
                 )
             )
         )
+
+        // цикл while Loop
+        registerBlock(
+            NativeBlockType(
+                "whileLoop",
+                DeclaredSingleInputFlowPin(
+                    nodeFabric = { NodeWhileLoop() },
+                ),
+                DeclaredSingleInputDataPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeWhileLoop>()
+                            .first().dependencies[NodeWhileLoop.CONDITION] = node
+                    },
+                    name = "Condition",
+                    type = Type.BOOLEAN
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeWhileLoop>()
+                            .first().loopBody = node
+                    },
+                    name = "Loop Body",
+                ),
+                DeclaredSingleOutputFlowPin(
+                    handler = { target, node ->
+                        target
+                            .filterIsInstance<NodeWhileLoop>()
+                            .first().completed = node
+                    },
+                    name = "Completed"
+                ),
+            )
+        )
+
 
         // Последовательность команд
         registerBlock(NativeBlockType("sequence",

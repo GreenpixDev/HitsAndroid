@@ -19,7 +19,7 @@
             android:textColor="@color/white"
             android:fontFamily="@font/montserrat_regular"
             android:textAlignment="textEnd"
-            android:text="Add pin"
+            android:text="@string/AddPin"
             tools:ignore="SmallSp" />
 
         <ImageView
