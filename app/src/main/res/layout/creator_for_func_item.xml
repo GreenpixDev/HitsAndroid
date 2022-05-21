@@ -26,8 +26,8 @@
                 android:textAlignment="center"
                 android:paddingStart="1dp"
                 android:paddingEnd="1dp"
-                android:text="Input"
-                android:textSize="15dp"
+                android:text="@string/inputText"
+                android:textSize="15sp"
                 style="@style/textViewStyle" />
 
             <ImageButton
@@ -61,8 +61,8 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textSize="15dp"
-                android:text="Output"
+                android:textSize="15sp"
+                android:text="@string/outputText"
                 android:textAlignment="center"
                 android:paddingStart="1dp"
                 android:paddingEnd="1dp"
@@ -84,6 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="75dp"
+            android:layout_marginBottom="10dp"
             android:orientation="vertical" />
 
         <TableRow
@@ -98,8 +99,8 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textSize="15dp"
-                android:text="Input execute"
+                android:textSize="15sp"
+                android:text="@string/inputExecuteText"
                 android:textAlignment="center"
                 android:paddingStart="1dp"
                 android:paddingEnd="1dp"
@@ -135,8 +136,8 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:textSize="15dp"
-                android:text="Output execute"
+                android:textSize="15sp"
+                android:text="@string/outputExecuteText"
                 android:textAlignment="center"
                 android:paddingStart="1dp"
                 android:paddingEnd="1dp"
@@ -157,6 +158,7 @@
             android:id="@+id/listOutputExecuteVar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:layout_marginStart="75dp"
             android:orientation="vertical" />
 

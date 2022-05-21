@@ -156,7 +156,7 @@
                         android:layout_weight="1"
                         android:paddingTop="5dp"
                         android:paddingBottom="10dp"
-                        android:text="Макросы" />
+                        android:text="@string/titleMacros" />
 
                     <ImageButton
                         android:id="@+id/plusMacros"
@@ -204,21 +204,23 @@
                 android:id="@+id/returnBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_medium"
-                android:text="Return Блок"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:text="@string/returnBlock"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="@font/montserrat_alternates_semibold"
+                android:textColor="@color/titleReturnBlock"
+                style="@style/textViewStyle" />
 
             <TextView
                 android:id="@+id/goToMain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_medium"
-                android:text="Back To Main"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:text="@string/back_to_main"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/montserrat_alternates_semibold"
+                android:textColor="@color/titleBackToMain"
+                style="@style/textViewStyle" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>

@@ -264,7 +264,9 @@ class BlueprintActivity : AppCompatActivity() {
      */
     private fun addCreator(view: CreatorView, isMacros: Boolean) {
         val creatorForFunctionView = CreatorForFunctionView(this)
-        if (!isMacros) creatorForFunctionView.hideParametersExecuteForFunction()
+
+        creatorForFunctionView.isMacros = isMacros
+        creatorForFunctionView.initComponents()
 
         view.creator.addView(creatorForFunctionView)
         view.typeExpression = false
@@ -487,12 +489,55 @@ class BlueprintActivity : AppCompatActivity() {
         //инициализация creatorView
         parameterView.edit = false
         parameterView.isVar = true
+        parameterView.get = false
 
         //дефолтное название
         parameterView.variableName = name
         parameterView.name.setText(parameterView.variableName)
 
-        parameterView.name.width = 200
+        parameterView.name.width = 100
+        parameterView.btnAddDel = true
+        parameterView.initComponents()
+
+        //проверка куда добавлять
+        when (place) {
+            VariablePlaces.INPUT_PARAMETERS -> {
+                creatorView.listParameters.addView(parameterView)
+            }
+            VariablePlaces.OUTPUT_VARIABLES -> {
+                creatorView.listOutputVar.addView(parameterView)
+            }
+            VariablePlaces.INPUT_EXEC_VARIABLES -> {
+                creatorView.listInputExecuteVar.addView(parameterView)
+            }
+            VariablePlaces.OUTPUT_EXEC_VARIABLES -> {
+                creatorView.listOutputExecuteVar.addView(parameterView)
+            }
+        }
+        return parameterView
+    }
+
+    /**
+     * Метод создания новой переменной execute в макросе
+     */
+    private fun createParameterExecuteView(
+        name: String,
+        creatorView: CreatorView,
+        place: VariablePlaces
+    ): VariableView {
+        val parameterView = VariableView(this)
+
+        //инициализация creatorView
+        parameterView.edit = false
+        parameterView.isVar = true
+        parameterView.get = false
+        parameterView.executeVar = true
+
+        //дефолтное название
+        parameterView.variableName = name
+        parameterView.name.setText(parameterView.variableName)
+
+        parameterView.name.width = 100
         parameterView.btnAddDel = true
         parameterView.initComponents()
 
@@ -641,6 +686,7 @@ class BlueprintActivity : AppCompatActivity() {
         macros: MacrosType,
         creatorView: CreatorView
     ): VariableView {
+
         val parameterView = createParameterView(generateName("param") {
             !macros.hasInput(it)
         }, creatorView, VariablePlaces.INPUT_PARAMETERS)
@@ -701,6 +747,7 @@ class BlueprintActivity : AppCompatActivity() {
         macros: MacrosType,
         creatorView: CreatorView
     ): VariableView {
+
         val parameterView = createParameterView(generateName("param") {
             !macros.hasOutput(it)
         }, creatorView, VariablePlaces.OUTPUT_VARIABLES)
@@ -761,7 +808,7 @@ class BlueprintActivity : AppCompatActivity() {
         macros: MacrosType,
         creatorView: CreatorView
     ): VariableView {
-        val parameterView = createParameterView(generateName("param") {
+        val parameterView = createParameterExecuteView(generateName("param") {
             !macros.hasInput(it)
         }, creatorView, VariablePlaces.INPUT_EXEC_VARIABLES)
 
@@ -811,7 +858,7 @@ class BlueprintActivity : AppCompatActivity() {
         macros: MacrosType,
         creatorView: CreatorView
     ): VariableView {
-        val parameterView = createParameterView(generateName("param") {
+        val parameterView = createParameterExecuteView(generateName("param") {
             !macros.hasOutput(it)
         }, creatorView, VariablePlaces.OUTPUT_EXEC_VARIABLES)
 

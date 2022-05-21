@@ -21,10 +21,12 @@ abstract class CreatorView @JvmOverloads constructor(
     var typeExpression = true
     var btnAddDel = false
     var edit = true
+    var set = true
+    var get = true
     var executeVar = false
     var isVar = false
 
-    private fun initLayoutParams() {
+    fun initLayoutParams() {
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -41,9 +43,14 @@ abstract class CreatorView @JvmOverloads constructor(
         if (!nameDescription) binding.name.visibility = GONE
         if (!typeExpression) binding.typeVariable.visibility = GONE
         if (!edit) binding.btnEdit.visibility = GONE
+        if (!set) binding.btnSet.visibility = GONE
+        if (!get) binding.btnGet.visibility = GONE
         if (isVar) binding.creator.background = null
         if (btnAddDel) binding.btnSet.visibility = GONE
-        if (executeVar) binding.typeExecute.visibility = VISIBLE
+        if (executeVar) {
+            binding.typeExecute.visibility = VISIBLE
+            binding.typeVariable.visibility = GONE
+        }
     }
 
     fun setCustomSpinner() {

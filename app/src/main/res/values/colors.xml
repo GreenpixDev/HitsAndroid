@@ -46,5 +46,8 @@
     <color name="titleFunction">#2AD397</color>
     <color name="titleMacros">#45C1D3</color>
     <color name="titleVariable">#BD5890</color>
+    <color name="titleReturnBlock">#E89068</color>
+    <color name="titleBackToMain">#5D95D3</color>
+
 
 </resources>
