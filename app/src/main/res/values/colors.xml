@@ -50,6 +50,7 @@
     <color name="sendIconColor">#8CFFE3</color>
     <color name="settingIconColor">#51BFE2</color>
     <color name="settingIconMainColor">#BE61A5</color>
+    <color name="refreshColor">#725C85</color>
 
     <color name="titleBlocks">#FFBF00</color>
     <color name="titleFunction">#2AD397</color>
