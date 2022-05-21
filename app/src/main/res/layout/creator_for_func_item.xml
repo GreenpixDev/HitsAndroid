@@ -78,12 +78,88 @@
                 android:layout_gravity="center_vertical" />
         </TableRow>
 
+        <!--        тут выходящие параметры-->
         <LinearLayout
             android:id="@+id/listOutputVar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="75dp"
             android:orientation="vertical" />
+
+        <TableRow
+            android:id="@+id/inputExecuteRow"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="5dp"
+            android:paddingBottom="5dp"
+            android:layout_gravity="left">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="15dp"
+                android:text="Input execute"
+                android:textAlignment="center"
+                android:paddingStart="1dp"
+                android:paddingEnd="1dp"
+                style="@style/textViewStyle" />
+
+            <ImageButton
+                android:id="@+id/plusInputExecuteVar"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/ic_plus"
+                android:layout_gravity="center_vertical" />
+        </TableRow>
+
+        <!--        тут входящие execute параметры-->
+        <LinearLayout
+            android:id="@+id/listInputExecuteVar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:orientation="vertical" />
+
+        <TableRow
+            android:id="@+id/outputExecuteRow"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginStart="5dp"
+            android:paddingBottom="5dp"
+            android:layout_gravity="left">
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:textSize="15dp"
+                android:text="Output execute"
+                android:textAlignment="center"
+                android:paddingStart="1dp"
+                android:paddingEnd="1dp"
+                style="@style/textViewStyle" />
+
+            <ImageButton
+                android:id="@+id/plusOutputExecuteVar"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/ic_plus"
+                android:layout_gravity="center_vertical" />
+        </TableRow>
+
+        <!--        тут выходящие execute параметры-->
+        <LinearLayout
+            android:id="@+id/listOutputExecuteVar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:orientation="vertical" />
+
 
     </LinearLayout>
 

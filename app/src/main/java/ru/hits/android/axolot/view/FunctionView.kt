@@ -19,5 +19,4 @@ class FunctionView @JvmOverloads constructor(
     override fun addViewMenu() {
         activity.listFunction.addView(this)
     }
-
 }

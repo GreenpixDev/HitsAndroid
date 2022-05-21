@@ -21,6 +21,7 @@ abstract class CreatorView @JvmOverloads constructor(
     var typeExpression = true
     var btnAddDel = false
     var edit = true
+    var executeVar = false
     var isVar = false
 
     private fun initLayoutParams() {
@@ -42,7 +43,7 @@ abstract class CreatorView @JvmOverloads constructor(
         if (!edit) binding.btnEdit.visibility = GONE
         if (isVar) binding.creator.background = null
         if (btnAddDel) binding.btnSet.visibility = GONE
-        if (btnAddDel) binding.btnGet.visibility = GONE
+        if (executeVar) binding.typeExecute.visibility = VISIBLE
     }
 
     fun setCustomSpinner() {
